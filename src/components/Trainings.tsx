@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import cld from '../utils/cloudinary';
+import cld from '../utils/cloudinaryInstance';
 import { AdvancedImage } from '@cloudinary/react';
 import { motion } from 'framer-motion';
 

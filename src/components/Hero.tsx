@@ -1,14 +1,17 @@
-import React from 'react';
-import cld from '../utils/cloudinary';
-import { AdvancedImage } from '@cloudinary/react';
+
+import { CloudinaryImage } from '@cloudinary/url-gen/index';
 import { motion } from 'framer-motion';
 
-const Hero: React.FC = () => {
-  const heroImage = cld.image('Gr8QMTechnovates/image_1_a25x7u');
+const Hero = () => {
+  // const heroImage = cld.image('Gr8QMTechnovates/image_1_a25x7u');
 
   return (
     <div className="relative h-screen">
-      <AdvancedImage cldImg={heroImage} className="w-full h-full object-cover" />
+  {/* <CloudinaryImage
+            imageKey="Logo"
+            className="hover:scale-120 hover:rotate-3"
+            alt="Testimony Hero Background"
+          /> */}
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="absolute inset-0 flex items-center justify-center text-center text-white">
         <motion.div

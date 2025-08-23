@@ -1,5 +1,5 @@
 import React from 'react';
-import cld from '../utils/cloudinary';
+import cld from '../utils/cloudinaryInstance';
 import { AdvancedImage } from '@cloudinary/react';
 import { motion } from 'framer-motion';
 
