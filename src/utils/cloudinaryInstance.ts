@@ -2,7 +2,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 
 const cld = new Cloudinary({
   cloud: {
-    cloudName: "dmxfjy079", // Replace with your Cloudinary cloud name
+    cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
   },
 });
 
