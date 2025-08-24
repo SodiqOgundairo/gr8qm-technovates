@@ -6,23 +6,12 @@ const cld = new Cloudinary({
   },
 });
 
-const imageBasePath = "LLCImageRepo/Images";
+const imageBasePath = "Gr8QMTechnovates/Images";
+const svgIcons = `${imageBasePath}/svgicons`;
 
 export const cloudinaryImages = {
-  heroBg: cld
-    .image(`${imageBasePath}/Img/kxmlpsmvyjxpj9p2endu`)
-    .format("auto")
-    .quality("auto"),
-  aboutUs: cld
-    .image(`${imageBasePath}/Img/eax8f5vjyzm1i2flp29e`)
-    .format("auto")
-    .quality("auto"),
-  contactUs: cld
-    .image(`${imageBasePath}/Img/xay0ytb2p9nixkzsttfr`)
-    .format("auto")
-    .quality("auto"),
-  training: cld
-    .image(`${imageBasePath}/Img/b4nnl2i1z7srmw9r96v9`)
+  verticalLogo: cld
+    .image(`${svgIcons}/Gr8QMNewlogoStraightDark_l8mdbv`)
     .format("auto")
     .quality("auto"),
 };

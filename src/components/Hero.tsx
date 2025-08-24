@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { cloudinaryImages } from '../utils/cloudinaryInstance';
 
 const Hero = () => {
-  const heroImageURL = cloudinaryImages.heroBg.toURL();
+  const heroImageURL = cloudinaryImages.verticalLogo.toURL();
 
   return (
     <motion.div

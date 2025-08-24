@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Modal from './Modal';
-import ApplicationForm from './ApplicationForm';
+import Modal from '../Modal';
+import ApplicationForm from '../ApplicationForm';
 
 const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
