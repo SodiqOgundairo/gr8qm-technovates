@@ -1,9 +1,9 @@
 
 import { AdvancedImage } from '@cloudinary/react';
-import { cloudinaryImages } from './cloudinaryInstance';
+import { cloudinaryImages, type CloudinaryImageKey } from './cloudinaryInstance';
 
 interface CloudinaryImageProps {
-//   imageKey: CloudinaryImageKey;
+  imageKey: CloudinaryImageKey;
   className?: string;
   alt?: string;
 }
