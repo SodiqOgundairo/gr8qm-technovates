@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-:root {
+@theme{
     /* Typography */
     --font-display: "Montserrat", "sans-serif";
 
@@ -13,6 +13,7 @@
     --color-orange: #f58634;
     --color-dark: #101010;
     --color-light: #fafafa;
+    --color-gray: #a1a1a1;
 }
 
 body {
