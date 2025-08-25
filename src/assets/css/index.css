@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-@theme {
+:root {
     /* Typography */
     --font-display: "Montserrat", "sans-serif";
 
@@ -38,3 +38,45 @@ body {
   transition: all 0.3s linear;
   color: var(--color-skyblue);
 }
+
+/* input field */
+.input-field {
+  border-radius: 40px;
+  background-color: var(--color-light);
+  padding: 10px 30px;
+  font-weight: 400;
+  height: 47px;
+  border: 1.167px solid var(--color-gray-2);
+  width: 100%;
+  flex: 1;
+  color: var(--Colors-Text-text-gray-3, #484848);
+  
+}
+
+.input-field:focus-visible {
+  background-color: var(--color-gray-1);
+  color: var(--color-darkPurple);
+  border:none;
+  outline-color: var(--color-purple-mid);
+}
+/* input field ends */
+
+
+/* SCROLL BAR */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(200, 200, 200, 1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
+  border-radius: 15px;
+  background-color: #fff;
+}
+
+/* SCROLL BAR ENDS*/
+
