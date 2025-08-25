@@ -1,5 +1,3 @@
-import { AdvancedImage } from '@cloudinary/react';
-import { cloudinaryImages } from '../utils/cloudinaryInstance';
 
 const ContactPage: React.FC = () => {
   return (
@@ -7,7 +5,6 @@ const ContactPage: React.FC = () => {
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-12">Contact Us</h1>
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/2">
-          <AdvancedImage cldImg={cloudinaryImages.contactUs} className="rounded-lg shadow-lg" />
         </div>
         <div className="md:w-1/2 md:pl-12 mt-8 md:mt-0">
           <p className="text-gray-600 mb-4">

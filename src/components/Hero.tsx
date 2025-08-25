@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { cloudinaryImages } from '../utils/cloudinaryInstance';
+import { cloudinaryImages } from '../utils/cloudinaryBank';
 
 const Hero = () => {
   const heroImageURL = cloudinaryImages.verticalLogo.toURL();

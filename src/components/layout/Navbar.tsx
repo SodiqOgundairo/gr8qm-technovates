@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Modal from '../Modal';
 import ApplicationForm from '../ApplicationForm';
+import CloudinaryImage from '../../utils/cloudinaryImage';
 
 const Navbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,12 +14,16 @@ const Navbar: React.FC = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white shadow-md"
+        className="bg-light/50 backdrop-blur-sm shadow-md sticky top-0 z-50"
       >
         <div className="container mx-auto px-6 py-3 md:flex md:justify-between md:items-center">
           <div className="flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400">
-              Gr8QM
+            <Link to="/" >
+              <CloudinaryImage
+                imageKey="verticalLogo"
+                className="max-w-30 hover:scale-120 hover:-rotate-2"
+                alt="About Hero Background"
+              />
             </Link>
           </div>
 
@@ -38,13 +43,13 @@ const Navbar: React.FC = () => {
           </div>
 
           <div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => setIsModalOpen(true)}
-                className="hidden md:block bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-              >
-                  Apply Now
-              </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setIsModalOpen(true)}
+              className="btn-pry"
+            >
+              Apply Now
+            </motion.button>
           </div>
         </div>
       </motion.nav>
