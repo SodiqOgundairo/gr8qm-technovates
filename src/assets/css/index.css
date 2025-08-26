@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
 
 @import "tailwindcss";
 
 @theme{
     /* Typography */
     --font-display: "Montserrat", "sans-serif";
-
+    --font-body: "Boldonse", system-ui;
+    
     /* Colors */
     --color-skyblue: #0098da;
     --color-iceblue: #c9ebfb;
@@ -26,18 +28,90 @@ body {
 .btn-pry {
   border-radius: 5px;
   background: var(--color-skyblue);
-  padding: 15px 30px;
+  padding: 13px 30px;
   font-weight: 400;
   color: var(--color-light);
-  /* height: 47px; */
+  cursor: pointer;
 }
 
 .btn-pry:hover {
   background: var(--color-light);
-  box-shadow: 4px 4px 4px 4px #256aff1a;
+  box-shadow: 0px 8px 8px 0px #1a5dee1a;
   scale: 0.95;
-  transition: all 0.3s linear;
+  transition: all 0.3s ease-in-out;
   color: var(--color-skyblue);
+}
+
+/* special button */
+.btn-sec {
+  position: relative;
+  /* Required to position the pseudo-element */
+  display: inline-flex;
+  /* Use flexbox to align content */
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  /* Hides the overflowing pseudo-element */
+
+  border: none;
+  /* Remove default border */
+  border-radius: 5px;
+  background: transparent;
+  padding: 10px 30px;
+  font-weight: 500;
+  color: var(--color-dark);
+  cursor: pointer;
+  z-index: 1;
+  /* Ensures the button is on top of the pseudo-element */
+}
+
+.button-content {
+  position: relative;
+  z-index: 2;
+  /* Ensures text is on top of the pseudo-element */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Space between text and arrow */
+  transition: color 0.3s ease;
+  /* Smooth color transition for text */
+}
+
+.btn-sec::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 47px;
+  /* The size of the circle */
+  height: 47px;
+  /* The size of the circle */
+  background: var(--color-iceblue);
+  border-radius: 100%;
+  transition: width 0.3s ease, transform 0.3s ease, border-radius 0.3s ease;
+  z-index: 1;
+  /* Puts the pseudo-element behind the text */
+}
+
+.btn-sec:hover::before {
+  background-color: var(--color-skyblue);
+  width: 100%;
+  /* Expands to the full width of the button */
+  border-radius: 5px;
+  /* Matches the button's border-radius */
+  transform: translateY(-50%) translateX(0);
+  /* Ensures it stays centered and moves to the left edge */
+}
+
+.btn-sec .arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.btn-sec:hover .arrow {
+  transform: translateX(4px);
+  /* Moves the arrow slightly to the right on hover */
 }
 
 /* input field */
@@ -47,10 +121,10 @@ body {
   padding: 10px 30px;
   font-weight: 400;
   height: 47px;
-  border: 1.167px solid var(--color-gray-2);
+  border: 1.167px solid var(--color-gray);
   width: 100%;
   flex: 1;
-  color: var(--Colors-Text-text-gray-3, #484848);
+  color: var(--color-dark);
   
 }
 

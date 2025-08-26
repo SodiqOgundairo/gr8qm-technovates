@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-light/50 backdrop-blur-sm sticky top-0 z-50 px-4 py-3">
+      <nav className="bg-gradient-to-br from-light/50 to-skyblue/20 backdrop-blur-sm sticky top-0 z-50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link to="/" aria-label="Homepage">
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-6 items-center">
             {navLinks.map(({ label, path }) => (
-              <Link key={label} to={path} className="text-gray hover:text-skyblue">
+              <Link key={label} to={path} className="text-dark hover:text-skyblue">
                 {label}
               </Link>
             ))}
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
                 >
                   <Link
                     to={path}
-                    className="block text-gray hover:text-skyblue"
+                    className="block text-dark hover:text-skyblue"
                     onClick={() => setIsMobileMenuOpen(false)}
                     role="menuitem"
                     tabIndex={0}
