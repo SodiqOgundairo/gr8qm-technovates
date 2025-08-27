@@ -7,8 +7,7 @@ const Hero = () => {
 
   return (
     <motion.div
-      className="relative h-screen bg-cover bg-center "
-      // style={{ backgroundImage: `url(${heroImageURL})` }}
+      className="relative h-screen bg-cover bg-center px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -30,7 +29,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.0 }}
-            className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4.5"
+            className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4"
           >
             <a href="/tech-school" className="btn-pry">
              

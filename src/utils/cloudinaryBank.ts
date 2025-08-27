@@ -8,6 +8,8 @@ const cld = new Cloudinary({
 
 const imageBasePath = "Gr8QMTechnovates/Images";
 const svgIcons = `${imageBasePath}/svgicons`;
+// const svgGIFs = `${imageBasePath}/svgGIFs`;
+// const svgImg = `${imageBasePath}/svgImg`;
 
 export const cloudinaryImages = {
   verticalLogo: cld

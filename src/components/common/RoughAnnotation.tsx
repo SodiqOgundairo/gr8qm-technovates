@@ -1,4 +1,11 @@
-const RoughAnnotation = () => {
+interface RoughAnnotationSVGProps {
+width: number;
+height: number;
+position: { left: number; top: number };
+color: string;
+}
+const RoughAnnotationSVG: React.FC<RoughAnnotationSVGProps> = () => {
+
     return (
         <>
         <svg
@@ -26,4 +33,4 @@ const RoughAnnotation = () => {
     )
 }
 
-export default RoughAnnotation
+export default RoughAnnotationSVG

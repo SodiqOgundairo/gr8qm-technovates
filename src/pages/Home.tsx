@@ -1,14 +1,14 @@
 import Hero from '../components/Hero';
 import About from '../components/About';
-import Trainings from '../components/Trainings';
+import Services from '../components/CoreValue';
 import Contact from '../components/Contact';
 
 const Home: React.FC = () => {
   return (
     <div>
       <Hero />
+      <Services />
       <About />
-      <Trainings />
       <Contact />
     </div>
   );

@@ -16,6 +16,7 @@
     --color-dark: #101010;
     --color-light: #fafafa;
     --color-gray: #a1a1a1;
+    --color-gray1: #f0f0f0;
 }
 
 body {
@@ -57,7 +58,7 @@ body {
   /* Remove default border */
   border-radius: 5px;
   background: transparent;
-  padding: 10px 30px;
+  padding: 13px 30px;
   font-weight: 500;
   color: var(--color-dark);
   cursor: pointer;
@@ -75,6 +76,10 @@ body {
   /* Space between text and arrow */
   transition: color 0.3s ease;
   /* Smooth color transition for text */
+}
+
+.button-content:hover {
+color: var(--color-skyblue);
 }
 
 .btn-sec::before {
@@ -95,8 +100,10 @@ body {
 }
 
 .btn-sec:hover::before {
-  background-color: var(--color-skyblue);
+  background-color: var(--color-light);
   width: 100%;
+  padding: 13px 30px;
+  height: 50px;
   /* Expands to the full width of the button */
   border-radius: 5px;
   /* Matches the button's border-radius */
