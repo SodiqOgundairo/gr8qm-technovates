@@ -19,7 +19,7 @@ const NotFound = () => {
                     <h1 className="text-3xl md:6xl text-oxfordblue font-bold font-body leading-loose">Page not found</h1>
 
                     <Link to='/' className='mt-8 btn-pry'>
-                    Let's get back home
+                    Let's get you back home
                     </Link>
                 </motion.div>
             </div>
