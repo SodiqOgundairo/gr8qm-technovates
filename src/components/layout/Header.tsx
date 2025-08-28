@@ -73,7 +73,8 @@ const Header: React.FC = () => {
               </Link>
             ))}
           </div>
-            <button onClick={() => setIsModalOpen(true)} className=" hidden md:block btn-pry">
+            {/* <button onClick={() => setIsModalOpen(true)} className=" hidden md:block btn-pry"> */}
+            <button className=" hidden md:block btn-pry">
               Apply Now
             </button>
         </div>
