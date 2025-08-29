@@ -6,10 +6,13 @@ import AboutPage from './pages/About';
 import TrainingsPage from './pages/Trainings';
 import ContactPage from './pages/Contact';
 import NotFound from './pages/PageNotFound';
+import ScrollToTop from './components/layout/ScrollToTop';
+
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
