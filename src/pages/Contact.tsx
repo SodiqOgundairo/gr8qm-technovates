@@ -1,7 +1,13 @@
 
+import SEO from '../components/common/SEO';
+
 const ContactPage: React.FC = () => {
   return (
     <div className="container mx-auto px-6 py-20">
+      <SEO
+        title="Contact Us"
+        description="Get in touch with Gr8QM Technovates. We'd love to hear from you! Whether you have a question about our courses, partnerships, or anything else, our team is ready to answer all your questions."
+      />
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-12">Contact Us</h1>
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/2">
