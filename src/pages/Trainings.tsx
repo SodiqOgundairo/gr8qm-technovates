@@ -1,7 +1,13 @@
 
+import SEO from '../components/common/SEO';
+
 const TrainingsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-6 py-20">
+      <SEO
+        title="Trainings"
+        description="Explore our comprehensive, hands-on training programs designed to align with the latest industry trends and help you specialize in your area of interest."
+      />
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-12">Our Trainings</h1>
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/2">

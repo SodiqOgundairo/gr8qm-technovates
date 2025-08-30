@@ -1,0 +1,31 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+            <url>
+              <loc>https://www.gr8qmtechnovates.com</loc>
+              <lastmod>2025-08-29T19:37:33.292Z</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>1.0</priority>
+            </url>
+
+            <url>
+              <loc>https://www.gr8qmtechnovates.com/about</loc>
+              <lastmod>2025-08-29T19:37:33.292Z</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+
+            <url>
+              <loc>https://www.gr8qmtechnovates.com/trainings</loc>
+              <lastmod>2025-08-29T19:37:33.292Z</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+
+            <url>
+              <loc>https://www.gr8qmtechnovates.com/contact</loc>
+              <lastmod>2025-08-29T19:37:33.292Z</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+
+    </urlset>
