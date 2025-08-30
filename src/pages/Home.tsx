@@ -11,6 +11,7 @@ const Home: React.FC = () => {
         title="Home"
         description="Welcome to Gr8QM Technovates. We design, build, and deliver AI powered solutions, product design, and training that raise leaders from overlooked spaces."
       />
+
       <Hero />
       <Services />
       <About />
