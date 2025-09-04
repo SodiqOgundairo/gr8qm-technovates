@@ -23,7 +23,7 @@ const About: React.FC = () => {
           transition={{ duration: 1 }}
           className="md:w-1/2 md:pl-12 mt-8 md:mt-0"
         >
-          <h2 className="text-3xl font-bold text-gray-800">Design Your Future Today</h2>
+          <h2 className="text-3xl font-bold text-gray-800">We dont just design a service. <br /> We design a movement</h2>
           <p className="mt-4 text-gray-600">
             DesignU improves the economic outcomes of individuals by equipping them with premium technology skills, business skills and life skills.
           </p>
