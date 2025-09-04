@@ -1,14 +1,7 @@
 
-
-import SEO from '../components/common/SEO';
-
 const AboutPage: React.FC = () => {
   return (
     <div className="container mx-auto px-6 py-20">
-      <SEO
-        title="About Us"
-        description="Learn more about Gr8QM Technovates and our mission to empower the next generation of tech professionals through world-class training and education."
-      />
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-12">About Us</h1>
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/2">

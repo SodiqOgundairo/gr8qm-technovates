@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import cld from '../utils/cloudinaryBank';
 import { AdvancedImage } from '@cloudinary/react';
