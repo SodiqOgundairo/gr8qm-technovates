@@ -1,29 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
-
 @import "tailwindcss";
 
-@theme{
-    /* Typography */
-    --font-display: "Montserrat", "sans-serif";
-    --font-body: "Boldonse", system-ui;
-    
-    /* Colors */
-    --color-skyblue: #0098da;
-    --color-iceblue: #c9ebfb;
-    --color-oxfordblue: #05235a;
-    --color-orange: #f58634;
-    --color-dark: #101010;
-    --color-light: #fafafa;
-    --color-gray: #a1a1a1;
-    --color-gray1: #f0f0f0;
+/* @import url("https://fonts.googleapis.com/css2?family=Boldonse&display=swap");  */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@font-face {
+  font-family: "Cerebri Sans";
+  /* font-family: "CerebriSans"; */
+  src: url("./../fonts/CerebriSans/CerebriSansHeavy.ttf") format(truetype);
+  font-weight: 900;
+}
+
+@theme {
+  /* Typography variables */
+
+  /* Specific settings for your header/body classes */
+   --text--font-family-base: CerebriSans, Montserrat;
+  --text-header: 70px;
+  --text-header--line-height: 105%;
+  --text-header--letter-spacing: -5%;
+  --text-header--font-weight: 900; /* Explicitly defining the weight here */
+
+  /* Colors */
+  --color-skyblue: #0098da;
+  --color-iceblue: #c9ebfb;
+  --color-oxfordblue: #05235a;
+  --color-orange: #f58634;
+  --color-dark: #101010;
+  --color-light: #fafafa;
+  --color-gray: #a1a1a1;
+  --color-gray1: #f0f0f0;
 }
 
 body {
-    font-family: var(--font-display);
-    margin: 0;
-    padding: 0;
-    background-color: var(--color-light);
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-light);
 }
 
 .btn-pry {
@@ -79,7 +92,7 @@ body {
 }
 
 .button-content:hover {
-color: var(--color-skyblue);
+  color: var(--color-skyblue);
 }
 
 .btn-sec::before {
@@ -132,17 +145,15 @@ color: var(--color-skyblue);
   width: 100%;
   flex: 1;
   color: var(--color-dark);
-  
 }
 
 .input-field:focus-visible {
   background-color: var(--color-gray-1);
   color: var(--color-darkPurple);
-  border:none;
+  border: none;
   outline-color: var(--color-purple-mid);
 }
 /* input field ends */
-
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
@@ -161,4 +172,3 @@ color: var(--color-skyblue);
 }
 
 /* SCROLL BAR ENDS*/
-
