@@ -15,7 +15,7 @@
   /* Typography variables */
 
   /* Specific settings for your header/body classes */
-   --text--font-family-base: CerebriSans, Montserrat;
+   --text--font-family-base: "Cerebri Sans", Montserrat;
   --text-header: 70px;
   --text-header--line-height: 105%;
   --text-header--letter-spacing: -5%;
@@ -33,7 +33,7 @@
 }
 
 body {
-  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  font-family: var(--text--font-family-base);
   margin: 0;
   padding: 0;
   background-color: var(--color-light);
