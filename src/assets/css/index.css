@@ -1,13 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
 
 /* @import url("https://fonts.googleapis.com/css2?family=Boldonse&display=swap");  */
 
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 @font-face {
   font-family: "Cerebri Sans";
   /* font-family: "CerebriSans"; */
-  src: url("./../fonts/CerebriSans/CerebriSansHeavy.ttf") format(truetype);
+  src: url("./../fonts/CerebriSans/CerebriSansHeavy.ttf") format('truetype');
   font-weight: 900;
 }
 
@@ -15,11 +16,11 @@
   /* Typography variables */
 
   /* Specific settings for your header/body classes */
-   --text--font-family-base: CerebriSans, Montserrat;
+   --text--font-family-base: Cerebri Sans;
   --text-header: 70px;
   --text-header--line-height: 105%;
   --text-header--letter-spacing: -5%;
-  --text-header--font-weight: 900; /* Explicitly defining the weight here */
+  --text-header--font-weight: 900;
 
   /* Colors */
   --color-skyblue: #0098da;
@@ -33,7 +34,7 @@
 }
 
 body {
-  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  font-family: 'Montserrat', sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--color-light);
