@@ -13,7 +13,7 @@ const svgIcons = `${imageBasePath}/svgicons`;
 
 export const cloudinaryImages = {
   verticalLogo: cld
-    .image(`${svgIcons}/Gr8QMNewlogoStraight_u2cohw`)
+    .image(`${svgIcons}/Gr8QMLogo_straightDefault_fg5vk2`)
     .format("auto")
     .quality("auto"),
 };

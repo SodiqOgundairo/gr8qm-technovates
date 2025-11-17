@@ -1,51 +1,51 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
-
-/* @import url("https://fonts.googleapis.com/css2?family=Boldonse&display=swap");  */
-
-
-@font-face {
-  font-family: "Cerebri Sans";
-  /* font-family: "CerebriSans"; */
-  src: url("./../fonts/CerebriSans/CerebriSansHeavy.ttf") format('truetype');
-  font-weight: 900;
-}
 
 @theme {
   /* Typography variables */
+  --text--font-family-base: "Epilogue", Montserrat;
 
-  /* Specific settings for your header/body classes */
-   --text--font-family-base: "Cerebri Sans", Montserrat;
-  --text-header: 70px;
+  /* Typography profiles */
+  /* --text-header: 70px;
   --text-header--line-height: 105%;
   --text-header--letter-spacing: -5%;
-  --text-header--font-weight: 900;
+  --text-header--font-weight: 1000;
 
+  --text-title: 28px;
+  --text-title--line-height: 130%;
+  --text-title--font-weight: 1000; */
+  
   /* Colors */
   --color-skyblue: #0098da;
   --color-iceblue: #c9ebfb;
-  --color-oxfordblue: #05235a;
+  --color-oxford: #05235a;
   --color-orange: #f58634;
   --color-dark: #101010;
   --color-light: #fafafa;
-  --color-gray: #a1a1a1;
-  --color-gray1: #f0f0f0;
+  --color-gray-1: #A1A1A1;
+  --color-gray-2: #6F6D66;
+  --color-gray-3: #282826;
 }
 
 body {
-
   font-family: var(--text--font-family-base);
   margin: 0;
   padding: 0;
   background-color: var(--color-light);
 }
 
+Link, a:hover {
+  color: var(--color-skyblue);
+}
+
 .btn-pry {
   border-radius: 5px;
   background: var(--color-skyblue);
   padding: 13px 30px;
-  font-weight: 400;
+  font-weight: 200;
   color: var(--color-light);
   cursor: pointer;
 }
@@ -74,7 +74,7 @@ body {
   border-radius: 5px;
   background: transparent;
   padding: 13px 30px;
-  font-weight: 500;
+  font-weight: 200;
   color: var(--color-dark);
   cursor: pointer;
   z-index: 1;
@@ -94,7 +94,7 @@ body {
 }
 
 .button-content:hover {
-  color: var(--color-skyblue);
+  color: var(--color-oxford);
 }
 
 .btn-sec::before {
@@ -111,11 +111,14 @@ body {
   border-radius: 100%;
   transition: width 0.3s ease, transform 0.3s ease, border-radius 0.3s ease;
   z-index: 1;
+  /* color: var(--Color-Text-text-iceblue, #C9EBFB); */
+  
   /* Puts the pseudo-element behind the text */
 }
 
 .btn-sec:hover::before {
   background-color: var(--color-light);
+  color: var(--color-dark);
   width: 100%;
   padding: 13px 30px;
   height: 50px;
@@ -136,24 +139,41 @@ body {
   /* Moves the arrow slightly to the right on hover */
 }
 
+
+.btn-inverted {
+  border-radius: 5px;
+  background: var(--color-oxford);
+  padding: 12px 30px;
+  width: fit-content;
+  font-weight: 200;
+  color: var(--color-light);
+  cursor: pointer;
+}
+
+.btn-inverted:hover {
+  background: var(--color-iceblue);
+  box-shadow: 0px 8px 8px 0px #1a5dee1a;
+  scale: 0.95;
+  transition: all 0.3s ease-in-out;
+  color: var(--color-oxford);
+}
+
 /* input field */
 .input-field {
-  border-radius: 40px;
-  background-color: var(--color-light);
+  border-radius: 4px;
   padding: 10px 30px;
   font-weight: 400;
   height: 47px;
-  border: 1.167px solid var(--color-gray);
+  border: 1.167px solid var(--color-gray-1);
   width: 100%;
-  flex: 1;
-  color: var(--color-dark);
+  color: var(--color-gray-1);
 }
 
 .input-field:focus-visible {
-  background-color: var(--color-gray-1);
-  color: var(--color-darkPurple);
+  background-color: var(--color-iceblue);
+  color: var(--color-oxford);
   border: none;
-  outline-color: var(--color-purple-mid);
+  outline-color: var(--color-dark);
 }
 /* input field ends */
 

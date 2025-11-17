@@ -21,7 +21,7 @@ const Hero = () => {
         >
 
           <p className="rounded-full bg-iceblue/40 border-2 border-skyblue py-2 px-10 mx-auto max-w-fit my-6"> Tech with purpose</p>
-          <h1 className="text-7xl leading-16 font-black drop-shadow-2xl">            
+          <h1 className="drop-shadow-2xl text-7xl font-black">            
             {/* Tech with <span className="text-skyblue">  purpose. </span><br /> */}
              <span className="text-orange">Faith</span> that builds. <br /><span className="text-skyblue">Impact </span> that lasts.</h1>
           <p className="text-lg md:text-xl mt-6 md:max-w-2xl">We are a research, design, and development company creating products, services, and learning pathways for people who want to build a better world.</p>
