@@ -61,36 +61,28 @@ Link, a:hover {
 /* special button */
 .btn-sec {
   position: relative;
-  /* Required to position the pseudo-element */
   display: inline-flex;
-  /* Use flexbox to align content */
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  /* Hides the overflowing pseudo-element */
-
   border: none;
-  /* Remove default border */
   border-radius: 5px;
   background: transparent;
   padding: 13px 30px;
   font-weight: 200;
   color: var(--color-dark);
+  z-index: 2;
   cursor: pointer;
-  z-index: 1;
-  /* Ensures the button is on top of the pseudo-element */
+  /* Remove z-index from here - not needed */
 }
 
 .button-content {
   position: relative;
-  z-index: 2;
-  /* Ensures text is on top of the pseudo-element */
+  z-index: 4; /* Text stays on top */
   display: flex;
   align-items: center;
   gap: 8px;
-  /* Space between text and arrow */
   transition: color 0.3s ease;
-  /* Smooth color transition for text */
 }
 
 .button-content:hover {
@@ -104,41 +96,33 @@ Link, a:hover {
   left: 0;
   transform: translateY(-50%);
   width: 47px;
-  /* The size of the circle */
   height: 47px;
-  /* The size of the circle */
   background: var(--color-iceblue);
+  color: var(--color-oxford);
   border-radius: 100%;
-  transition: width 0.3s ease, transform 0.3s ease, border-radius 0.3s ease;
-  z-index: 1;
-  /* color: var(--Color-Text-text-iceblue, #C9EBFB); */
-  
-  /* Puts the pseudo-element behind the text */
+  transition: width 0.3s ease, transform 0.3s ease, border-radius 0.3s ease, background-color 0.3s ease;
+  z-index: 0; /* THIS IS KEY - must be lower than button-content */
 }
 
 .btn-sec:hover::before {
   background-color: var(--color-light);
-  color: var(--color-dark);
   width: 100%;
-  padding: 13px 30px;
   height: 50px;
-  /* Expands to the full width of the button */
   border-radius: 5px;
-  /* Matches the button's border-radius */
   transform: translateY(-50%) translateX(0);
-  /* Ensures it stays centered and moves to the left edge */
+  /* Remove padding and color from here - they don't apply to pseudo-elements */
 }
 
 .btn-sec .arrow {
   display: inline-block;
   transition: transform 0.3s ease;
+  position: relative; /* Add this */
+  z-index: 2; /* Add this to keep arrow on top */
 }
 
 .btn-sec:hover .arrow {
   transform: translateX(4px);
-  /* Moves the arrow slightly to the right on hover */
 }
-
 
 .btn-inverted {
   border-radius: 5px;

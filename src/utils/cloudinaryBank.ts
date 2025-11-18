@@ -10,10 +10,16 @@ const imageBasePath = "Gr8QMTechnovates/Images";
 const svgIcons = `${imageBasePath}/svgicons`;
 // const svgGIFs = `${imageBasePath}/svgGIFs`;
 // const svgImg = `${imageBasePath}/svgImg`;
+const Img = `${imageBasePath}/Img`;
 
 export const cloudinaryImages = {
   verticalLogo: cld
     .image(`${svgIcons}/Gr8QMLogo_straightDefault_fg5vk2`)
+    .format("auto")
+    .quality("auto"),
+
+  heroBg: cld
+    .image(`${Img}/heroImg_lfqqdw`)
     .format("auto")
     .quality("auto"),
 };
