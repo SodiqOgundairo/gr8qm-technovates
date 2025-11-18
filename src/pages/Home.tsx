@@ -18,9 +18,9 @@ const Home: React.FC = () => {
 
           <h1 className="text-4xl md:text-7xl font-black leading-12 md:leading-20 tracking-tighter">
             <span className="text-skyblue">Faith</span>{" "}
-            <span className="text-oxforod">that builds.</span> <br />
+            <span className="text-oxford">that builds.</span> <br />
             <span className="text-orange">Impact</span>{" "}
-            <span className="text-oxforod">that lasts.</span>
+            <span className="text-oxford">that lasts.</span>
           </h1>
           <p className="text-dark">
             {" "}
@@ -60,6 +60,19 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        className="flex flex-col justify-between items-center px-5 md:px-24 py-12 md:py-36 bg-light"
+        id="purpose">
+          <div className="flex flex-col text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-oxford">
+              Built on Purpose, Driven by Faith
+            </h2>
+            <p className="text-base text-gray-2 max-w-[612px]">We don't just build technology. We create solutions that reflect kingdom values and transform communities.</p>
+          </div>
+          <div className="flex flex-col md:flex-row justify-center">
+          </div>
       </div>
     </main>
   );

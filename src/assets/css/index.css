@@ -2,23 +2,12 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap");
 
-@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@theme {
-  /* Typography variables */
+:root {
   --text--font-family-base: "Epilogue", Montserrat;
-
-  /* Typography profiles */
-  /* --text-header: 70px;
-  --text-header--line-height: 105%;
-  --text-header--letter-spacing: -5%;
-  --text-header--font-weight: 1000;
-
-  --text-title: 28px;
-  --text-title--line-height: 130%;
-  --text-title--font-weight: 1000; */
-  
-  /* Colors */
   --color-skyblue: #0098da;
   --color-iceblue: #c9ebfb;
   --color-oxford: #05235a;
@@ -30,136 +19,108 @@
   --color-gray-3: #282826;
 }
 
-body {
+html, body {
   font-family: var(--text--font-family-base);
   margin: 0;
   padding: 0;
   background-color: var(--color-light);
 }
 
-Link, a:hover {
+/* Link defaults */
+a, a:visited {
   color: var(--color-skyblue);
 }
 
-.btn-pry {
-  border-radius: 5px;
-  background: var(--color-skyblue);
-  padding: 13px 30px;
-  font-weight: 200;
-  color: var(--color-light);
-  cursor: pointer;
-}
+/* Tailwind-based component classes using @apply where possible */
+@layer components {
+  .btn-pry {
+    @apply rounded-md px-6 py-3 font-medium text-white cursor-pointer;
+    background-color: var(--color-skyblue);
+  }
+  .btn-pry:hover{
+    background-color: var(--color-light);
+    box-shadow: 0px 8px 8px 0px #1a5dee1a;
+    transform: scale(.95);
+    transition: all .3s ease-in-out;
+    color: var(--color-skyblue);
+  }
 
-.btn-pry:hover {
-  background: var(--color-light);
-  box-shadow: 0px 8px 8px 0px #1a5dee1a;
-  scale: 0.95;
-  transition: all 0.3s ease-in-out;
-  color: var(--color-skyblue);
-}
+  .btn-sec{
+    @apply relative inline-flex items-center justify-start overflow-hidden rounded-md px-6 py-3 font-medium text-[var(--color-dark)] bg-transparent cursor-pointer;
+    z-index: 2;
+  }
 
-/* special button */
-.btn-sec {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  border: none;
-  border-radius: 5px;
-  background: transparent;
-  padding: 13px 30px;
-  font-weight: 200;
-  color: var(--color-dark);
-  z-index: 2;
-  cursor: pointer;
-  /* Remove z-index from here - not needed */
-}
+  .button-content{
+    position: relative;
+    z-index: 4;
+    @apply flex items-center gap-2 transition-colors;
+  }
 
-.button-content {
-  position: relative;
-  z-index: 4; /* Text stays on top */
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: color 0.3s ease;
-}
+  .button-content:hover{
+    color: var(--color-oxford);
+  }
 
-.button-content:hover {
-  color: var(--color-oxford);
-}
+  .btn-sec::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 47px;
+    height: 47px;
+    background: var(--color-iceblue);
+    color: var(--color-oxford);
+    border-radius: 9999px;
+    transition: width .3s ease, transform .3s ease, border-radius .3s ease, background-color .3s ease;
+    z-index: 0;
+  }
 
-.btn-sec::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 47px;
-  height: 47px;
-  background: var(--color-iceblue);
-  color: var(--color-oxford);
-  border-radius: 100%;
-  transition: width 0.3s ease, transform 0.3s ease, border-radius 0.3s ease, background-color 0.3s ease;
-  z-index: 0; /* THIS IS KEY - must be lower than button-content */
-}
+  .btn-sec:hover::before{
+    background-color: var(--color-light);
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    transform: translateY(-50%) translateX(0);
+  }
 
-.btn-sec:hover::before {
-  background-color: var(--color-light);
-  width: 100%;
-  height: 50px;
-  border-radius: 5px;
-  transform: translateY(-50%) translateX(0);
-  /* Remove padding and color from here - they don't apply to pseudo-elements */
-}
+  .btn-sec .arrow{
+    @apply inline-block transition-transform;
+    position: relative;
+    z-index: 2;
+  }
 
-.btn-sec .arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  position: relative; /* Add this */
-  z-index: 2; /* Add this to keep arrow on top */
-}
+  .btn-sec:hover .arrow{
+    transform: translateX(4px);
+  }
 
-.btn-sec:hover .arrow {
-  transform: translateX(4px);
-}
+  .btn-inverted{
+    @apply rounded-md px-6 py-3 font-medium text-white cursor-pointer;
+    background-color: var(--color-oxford);
+    width: fit-content;
+  }
 
-.btn-inverted {
-  border-radius: 5px;
-  background: var(--color-oxford);
-  padding: 12px 30px;
-  width: fit-content;
-  font-weight: 200;
-  color: var(--color-light);
-  cursor: pointer;
-}
+  .btn-inverted:hover{
+    background-color: var(--color-iceblue);
+    box-shadow: 0px 8px 8px 0px #1a5dee1a;
+    transform: scale(.95);
+    transition: all .3s ease-in-out;
+    color: var(--color-oxford);
+  }
 
-.btn-inverted:hover {
-  background: var(--color-iceblue);
-  box-shadow: 0px 8px 8px 0px #1a5dee1a;
-  scale: 0.95;
-  transition: all 0.3s ease-in-out;
-  color: var(--color-oxford);
-}
+  .input-field{
+    @apply rounded-md px-6 py-2 font-normal w-full;
+    height: 47px;
+    border: 1.167px solid var(--color-gray-1);
+    color: var(--color-gray-1);
+  }
 
-/* input field */
-.input-field {
-  border-radius: 4px;
-  padding: 10px 30px;
-  font-weight: 400;
-  height: 47px;
-  border: 1.167px solid var(--color-gray-1);
-  width: 100%;
-  color: var(--color-gray-1);
+  .input-field:focus-visible{
+    background-color: var(--color-iceblue);
+    color: var(--color-oxford);
+    border: none;
+    outline-color: var(--color-dark);
+  }
 }
-
-.input-field:focus-visible {
-  background-color: var(--color-iceblue);
-  color: var(--color-oxford);
-  border: none;
-  outline-color: var(--color-dark);
-}
-/* input field ends */
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
