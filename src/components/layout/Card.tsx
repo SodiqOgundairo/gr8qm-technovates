@@ -33,7 +33,6 @@ const Card: React.FC<CardProps> = ({
     // roundedClass = 'rounded-md',
     // paddingClass = 'p-4',
     className = '',
-    style,
 }) => {
     const classes = [
         'flex',

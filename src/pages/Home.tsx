@@ -2,6 +2,7 @@ import CloudinaryImage from "../utils/cloudinaryImage";
 import { Link } from "react-router-dom";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { PiSparkleLight } from "react-icons/pi";
+// import Card from "../components/layout/Card";
 
 const Home: React.FC = () => {
   return (
@@ -72,6 +73,7 @@ const Home: React.FC = () => {
             <p className="text-base text-gray-2 max-w-[612px]">We don't just build technology. We create solutions that reflect kingdom values and transform communities.</p>
           </div>
           <div className="flex flex-col md:flex-row justify-center">
+            {/* <Card title="Purpose"/> */}
           </div>
       </div>
     </main>
