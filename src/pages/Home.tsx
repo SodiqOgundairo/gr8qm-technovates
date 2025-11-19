@@ -2,36 +2,31 @@ import CloudinaryImage from "../utils/cloudinaryImage";
 import { Link } from "react-router-dom";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { PiSparkleLight } from "react-icons/pi";
-import Purpose from "../components/Purpose";
+import Button from "../components/common/Button";
 import Container from "../components/common/Container";
+import Card from "../components/layout/Card";
+// import Card from "../components/layout/Card";
 
 const Home: React.FC = () => {
   return (
     <main className="flex flex-col">
       <div
-        className="bg-gradient-to-br from-skyblue/20 to-orange/20"
+        className="flex flex-col md:flex-row justify-between items-center px-5 md:px-24 py-12 md:py-36 bg-gradient-to-br from-skyblue/20 to-orange/20"
         id="hero"
       >
-        <Container
-          maxWidth="2xl"
-          padding="py-12 md:py-36"
-          className="flex flex-col md:flex-row justify-between items-center"
-        >
-          <div className="flex flex-col justify-center items-center md:items-start gap-4 text-center md:text-start w-full md:w-2/3">
-            <div className="bg-iceblue flex justify-center items-center py-2 px-4 rounded-full border border-skyblue gap-4">
-              <PiSparkleLight className="text-body-sm text-skyblue" />
-              <p className="text-body-sm text-oxford">
-                Kingdom-Rooted Innovation
-              </p>
-            </div>
+        <div className="flex flex-col justify-center items-center md:items-start gap-4 px-5 md:px-24 text-center md:text-start w-full md:w-2/3">
+          <div className="bg-iceblue flex justify-center items-center py-2 px-4 rounded-full border border-skyblue gap-4">
+            <PiSparkleLight className="text-sm text-skyblue" />
+            <p className="text-sm text-oxford">Kingdom-Rooted Innovation</p>
+          </div>
 
-          <h1 className="text-header-2 md:text-header-1">
+          <h1 className="text-4xl md:text-7xl font-black leading-12 md:leading-20 tracking-tighter">
             <span className="text-skyblue">Faith</span>{" "}
             <span className="text-oxford">that builds.</span> <br />
             <span className="text-orange">Impact</span>{" "}
             <span className="text-oxford">that lasts.</span>
           </h1>
-          <p className="text-body-md text-dark">
+          <p className="text-dark">
             {" "}
             We are a kingdom-rooted innovation collective advancing AI through
             thoughtful research, purposeful design, and principled development.
@@ -39,15 +34,21 @@ const Home: React.FC = () => {
           </p>
 
           <div className="flex justify-start flex-col md:flex-row gap-3 md:gap-5">
-            <Button to="/" variant="pry">
+            <Link to="/" className="btn-pry">
+              {" "}
               Explore Solutions
-            </Button>
-            <Button to="/" variant="sec">
+            </Link>
+            <Button size="md" variant="sec"> 
+              <div className="button-content">
+               Button
+              </div>
+                 </Button>
+            <Link to="/" className="btn-sec">
               <div className="button-content">
                 Academy
                 <HiArrowLongRight className="arrow" />
               </div>
-            </Button>
+            </Link>
           </div>
         </div>
 
@@ -68,10 +69,21 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-        </Container>
       </div>
 
-      <Purpose />
+      <div
+        className="flex flex-col justify-between items-center px-5 md:px-24 py-12 md:py-36 bg-light"
+        id="purpose">
+          <div className="flex flex-col text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-oxford">
+              Built on Purpose, Driven by Faith
+            </h2>
+            <p className="text-base text-gray-2 max-w-[612px]">We don't just build technology. We create solutions that reflect kingdom values and transform communities.</p>
+          </div>
+          <div className="flex flex-col md:flex-row justify-center">
+            <Card className="bg-iceblue" title="Purpose"/>
+          </div>
+      </div>
     </main>
   );
 };

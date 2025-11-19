@@ -50,9 +50,7 @@
   --numbers-60: 60px;
   --numbers-96: 96px;
   --numbers-70: 70px;
-}
-
-:root {
+  
   --text--font-family-base: "Epilogue", Montserrat;
   --color-skyblue: #0098da;
   --color-iceblue: #c9ebfb;
@@ -72,10 +70,10 @@ html, body {
   background-color: var(--color-light);
 }
 
-/* Link defaults */
-a, a:visited {
-  color: var(--color-skyblue);
-}
+/* Link defaults: let components decide color (use inherit) */
+/* a, a:visited {
+  color: inherit; */
+/* } */
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
@@ -142,35 +140,35 @@ a, a:visited {
   .btn-sec:hover .arrow{
     transform: translateX(4px);
   }
+}
 
-  .text-header-1 {
-    @apply font-bold text-13;
-  }
 
-  .text-header-2 {
-    @apply font-bold text-12;
-  }
+/* input field */
 
-  .text-header-3 {
-    @apply font-bold text-11;
-  }
+.input-field {
 
-  .text-header-4 {
-    @apply font-bold text-10;
-  }
+border-radius: 4px;
 
-  .text-body-lg {
-    @apply font-regular text-6;
-  }
+padding: 10px 30px;
 
-  .text-body-md {
-    @apply font-regular text-5;
-  }
+font-weight: 400;
 
-  .text-body-sm {
-    @apply font-regular text-4;
-  }
-  .text-body-lg-bold {
-    @apply font-bold text-6;
-  }
+height: 47px;
+
+border: 1.167px solid var( --color-gray-1);
+
+width: 100%;
+
+color: var( --color-gray-1);
+}
+
+.input-field:focus-visible {
+
+background-color: var( --color-iceblue);
+
+color: var( --color-oxford);
+
+border: none;
+
+outline-color: var( --color-dark);
 }

@@ -8,6 +8,7 @@ import shape2 from '../../assets/img/shape2.png';
 import arrow from '../../assets/img/arrow_corner.svg';
 import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
 import { RiTwitterXFill } from "react-icons/ri";
+import Button from "../common/Button";
 
 interface FooterLink {
   label: string;
@@ -60,7 +61,7 @@ const defaultSections: FooterSection[] = [
 ];
 
 const defaultContactInfo: ContactInfo = {
-  email: "hellow@gr8qm.com",
+  email: "hello@gr8qm.com",
   phone: "+234 901 329 4248",
 };
 
@@ -130,7 +131,7 @@ const Footer: React.FC<FooterProps> = ({
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-2 w-full">
+          <form onSubmit={handleSubmit} className="flex flex-col justify-start gap-4 md:gap-2 w-full">
             <div className="flex flex-col md:flex-row justify-start gap-4 md:gap-2">
               <input
                 type="text"
@@ -151,9 +152,7 @@ const Footer: React.FC<FooterProps> = ({
                 required
               />
             </div>
-            <button type="submit" className="btn-inverted flex justify-center items-center">
-              Send a request <IoIosArrowRoundForward />
-            </button>
+            <Button type="submit" variant="inverted" className=" flex justify-center items-center w-fit"> Send a request <IoIosArrowRoundForward /></Button>
           </form>
         </div>
 
@@ -169,7 +168,7 @@ const Footer: React.FC<FooterProps> = ({
                 <ul className="list-none text-light space-y-2">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <Link to={link.path} className="font-light hover:text-orange transition-colors">
+                      <Link to={link.path} className="font-light hover:text-iceblue transition-colors">
                         {link.label}
                       </Link>
                     </li>
@@ -184,13 +183,13 @@ const Footer: React.FC<FooterProps> = ({
             <p className="text-orange text-sm">CONTACT US</p>
             <a
               href={`mailto:${contactInfo.email}`}
-              className="font-light hover:text-orange transition-colors"
+              className="font-light hover:text-iceblue transition-colors"
             >
               {contactInfo.email}
             </a>
             <a
               href={`tel:${contactInfo.phone}`}
-              className="font-light hover:text-orange transition-colors"
+              className="font-light hover:text-iceblue transition-colors"
             >
               {contactInfo.phone}
             </a>
@@ -236,7 +235,7 @@ const Footer: React.FC<FooterProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              className="hover:text-orange transition-colors"
+              className="hover:text-iceblue transition-colors"
             >
               {social.icon}
             </a>

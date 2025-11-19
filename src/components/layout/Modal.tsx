@@ -49,7 +49,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
         <Button
           onClick={onClose}
           size="sm"
-          variant="tertiary"
+          variant="pry"
           className="absolute right-4 top-4 p-2"
           aria-label="Close modal"
         >

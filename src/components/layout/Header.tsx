@@ -5,14 +5,15 @@ import { Link } from 'react-router-dom';
 import Modal from '../Modal';
 import ApplicationForm from '../ApplicationForm';
 import CloudinaryImage from '../../utils/cloudinaryImage';
+import Button from '../common/Button';
 
 // Link types
 interface NavItem {
   label: string;
   path?: string;
   dropdownLinks?: NavItem[];
+  onClick?: () => void;
 }
-
 interface HeaderProps {
   navLinks?: NavItem[];
   logo?: {
@@ -48,10 +49,10 @@ const defaultLogo = {
   className: 'w-24 hover:scale-105 transition-transform ease-in-out hover:-rotate-2',
 };
 
-const defaultCtaButton = {
+
+const defaultCtaButton: HeaderProps['ctaButton'] = {
   label: 'Contact Us',
 };
-
 const Header: React.FC<HeaderProps> = ({
   navLinks = defaultNavLinks,
   logo = defaultLogo,
@@ -141,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({
           {/* Logo */}
           <Link to="/" aria-label="Homepage">
             <CloudinaryImage
-              imageKey={logo.imageKey}
+              imageKey='verticalLogo'
               className={logo.className}
               alt={logo.alt}
             />
@@ -177,17 +178,17 @@ const Header: React.FC<HeaderProps> = ({
                 <Link 
                   key={item.label} 
                   to={item.path} 
-                  className="text-oxfordblue hover:text-skyblue transition-colors"
+                  className="text-oxford hover:text-skyblue transition-colors"
                 >
                   {item.label}
                 </Link>
               ) : (
                 // Dropdown menu trigger
                 <div key={item.label} className="relative">
-                  <button
+                    <button
                     ref={(el) => setDropdownButtonRef(index, el)}
                     onClick={() => toggleDropdown(index)}
-                    className="text-oxfordblue hover:text-skyblue flex items-center transition-colors"
+                      className="text-oxford hover:text-skyblue flex items-center transition-colors"
                     aria-expanded={isDropdownOpen === index}
                     aria-haspopup="true"
                   >
@@ -203,7 +204,7 @@ const Header: React.FC<HeaderProps> = ({
                     </svg>
                   </button>
                   {/* Dropdown menu content */}
-                  {isDropdownOpen === index && item.dropdownLinks && (
+                      {isDropdownOpen === index && item.dropdownLinks && (
                     <div
                       ref={(el) => setDropdownRef(index, el)}
                       className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -213,7 +214,7 @@ const Header: React.FC<HeaderProps> = ({
                         <Link
                           key={dropdownItem.label}
                           to={dropdownItem.path || '#'}
-                          className="block px-4 py-2 text-sm text-oxfordblue hover:bg-iceblue/50 hover:text-skyblue transition-colors"
+                              className="block px-4 py-2 text-sm text-oxford hover:bg-iceblue/50 hover:text-skyblue transition-colors"
                           onClick={() => setIsDropdownOpen(null)}
                           role="menuitem"
                         >
@@ -226,13 +227,14 @@ const Header: React.FC<HeaderProps> = ({
               )
             ))}
           </div>
-          <button 
-            onClick={handleCtaClick} 
-            className="btn-pry hidden md:flex"
-            aria-label={ctaButton.label}
-          >
-            {ctaButton.label}
-          </button>
+                <Button
+                  onClick={handleCtaClick}
+                  variant="pry"
+                  className="hidden md:flex"
+                  aria-label={ctaButton.label}
+                >
+                  {ctaButton.label}
+                </Button>
         </div>
 
         {/* Mobile Menu (Hidden on desktop) */}
@@ -314,18 +316,18 @@ const Header: React.FC<HeaderProps> = ({
                 exit={{ x: -50, opacity: 0 }}
                 transition={{ delay: navLinks.length * 0.05 }}
               >
-                <button
+                <Button
                   onClick={() => {
                     handleCtaClick();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="btn-pry w-full"
+                  variant="pry"
+                  className="w-full"
                   aria-label={ctaButton.label}
-                  role="menuitem"
-                  tabIndex={0}
                 >
                   {ctaButton.label}
-                </button>
+                </Button>
+
               </motion.div>
             </motion.div>
           )}

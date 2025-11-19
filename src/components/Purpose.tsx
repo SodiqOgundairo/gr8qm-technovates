@@ -1,10 +1,8 @@
 import Card from "./Card";
-import Section from "./Section";
 import Container from "./common/Container";
 
 const Purpose = () => {
   return (
-    <Section>
       <Container
         maxWidth="2xl"
         padding="py-12 md:py-36"
@@ -53,7 +51,6 @@ const Purpose = () => {
         </Card>
         </div>
       </Container>
-    </Section>
   );
 };
 
