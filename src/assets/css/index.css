@@ -1,10 +1,56 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
 
-@import "tailwindcss/preflight";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@theme {
+  --family-font-body: "Epilogue";
+  --family-font-header: "Epilogue";
+  --weight-light: "light";
+  --weight-light-italic: "italic";
+  --weight-semibod: "semibold";
+  --weight-semibod-italic: "semibold italic";
+  --weight-bold: "extrabold";
+  --weight-bold-italic: "extrabold italic";
+  --text-1: "var(--numbers-3)";
+  --text-2: "var(--numbers-4)";
+  --text-3: "var(--numbers-12)";
+  --text-4: "var(--numbers-4-half)";
+  --text-5: "var(--numbers-5)";
+  --text-6: "var(--numbers-6)";
+  --text-7: "var(--numbers-8)";
+  --text-8: "var(--numbers-10)";
+  --text-9: "var(--numbers-10)";
+  --text-10: "var(--numbers-48)";
+  --text-11: "var(--numbers-60)";
+  --text-12: "var(--numbers-70)";
+  --font-weight-regular: "400";
+  --font-weight-italic: "italic";
+  --font-weight-heavy: "heavy";
+  --text-13: "var(--numbers-96)";
+
+  --numbers-0: 0px;
+  --numbers-half: 0.5px;
+  --numbers-1: 1px;
+  --numbers-2: 4px;
+  --numbers-3: 8px;
+  --numbers-4: 12px;
+  --numbers-5: 16px;
+  --numbers-6: 20px;
+  --numbers-7: 24px;
+  --numbers-8: 28px;
+  --numbers-9: 32px;
+  --numbers-10: 40px;
+  --numbers-11: 50px;
+  --numbers-12: 100px;
+  --numbers-13: 150px;
+  --numbers-full: 9999999px;
+  --numbers-4-half: 14px;
+  --numbers-48: 48px;
+  --numbers-60: 60px;
+  --numbers-96: 96px;
+  --numbers-70: 70px;
+}
 
 :root {
   --text--font-family-base: "Epilogue", Montserrat;
@@ -31,20 +77,24 @@ a, a:visited {
   color: var(--color-skyblue);
 }
 
-/* Tailwind-based component classes using @apply where possible */
-@layer components {
-  .btn-pry {
-    @apply rounded-md px-6 py-3 font-medium text-white cursor-pointer;
-    background-color: var(--color-skyblue);
-  }
-  .btn-pry:hover{
-    background-color: var(--color-light);
-    box-shadow: 0px 8px 8px 0px #1a5dee1a;
-    transform: scale(.95);
-    transition: all .3s ease-in-out;
-    color: var(--color-skyblue);
-  }
+/* SCROLL BAR */
+::-webkit-scrollbar {
+  width: 5px;
+}
 
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(200, 200, 200, 1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
+  border-radius: 15px;
+  background-color: #fff;
+}
+
+/* SCROLL BAR ENDS*/
+@layer components {
   .btn-sec{
     @apply relative inline-flex items-center justify-start overflow-hidden rounded-md px-6 py-3 font-medium text-[var(--color-dark)] bg-transparent cursor-pointer;
     z-index: 2;
@@ -93,49 +143,34 @@ a, a:visited {
     transform: translateX(4px);
   }
 
-  .btn-inverted{
-    @apply rounded-md px-6 py-3 font-medium text-white cursor-pointer;
-    background-color: var(--color-oxford);
-    width: fit-content;
+  .text-header-1 {
+    @apply font-bold text-13;
   }
 
-  .btn-inverted:hover{
-    background-color: var(--color-iceblue);
-    box-shadow: 0px 8px 8px 0px #1a5dee1a;
-    transform: scale(.95);
-    transition: all .3s ease-in-out;
-    color: var(--color-oxford);
+  .text-header-2 {
+    @apply font-bold text-12;
   }
 
-  .input-field{
-    @apply rounded-md px-6 py-2 font-normal w-full;
-    height: 47px;
-    border: 1.167px solid var(--color-gray-1);
-    color: var(--color-gray-1);
+  .text-header-3 {
+    @apply font-bold text-11;
   }
 
-  .input-field:focus-visible{
-    background-color: var(--color-iceblue);
-    color: var(--color-oxford);
-    border: none;
-    outline-color: var(--color-dark);
+  .text-header-4 {
+    @apply font-bold text-10;
+  }
+
+  .text-body-lg {
+    @apply font-regular text-6;
+  }
+
+  .text-body-md {
+    @apply font-regular text-5;
+  }
+
+  .text-body-sm {
+    @apply font-regular text-4;
+  }
+  .text-body-lg-bold {
+    @apply font-bold text-6;
   }
 }
-
-/* SCROLL BAR */
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(200, 200, 200, 1);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
-  border-radius: 15px;
-  background-color: #fff;
-}
-
-/* SCROLL BAR ENDS*/
