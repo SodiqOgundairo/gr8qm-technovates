@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { PiSparkleLight } from "react-icons/pi";
 import Button from "../components/common/Button";
-import Container from "../components/common/Container";
-import Card from "../components/layout/Card";
-// import Card from "../components/layout/Card";
 
 const Home: React.FC = () => {
   return (
@@ -81,7 +78,9 @@ const Home: React.FC = () => {
             <p className="text-base text-gray-2 max-w-[612px]">We don't just build technology. We create solutions that reflect kingdom values and transform communities.</p>
           </div>
           <div className="flex flex-col md:flex-row justify-center">
-            <Card className="bg-iceblue" title="Purpose"/>
+            <div className="bg-iceblue text-dark flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl border-b-4 border-oxford shadow-skyblue drop-shadow-2xl">
+              <p className="text-lg text-oxford">Purpasose</p>
+            </div>
           </div>
       </div>
     </main>
