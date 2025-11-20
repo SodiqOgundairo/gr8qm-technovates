@@ -3,12 +3,14 @@ import type { FormEvent } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../../utils/cloudinaryImage";
-import shape1 from '../../assets/img/shape.png';
-import shape2 from '../../assets/img/shape2.png';
-import arrow from '../../assets/img/arrow_corner.svg';
+import shape1 from "../../assets/img/shape.png";
+import shape2 from "../../assets/img/shape2.png";
+import arrow from "../../assets/img/arrow_corner.svg";
 import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
 import { RiTwitterXFill } from "react-icons/ri";
 import Button from "../common/Button";
+import Container from "./Container";
+import Input from "../common/Input";
 
 interface FooterLink {
   label: string;
@@ -88,7 +90,8 @@ const defaultSocialLinks: SocialLink[] = [
   },
 ];
 
-const defaultTagline = "Innovating with faith, designing with purpose, and transforming lives through kingdom-rooted technology.";
+const defaultTagline =
+  "Innovating with faith, designing with purpose, and transforming lives through kingdom-rooted technology.";
 
 const Footer: React.FC<FooterProps> = ({
   sections = defaultSections,
@@ -115,9 +118,8 @@ const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="relative bg-oxford text-white p-5 md:px-24 md:py-36 flex flex-col gap-24 items-start">
-      <div className="flex flex-col md:flex-row justify-between gap-6 w-full">
-        
+    <footer className="relative bg-oxford text-white py-12 md:py-24 lg:py-36 xl:py-40 2xl:py-48 flex flex-col gap-24 items-start">
+      <Container className="flex flex-col md:flex-row justify-between gap-6 w-full">
         {/* Subscribe Section */}
         <div
           id="subscribe"
@@ -127,32 +129,43 @@ const Footer: React.FC<FooterProps> = ({
             <p className="text-orange text-xs md:text-sm">LET'S GO</p>
             <h2 className="text-2xl md:text-3xl text-gray-1 font-light">
               Seeking personalized support?
-              <span className="text-light font-medium"> Request a call from our team</span>
+              <span className="text-light font-medium">
+                {" "}
+                Request a call from our team
+              </span>
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col justify-start gap-4 md:gap-2 w-full">
-            <div className="flex flex-col md:flex-row justify-start gap-4 md:gap-2">
-              <input
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-start gap-4 md:gap-2 w-full"
+          >
+            <div className="flex flex-col lg:flex-row justify-start gap-4 md:gap-2">
+              <Input
                 type="text"
-                className="input-field"
-                placeholder="name"
+                placeholder="Name"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 required
               />
-              <input
+              <Input
                 type="email"
-                className="input-field"
-                placeholder="email"
+                placeholder="email@example.com"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 required
               />
             </div>
-            <Button type="submit" variant="inverted" className=" flex justify-center items-center w-fit"> Send a request <IoIosArrowRoundForward /></Button>
+            <Button
+              type="submit"
+              variant="inverted"
+              className=" flex justify-center items-center w-fit"
+            >
+              {" "}
+              Send a request <IoIosArrowRoundForward />
+            </Button>
           </form>
         </div>
 
@@ -168,7 +181,10 @@ const Footer: React.FC<FooterProps> = ({
                 <ul className="list-none text-light space-y-2">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <Link to={link.path} className="font-light hover:text-iceblue transition-colors">
+                      <Link
+                        to={link.path}
+                        className="font-light hover:text-iceblue transition-colors"
+                      >
                         {link.label}
                       </Link>
                     </li>
@@ -216,14 +232,15 @@ const Footer: React.FC<FooterProps> = ({
           <img src={shape1} alt="" className="absolute top-[50%] left-2.5" />
           <img src={shape2} alt="" className="absolute right-0 bottom-0" />
         </div>
-      </div>
+      </Container>
 
       {/* Bottom Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 z-20 py-5 px-4 bg-dark/20 rounded-b-md">
+      <Container className="flex flex-col md:flex-row justify-between items-center w-full gap-6 z-20 py-5 bg-dark/20 rounded-b-md">
         <div className="flex items-center gap-2">
           <img src={arrow} alt="" className="" />
           <p className="text-sm">
-            &copy; {currentYear} - Copyright - <span className="text-iceblue">Gr8QM</span>
+            &copy; {currentYear} - Copyright -{" "}
+            <span className="text-iceblue">Gr8QM</span>
           </p>
         </div>
 
@@ -241,7 +258,7 @@ const Footer: React.FC<FooterProps> = ({
             </a>
           ))}
         </div>
-      </div>
+      </Container>
     </footer>
   );
 };

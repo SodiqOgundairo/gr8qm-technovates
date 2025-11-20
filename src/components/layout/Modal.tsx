@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ResponsiveContainer } from "./ResponsiveContainer";
+import Container from "./Container";
 import Button from "../common/Button";
 import { PiMarkerCircleDuotone } from "react-icons/pi";
 
@@ -41,7 +41,6 @@ const BaseModal: React.FC<BaseModalProps> = ({
       aria-describedby="modal-description"
     >
       <div
-        // force white background, stronger shadow and rounded corners to match the screenshot
         className={`w-full ${width} bg-white rounded-xl shadow-2xl p-6 relative`}
         onClick={(e) => e.stopPropagation()}
         role="document"
@@ -56,7 +55,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           <PiMarkerCircleDuotone className="w-5 h-5 text-neutral-600" />
         </Button>
 
-        <ResponsiveContainer className="w-full">
+        <Container>
           {title && (
             <h2 id="modal-title" className="text-lg font-semibold mb-1">
               {title}
@@ -69,7 +68,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           )}
 
           <div className="space-y-3">{children}</div>
-        </ResponsiveContainer>
+        </Container>
       </div>
     </div>
   );

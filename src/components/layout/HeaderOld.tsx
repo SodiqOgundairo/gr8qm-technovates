@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import Modal from '../Modal';
-import ApplicationForm from '../ApplicationForm';
-import CloudinaryImage from '../../utils/cloudinaryImage';
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import Modal from "./Modal";
+import ApplicationForm from "../ApplicationForm";
+import CloudinaryImage from "../../utils/cloudinaryImage";
 
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,21 +11,21 @@ const Header: React.FC = () => {
   const mobileMenuRef = useRef(null);
 
   const navLinks = [
-    { label: 'About', path: '/about' },
-    { label: 'Trainings', path: '/trainings' },
-    { label: 'Contact', path: '/contact' },
+    { label: "About", path: "/about" },
+    { label: "Trainings", path: "/trainings" },
+    { label: "Contact", path: "/contact" },
   ];
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setIsMobileMenuOpen(false);
       }
     };
-    
-    document.addEventListener('keydown', handleKeyDown);
+
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
           {/* Hamburger */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             className="md:hidden absolute right-4 top-4 z-50"
@@ -58,9 +58,19 @@ const Header: React.FC = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -68,15 +78,17 @@ const Header: React.FC = () => {
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-6 items-center">
             {navLinks.map(({ label, path }) => (
-              <Link key={label} to={path} className="text-oxfordblue hover:text-skyblue">
+              <Link
+                key={label}
+                to={path}
+                className="text-oxfordblue hover:text-skyblue"
+              >
                 {label}
               </Link>
             ))}
           </div>
-            {/* <button onClick={() => setIsModalOpen(true)} className=" hidden md:block btn-pry"> */}
-            <button className=" hidden md:block btn-pry">
-              Apply Now
-            </button>
+          {/* <button onClick={() => setIsModalOpen(true)} className=" hidden md:block btn-pry"> */}
+          <button className=" hidden md:block btn-pry">Apply Now</button>
         </div>
 
         {/* Mobile Menu */}
@@ -136,7 +148,7 @@ const Header: React.FC = () => {
       </nav>
 
       {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ApplicationForm onClose={() => setIsModalOpen(false)} />
       </Modal>
     </>

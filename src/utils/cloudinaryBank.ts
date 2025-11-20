@@ -22,6 +22,21 @@ export const cloudinaryImages = {
     .image(`${Img}/heroImg_lfqqdw`)
     .format("auto")
     .quality("auto"),
+
+  ResearchDesignImage: cld
+    .image(`${Img}/image_2_hqy2p0`)
+    .format("auto")
+    .quality("auto"),
+
+  TrainingImage: cld
+    .image(`${Img}/TrainingImage`)
+    .format("auto")
+    .quality("auto"),
+
+  PintShop: cld
+    .image(`${Img}/image_1_omivim`)
+    .format("auto")
+    .quality("auto"),
 };
 
 export type CloudinaryImageKey = keyof typeof cloudinaryImages;

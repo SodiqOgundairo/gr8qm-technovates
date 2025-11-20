@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { HiArrowLongRight } from 'react-icons/hi2';
+import Container from './layout/Container';
 // import { cloudinaryImages } from '../utils/cloudinaryBank';
 
 const Hero = () => {
@@ -7,13 +8,14 @@ const Hero = () => {
 
   return (
     <motion.div
-      className="relative h-screen bg-cover bg-center px-4"
+      className="relative h-screen bg-cover bg-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-light/50 to-skyblue/20"></div>
       <div className="absolute inset-0 flex items-center justify-center text-center">
+        <Container>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,6 +47,7 @@ const Hero = () => {
             </a>
           </motion.div>
         </motion.div>
+        </Container>
       </div>
     </motion.div>
   );

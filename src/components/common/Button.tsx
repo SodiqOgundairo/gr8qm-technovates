@@ -21,7 +21,8 @@ const Button: React.FC<ButtonProps> = ({
   const variants = {
     pry: "bg-skyblue text-white hover:bg-light hover:text-skyblue hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
     sec: "btn-sec",
-    inverted: "bg-oxford text-white hover:bg-iceblue hover:text-[var(--color-oxford)] hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
+    inverted:
+      "bg-oxford text-white hover:bg-iceblue hover:text-[var(--color-oxford)] hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
   };
 
   const sizes = {
@@ -30,7 +31,8 @@ const Button: React.FC<ButtonProps> = ({
     lg: "px-8 py-4 text-lg",
   };
 
-  const baseClassName = "rounded-md font-medium cursor-pointer";
+  const baseClassName =
+    "rounded-md font-medium cursor-pointer whitespace-nowrap";
   const variantClassName = variants[variant];
   const sizeClassName = sizes[size];
 

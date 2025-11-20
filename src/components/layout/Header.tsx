@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import type { MouseEvent, KeyboardEvent } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import Modal from '../Modal';
-import ApplicationForm from '../ApplicationForm';
-import CloudinaryImage from '../../utils/cloudinaryImage';
-import Button from '../common/Button';
+import { useEffect, useRef, useState } from "react";
+import type { MouseEvent, KeyboardEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import Modal from "./Modal";
+import ApplicationForm from "../ApplicationForm";
+import CloudinaryImage from "../../utils/cloudinaryImage";
+import Button from "../common/Button";
+import Container from "./Container";
 
 // Link types
 interface NavItem {
@@ -31,27 +32,27 @@ interface HeaderProps {
 }
 
 const defaultNavLinks: NavItem[] = [
-  { label: 'About', path: '/about' },
+  { label: "About", path: "/about" },
   {
-    label: 'Services',
+    label: "Services",
     dropdownLinks: [
-      { label: 'Services 1', path: '/service/service1' },
-      { label: 'Services 2', path: '/service/service2' },
-      { label: 'Services 3', path: '/service/service3' },
+      { label: "Services 1", path: "/service/service1" },
+      { label: "Services 2", path: "/service/service2" },
+      { label: "Services 3", path: "/service/service3" },
     ],
   },
-  { label: 'Portfolio', path: '/portfolio' },
+  { label: "Portfolio", path: "/portfolio" },
 ];
 
 const defaultLogo = {
-  imageKey: 'verticalLogo',
-  alt: 'Gr8QM Logo',
-  className: 'w-24 hover:scale-105 transition-transform ease-in-out hover:-rotate-2',
+  imageKey: "verticalLogo",
+  alt: "Gr8QM Logo",
+  className:
+    "w-24 hover:scale-105 transition-transform ease-in-out hover:-rotate-2",
 };
 
-
-const defaultCtaButton: HeaderProps['ctaButton'] = {
-  label: 'Contact Us',
+const defaultCtaButton: HeaderProps["ctaButton"] = {
+  label: "Contact Us",
 };
 const Header: React.FC<HeaderProps> = ({
   navLinks = defaultNavLinks,
@@ -71,15 +72,15 @@ const Header: React.FC<HeaderProps> = ({
   // Close mobile menu on Escape key press
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setIsMobileMenuOpen(false);
         setIsDropdownOpen(null);
       }
     };
-    
-    document.addEventListener('keydown', handleKeyDown as any);
+
+    document.addEventListener("keydown", handleKeyDown as any);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown as any);
+      document.removeEventListener("keydown", handleKeyDown as any);
     };
   }, []);
 
@@ -89,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
       if (isDropdownOpen !== null) {
         const dropdownRef = dropdownRefs.current.get(isDropdownOpen);
         const buttonRef = dropdownButtonRefs.current.get(isDropdownOpen);
-        
+
         if (
           dropdownRef &&
           !dropdownRef.contains(event.target as Node) &&
@@ -101,9 +102,9 @@ const Header: React.FC<HeaderProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside as any);
+    document.addEventListener("mousedown", handleClickOutside as any);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside as any);
+      document.removeEventListener("mousedown", handleClickOutside as any);
     };
   }, [isDropdownOpen]);
 
@@ -127,7 +128,10 @@ const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const setDropdownButtonRef = (index: number, element: HTMLButtonElement | null) => {
+  const setDropdownButtonRef = (
+    index: number,
+    element: HTMLButtonElement | null
+  ) => {
     if (element) {
       dropdownButtonRefs.current.set(index, element);
     } else {
@@ -137,12 +141,16 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <nav className={`bg-light/30 to-skyblue/20 backdrop-blur-xl ${stickyHeader ? 'sticky top-0' : ''} z-50 px-5 md:px-24 py-3`}>
-        <div className="mx-auto flex justify-between items-center">
+      <nav
+        className={`bg-light/30 to-skyblue/20 backdrop-blur-xl ${
+          stickyHeader ? "sticky top-0" : ""
+        } z-50 py-3`}
+      >
+        <Container className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" aria-label="Homepage">
             <CloudinaryImage
-              imageKey='verticalLogo'
+              imageKey="verticalLogo"
               className={logo.className}
               alt={logo.alt}
             />
@@ -151,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
           {/* Hamburger (Mobile Only) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             className="md:hidden absolute right-4 top-4 z-50"
@@ -164,20 +172,30 @@ const Header: React.FC<HeaderProps> = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
 
           {/* Desktop Nav (Hidden on mobile) */}
-          <div className="hidden md:flex justify-between space-x-24 items-center">
-            {navLinks.map((item, index) => (
+          <div className="hidden md:flex justify-between space-x-8 lg:space-x-16 items-center">
+            {navLinks.map((item, index) =>
               item.path ? (
-                <Link 
-                  key={item.label} 
-                  to={item.path} 
+                <Link
+                  key={item.label}
+                  to={item.path}
                   className="text-oxford hover:text-skyblue transition-colors"
                 >
                   {item.label}
@@ -185,26 +203,33 @@ const Header: React.FC<HeaderProps> = ({
               ) : (
                 // Dropdown menu trigger
                 <div key={item.label} className="relative">
-                    <button
+                  <button
                     ref={(el) => setDropdownButtonRef(index, el)}
                     onClick={() => toggleDropdown(index)}
-                      className="text-oxford hover:text-skyblue flex items-center transition-colors"
+                    className="text-oxford hover:text-skyblue flex items-center transition-colors"
                     aria-expanded={isDropdownOpen === index}
                     aria-haspopup="true"
                   >
                     {item.label}
-                    <svg 
-                      className={`ml-1 h-4 w-4 transform transition-transform ${isDropdownOpen === index ? 'rotate-180' : ''}`} 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
+                    <svg
+                      className={`ml-1 h-4 w-4 transform transition-transform ${
+                        isDropdownOpen === index ? "rotate-180" : ""
+                      }`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </button>
                   {/* Dropdown menu content */}
-                      {isDropdownOpen === index && item.dropdownLinks && (
+                  {isDropdownOpen === index && item.dropdownLinks && (
                     <div
                       ref={(el) => setDropdownRef(index, el)}
                       className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -213,8 +238,8 @@ const Header: React.FC<HeaderProps> = ({
                       {item.dropdownLinks.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.label}
-                          to={dropdownItem.path || '#'}
-                              className="block px-4 py-2 text-sm text-oxford hover:bg-iceblue/50 hover:text-skyblue transition-colors"
+                          to={dropdownItem.path || "#"}
+                          className="block px-4 py-2 text-sm text-oxford hover:bg-iceblue/50 hover:text-skyblue transition-colors"
                           onClick={() => setIsDropdownOpen(null)}
                           role="menuitem"
                         >
@@ -225,17 +250,17 @@ const Header: React.FC<HeaderProps> = ({
                   )}
                 </div>
               )
-            ))}
+            )}
           </div>
-                <Button
-                  onClick={handleCtaClick}
-                  variant="pry"
-                  className="hidden md:flex"
-                  aria-label={ctaButton.label}
-                >
-                  {ctaButton.label}
-                </Button>
-        </div>
+          <Button
+            onClick={handleCtaClick}
+            variant="pry"
+            className="hidden md:flex"
+            aria-label={ctaButton.label}
+          >
+            {ctaButton.label}
+          </Button>
+        </Container>
 
         {/* Mobile Menu (Hidden on desktop) */}
         <AnimatePresence>
@@ -246,7 +271,7 @@ const Header: React.FC<HeaderProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 space-y-4 px-4"
+              className="md:hidden mt-4 space-y-5 px-4"
               role="menu"
               aria-label="Mobile navigation"
               id="mobile-menu"
@@ -278,22 +303,29 @@ const Header: React.FC<HeaderProps> = ({
                         aria-expanded={isDropdownOpen === index}
                       >
                         {item.label}
-                        <svg 
-                          className={`h-4 w-4 transform transition-transform ${isDropdownOpen === index ? 'rotate-180' : ''}`} 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
+                        <svg
+                          className={`h-4 w-4 transform transition-transform ${
+                            isDropdownOpen === index ? "rotate-180" : ""
+                          }`}
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
                           stroke="currentColor"
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
                         </svg>
                       </button>
                       {isDropdownOpen === index && item.dropdownLinks && (
-                        <div className="mt-2 space-y-2 pl-4 border-l border-skyblue">
+                        <div className="mt-2 space-y-4 pl-4 border-l border-skyblue">
                           {item.dropdownLinks.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.label}
-                              to={dropdownItem.path || '#'}
+                              to={dropdownItem.path || "#"}
                               className="block text-sm text-dark hover:text-skyblue transition-colors"
                               onClick={() => {
                                 setIsMobileMenuOpen(false);
@@ -327,7 +359,6 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   {ctaButton.label}
                 </Button>
-
               </motion.div>
             </motion.div>
           )}
@@ -336,8 +367,10 @@ const Header: React.FC<HeaderProps> = ({
 
       {/* Modal */}
       {showModal && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {modalContent || <ApplicationForm onClose={() => setIsModalOpen(false)} />}
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          {modalContent || (
+            <ApplicationForm onClose={() => setIsModalOpen(false)} />
+          )}
         </Modal>
       )}
     </>
