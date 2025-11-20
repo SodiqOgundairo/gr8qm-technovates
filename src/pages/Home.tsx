@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { PiSparkleLight } from "react-icons/pi";
 import Button from "../components/common/Button";
+import { LuBrain } from "react-icons/lu";
 
 const Home: React.FC = () => {
   return (
@@ -11,41 +12,35 @@ const Home: React.FC = () => {
         className="flex flex-col md:flex-row justify-between items-center px-5 md:px-24 py-12 md:py-36 bg-gradient-to-br from-skyblue/20 to-orange/20"
         id="hero"
       >
-        <div className="flex flex-col justify-center items-center md:items-start gap-4 px-5 md:px-24 text-center md:text-start w-full md:w-2/3">
+        <div className="flex flex-col justify-center items-center md:items-start gap-4 my-4 md:my-0 text-center md:text-start w-full md:w-2/3">
           <div className="bg-iceblue flex justify-center items-center py-2 px-4 rounded-full border border-skyblue gap-4">
             <PiSparkleLight className="text-sm text-skyblue" />
             <p className="text-sm text-oxford">Kingdom-Rooted Innovation</p>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-black leading-12 md:leading-20 tracking-tighter">
+          <h1 className="text-4xl md:text-6xl font-black leading-12 md:leading-20 tracking-tighter">
             <span className="text-skyblue">Faith</span>{" "}
             <span className="text-oxford">that builds.</span> <br />
             <span className="text-orange">Impact</span>{" "}
             <span className="text-oxford">that lasts.</span>
           </h1>
-          <p className="text-dark">
+          <p className="text-dark max-w-[550px]">
             {" "}
             We are a kingdom-rooted innovation collective advancing AI through
             thoughtful research, purposeful design, and principled development.
             Transforming lives through technology anchored in faith.
           </p>
 
-          <div className="flex justify-start flex-col md:flex-row gap-3 md:gap-5">
-            <Link to="/" className="btn-pry">
-              {" "}
+          <div className="flex justify-start items-center flex-col md:flex-row gap-3 md:gap-5">
+            <Button to="/" variant="pry">
               Explore Solutions
-            </Link>
-            <Button size="md" variant="sec"> 
-              <div className="button-content">
-               Button
-              </div>
-                 </Button>
-            <Link to="/" className="btn-sec">
+            </Button>
+            <Button to="/" variant="sec">
               <div className="button-content">
                 Academy
                 <HiArrowLongRight className="arrow" />
               </div>
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -56,7 +51,7 @@ const Home: React.FC = () => {
             alt="Hero BG"
           />
 
-          <div className="flex items-center absolute -left-10 bottom-4 rounded-lg bg-white shadow-sm shadow-iceblue p-5 gap-4 hover:scale-110 hover:rotate-12">
+          <div className="flex items-center absolute md:-left-10 md:bottom-4 rounded-lg bg-white shadow-sm shadow-iceblue p-2 md:p-5 gap-4 hover:scale-110 hover:rotate-12">
             <div className="p-2 bg-iceblue rounded-md">
             <PiSparkleLight className="text-2xl text-skyblue" />
             </div>
@@ -78,8 +73,14 @@ const Home: React.FC = () => {
             <p className="text-base text-gray-2 max-w-[612px]">We don't just build technology. We create solutions that reflect kingdom values and transform communities.</p>
           </div>
           <div className="flex flex-col md:flex-row justify-center">
-            <div className="bg-iceblue text-dark flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl border-b-4 border-oxford shadow-skyblue drop-shadow-2xl">
-              <p className="text-lg text-oxford">Purpasose</p>
+            <div className="bg-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl border-b-4 border-oxford shadow-skyblue shadow-md">
+              <div className="p-4 bg-light w-fit rounded-xl text-oxford">
+                <LuBrain />
+              </div>
+              <p className="text-xl font-bold text-oxford">AI Innovation</p>
+              <p className="text-base text-oxford tex-thin">
+                Advancing AI research with integrity and purpose
+              </p>
             </div>
           </div>
       </div>

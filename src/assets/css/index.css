@@ -6,28 +6,6 @@
 @theme {
   --family-font-body: "Epilogue";
   --family-font-header: "Epilogue";
-  --weight-light: "light";
-  --weight-light-italic: "italic";
-  --weight-semibod: "semibold";
-  --weight-semibod-italic: "semibold italic";
-  --weight-bold: "extrabold";
-  --weight-bold-italic: "extrabold italic";
-  --text-1: "var(--numbers-3)";
-  --text-2: "var(--numbers-4)";
-  --text-3: "var(--numbers-12)";
-  --text-4: "var(--numbers-4-half)";
-  --text-5: "var(--numbers-5)";
-  --text-6: "var(--numbers-6)";
-  --text-7: "var(--numbers-8)";
-  --text-8: "var(--numbers-10)";
-  --text-9: "var(--numbers-10)";
-  --text-10: "var(--numbers-48)";
-  --text-11: "var(--numbers-60)";
-  --text-12: "var(--numbers-70)";
-  --font-weight-regular: "400";
-  --font-weight-italic: "italic";
-  --font-weight-heavy: "heavy";
-  --text-13: "var(--numbers-96)";
 
   --numbers-0: 0px;
   --numbers-half: 0.5px;
