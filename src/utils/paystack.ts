@@ -90,7 +90,7 @@ export const formatAmount = (amount: number): string => {
  * Note: This is a client-side check. Server-side verification is recommended
  */
 export const verifyPayment = async (
-  reference: string
+//   reference: string
 ): Promise<{ success: boolean; message: string }> => {
   try {
     // In production, you should verify via your backend
