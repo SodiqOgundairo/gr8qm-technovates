@@ -84,7 +84,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col md:flex-row justify-between w-full gap-5 lg:gap-8">
-            <div className="bg-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
+            <div className="bg-none border border-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
               <div className="p-4 bg-light w-fit rounded-xl text-xl text-oxford">
                 <LuBrain />
               </div>
@@ -93,7 +93,7 @@ const Home: React.FC = () => {
                 Advancing AI research with integrity and purpose
               </p>
             </div>
-            <div className="bg-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
+            <div className="bg-none border border-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
               <div className="p-4 bg-light w-fit rounded-xl text-xl text-orange">
                 <PiSpiral />
               </div>
@@ -102,11 +102,11 @@ const Home: React.FC = () => {
                 Building solutions rooted in faith and excellence
               </p>
             </div>
-            <div className="bg-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
+            <div className="bg-none border border-iceblue flex p-8 flex-start flex-col gap-3 flex-1 rounded-3xl shadow-skyblue drop-shadow-xl">
               <div className="p-4 bg-light w-fit rounded-xl text-xl text-oxford">
                 <RiExchange2Line />
               </div>
-              <p className="text-xl font-bold text-skyblue">Transformation</p>
+              <p className="text-xl font-bold text-oxford">Transformation</p>
               <p className="text-base text-oxford tex-thin">
                 Creating impact that uplifts communities
               </p>
@@ -140,7 +140,7 @@ const Home: React.FC = () => {
           id="purpose"
         >
           <Container className="flex flex-col justify-between items-center gap-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-8 w-full">
               <div className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden">
                 <CloudinaryImage
                   imageKey="ResearchDesignImage"

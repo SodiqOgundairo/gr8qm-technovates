@@ -23,6 +23,16 @@ export const cloudinaryImages = {
     .format("auto")
     .quality("auto"),
 
+  aboutUsHero: cld
+    .image(`${Img}/aboutUsHero`)
+    .format("auto")
+    .quality("auto"),
+
+  visionMision: cld
+    .image(`${Img}/visionMision`)
+    .format("auto")
+    .quality("auto"),
+
   ResearchDesignImage: cld
     .image(`${Img}/image_2_hqy2p0`)
     .format("auto")

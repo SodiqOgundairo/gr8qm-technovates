@@ -55,9 +55,9 @@ const defaultSections: FooterSection[] = [
   {
     title: "INFORMATION",
     links: [
-      { label: "About Us", path: "/" },
-      { label: "Our Mission", path: "/" },
-      { label: "Our Work", path: "/" },
+      { label: "About Us", path: "/about" },
+      { label: "Our Mission", path: "/about#mission" },
+      { label: "Our Work", path: "/portfolio" },
     ],
   },
 ];
