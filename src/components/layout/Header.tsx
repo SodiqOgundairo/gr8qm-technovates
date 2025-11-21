@@ -36,9 +36,9 @@ const defaultNavLinks: NavItem[] = [
   {
     label: "Services",
     dropdownLinks: [
-      { label: "Services 1", path: "/service/service1" },
-      { label: "Services 2", path: "/service/service2" },
-      { label: "Services 3", path: "/service/service3" },
+      { label: "Design & Build", path: "/services/design-build" },
+      { label: "Print Shop", path: "/services/print-shop" },
+      { label: "Tech Training", path: "/services/tech-training" },
     ],
   },
   { label: "Portfolio", path: "/portfolio" },

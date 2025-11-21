@@ -51,9 +51,9 @@ const defaultSections: FooterSection[] = [
   {
     title: "SERVICES",
     links: [
-      { label: "Service Design", path: "/" },
-      { label: "Tech Training", path: "/" },
-      { label: "Print Shop", path: "/" },
+      { label: "Design & Build", path: "/services/design-build" },
+      { label: "Tech Training", path: "/services/tech-training" },
+      { label: "Print Shop", path: "/services/print-shop" },
     ],
   },
   {

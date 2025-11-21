@@ -149,16 +149,16 @@ const Home: React.FC = () => {
                 />
                 <div className="p-6 flex flex-col gap-3">
                   <h3 className="text-lg font-bold text-oxford">
-                    Research & Design
+                    Design & Build
                   </h3>
                   <p className="text-gray-2 text-sm">
-                    Purposeful design that transforms brands and creates
-                    meaningful digital experiences. We study learning patterns,
-                    behavioral insights, and community needs to design
-                    contextually relevant education and development programs.
+                    From concept to deployment, we design and build custom
+                    digital solutions. Whether it's a website, mobile app, or
+                    enterprise system, we transform your vision into powerful,
+                    user-friendly applications that drive results.
                   </p>
                   <Button
-                    to="/service/research-design"
+                    to="/services/design-build"
                     variant="sec"
                     className="w-fit"
                   >
@@ -187,7 +187,7 @@ const Home: React.FC = () => {
                     and human-centered design into their work.
                   </p>
                   <Button
-                    to="/service/tech-training"
+                    to="/services/tech-training"
                     variant="sec"
                     className="w-fit"
                   >
@@ -213,7 +213,7 @@ const Home: React.FC = () => {
                     excellence and attention to detail.
                   </p>
                   <Button
-                    to="/service/print-shop"
+                    to="/services/print-shop"
                     variant="sec"
                     className="w-fit"
                   >
