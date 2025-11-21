@@ -36,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   ref
 ) {
   const baseStyles =
-    "w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)]";
+    "w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-dark)] placeholder:text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)]";
 
   return (
     <div className="flex flex-col gap-2 w-full">

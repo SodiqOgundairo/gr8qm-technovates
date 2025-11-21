@@ -108,13 +108,13 @@ const Header: React.FC<HeaderProps> = ({
     };
   }, [isDropdownOpen]);
 
-  const handleCtaClick = () => {
-    if (ctaButton.onClick) {
-      ctaButton.onClick();
-    } else if (showModal) {
-      setIsModalOpen(true);
-    }
-  };
+  // const handleCtaClick = () => {
+  //   if (ctaButton.onClick) {
+  //     ctaButton.onClick();
+  //   } else if (showModal) {
+  //     setIsModalOpen(true);
+  //   }
+  // };
 
   const toggleDropdown = (index: number) => {
     setIsDropdownOpen(isDropdownOpen === index ? null : index);
@@ -253,7 +253,7 @@ const Header: React.FC<HeaderProps> = ({
             )}
           </div>
           <Button
-            onClick={handleCtaClick}
+            to="/contact"
             variant="pry"
             className="hidden md:flex"
             aria-label={ctaButton.label}
@@ -349,10 +349,7 @@ const Header: React.FC<HeaderProps> = ({
                 transition={{ delay: navLinks.length * 0.05 }}
               >
                 <Button
-                  onClick={() => {
-                    handleCtaClick();
-                    setIsMobileMenuOpen(false);
-                  }}
+                  to="/contact"
                   variant="pry"
                   className="w-full"
                   aria-label={ctaButton.label}

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import type { FormEvent } from "react";
+import React, { useState, type FormEvent } from "react";
+import { supabase } from "../../utils/supabase";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../../utils/cloudinaryImage";
@@ -38,7 +38,11 @@ interface FooterProps {
   contactInfo?: ContactInfo;
   socialLinks?: SocialLink[];
   tagline?: string;
-  onSubscribe?: (data: { name: string; email: string }) => void;
+  onSubscribe?: (data: {
+    name: string;
+    email: string;
+    message?: string;
+  }) => void;
 }
 
 const currentYear = new Date().getFullYear();
@@ -100,20 +104,65 @@ const Footer: React.FC<FooterProps> = ({
   tagline = defaultTagline,
   onSubscribe,
 }) => {
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "cooldown"
+  >("idle");
+  const [loading, setLoading] = useState(false);
+
+  React.useEffect(() => {
+    const last = localStorage.getItem("footer_last_submit");
+    if (last && Date.now() - Number(last) < 30000) {
+      setSubmitStatus("cooldown");
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.email) {
-      if (onSubscribe) {
-        onSubscribe(formData);
+      const last = localStorage.getItem("footer_last_submit");
+      if (last && Date.now() - Number(last) < 30000) {
+        setSubmitStatus("cooldown");
+        return;
       }
-      setFormData({ name: "", email: "" });
+      setLoading(true);
+      try {
+        await supabase.from("messages").insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+          },
+        ]);
+        try {
+          await supabase.functions.invoke("send-contact-email", {
+            body: {
+              name: formData.name,
+              email: formData.email,
+              message: formData.message,
+            },
+          });
+        } catch {}
+        if (onSubscribe) {
+          onSubscribe(formData);
+        }
+        setFormData({ name: "", email: "", message: "" });
+        localStorage.setItem("footer_last_submit", String(Date.now()));
+        setSubmitStatus("success");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -136,37 +185,80 @@ const Footer: React.FC<FooterProps> = ({
             </h2>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-start gap-4 md:gap-2 w-full"
-          >
-            <div className="flex flex-col lg:flex-row justify-start gap-4 md:gap-2">
-              <Input
-                type="text"
-                placeholder="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                type="email"
-                placeholder="email@example.com"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
+          {submitStatus === "success" ? (
+            <div className="flex flex-col gap-4 h-full justify-center">
+              <h3 className="text-xl font-medium text-white">Request Sent!</h3>
+              <p className="text-gray-300">
+                Thank you for reaching out. We'll get back to you shortly.
+              </p>
+              <Button
+                variant="inverted"
+                onClick={() => setSubmitStatus("idle")}
+                className="w-fit mt-4"
+              >
+                Send another
+              </Button>
             </div>
-            <Button
-              type="submit"
-              variant="inverted"
-              className=" flex justify-center items-center w-fit"
+          ) : submitStatus === "cooldown" ? (
+            <div className="flex flex-col gap-4 h-full justify-center">
+              <h3 className="text-xl font-medium text-white">
+                Request Received
+              </h3>
+              <p className="text-gray-300">
+                You have already submitted a request recently. Please wait a
+                moment before sending another.
+              </p>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-start gap-4 md:gap-2 w-full"
             >
-              {" "}
-              Send a request <IoIosArrowRoundForward />
-            </Button>
-          </form>
+              <div className="flex flex-col lg:flex-row justify-start gap-4 md:gap-2">
+                <Input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+                <Input
+                  type="email"
+                  placeholder="email@example.com"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2 w-full">
+                <label className="text-sm font-medium text-gray-300">
+                  Message
+                </label>
+                <textarea
+                  className="w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-24"
+                  name="message"
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      message: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <Button
+                type="submit"
+                variant="inverted"
+                className=" flex justify-center items-center w-fit"
+                loading={loading}
+              >
+                {" "}
+                Send a request <IoIosArrowRoundForward />
+              </Button>
+            </form>
+          )}
         </div>
 
         {/* Links Section */}

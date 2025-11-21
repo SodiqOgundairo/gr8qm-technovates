@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { CgSpinner } from "react-icons/cg";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "pry" | "sec" | "inverted";
@@ -8,6 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   size?: "sm" | "md" | "lg";
   to?: string;
+  loading?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,6 +19,9 @@ const Button: React.FC<ButtonProps> = ({
   className,
   size = "md",
   to,
+  disabled,
+  loading,
+  ...props
 }) => {
   const variants = {
     pry: "bg-skyblue text-white hover:bg-light hover:text-skyblue hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
@@ -32,11 +37,21 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const baseClassName =
-    "rounded-md font-medium cursor-pointer whitespace-nowrap";
-  const variantClassName = variants[variant];
+    "rounded-md font-medium cursor-pointer whitespace-nowrap flex items-center justify-center gap-2";
+
+  let variantClassName = variants[variant];
+  if (disabled || loading) {
+    variantClassName =
+      "bg-[var(--color-gray-1)] text-[var(--color-gray-2)] cursor-not-allowed opacity-50";
+    if (variant === "sec") {
+      variantClassName =
+        "bg-transparent border border-[var(--color-gray-1)] text-[var(--color-gray-2)] cursor-not-allowed";
+    }
+  }
+
   const sizeClassName = sizes[size];
 
-  if (to) {
+  if (to && !disabled && !loading) {
     return (
       <Link
         to={to}
@@ -50,8 +65,11 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
+      disabled={disabled || loading}
       className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
+      {...props}
     >
+      {loading && <CgSpinner className="animate-spin text-xl" />}
       {children}
     </button>
   );

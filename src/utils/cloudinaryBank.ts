@@ -47,6 +47,11 @@ export const cloudinaryImages = {
     .image(`${Img}/image_1_omivim`)
     .format("auto")
     .quality("auto"),
+
+  contactHero: cld
+    .image(`${Img}/contactHero`)
+    .format("auto")
+    .quality("auto"),
 };
 
 export type CloudinaryImageKey = keyof typeof cloudinaryImages;
