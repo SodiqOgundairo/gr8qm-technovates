@@ -1,9 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import Home from "./pages/Home";
-import NotFound from "./pages/PageNotFound";
 import ScrollToTop from "./components/layout/ScrollToTop";
+
+/* Public pages */
+import Home from "./pages/Home";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import ServicesPage from "./pages/Services";
@@ -12,20 +18,22 @@ import DesignBuildPage from "./pages/services/DesignBuild";
 import PrintShopPage from "./pages/services/PrintShop";
 import TechTrainingPage from "./pages/services/TechTraining";
 
-// Admin Pages
+/* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminCourses from "./pages/admin/Courses";
 import AdminMessages from "./pages/admin/Messages";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminLayout from "./components/admin/AdminLayout";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import NotFound from "./pages/PageNotFound";
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
-
       <Routes>
-        {/* Public Routes with Header/Footer */}
+        {/* Public routes – keep Header/Footer */}
         <Route
           path="/*"
           element={
@@ -56,38 +64,29 @@ function App() {
           }
         />
 
-        {/* Admin Login (No Header/Footer) */}
+        {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Protected Admin Routes (No Header/Footer) */}
+        {/* Admin area – single guard + layout */}
         <Route
-          path="/admin/dashboard"
+          path="/admin/*"
           element={
             <ProtectedRoute>
-              <AdminDashboard />
+              <AdminLayout children={undefined} />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/admin/courses"
-          element={
-            <ProtectedRoute>
-              <AdminCourses />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/messages"
-          element={
-            <ProtectedRoute>
-              <AdminMessages />
-            </ProtectedRoute>
-          }
-        />
-        {/* Add more protected admin routes as you create them */}
+        >
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="courses" element={<AdminCourses />} />
+          <Route path="messages" element={<AdminMessages />} />
+          {/* Future admin routes go here */}
+        </Route>
+
+        {/* Public payment‑success page */}
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;
