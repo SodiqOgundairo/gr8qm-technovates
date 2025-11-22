@@ -319,7 +319,7 @@ const PrintShopPage: React.FC = () => {
       <ServiceRequestModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        serviceType="print"
+        serviceType="print-shop"
         serviceName="Print Shop"
       />
     </main>

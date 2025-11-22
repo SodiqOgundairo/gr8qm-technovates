@@ -264,7 +264,7 @@ const DesignBuildPage: React.FC = () => {
       <ServiceRequestModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        serviceType="build"
+        serviceType="design-build"
         serviceName="Design & Build"
       />
     </main>
