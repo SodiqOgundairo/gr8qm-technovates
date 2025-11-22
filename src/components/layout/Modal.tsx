@@ -38,7 +38,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
       onClick={() => {
         if (closeOnOutsideClick) onClose();
       }}
@@ -48,7 +48,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
       aria-describedby="modal-description"
     >
       <div
-        className={`w-full ${width} bg-white rounded-xl shadow-2xl p-6 relative`}
+        className={`w-full ${width} bg-white rounded-xl shadow-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto`}
         onClick={(e) => e.stopPropagation()}
         role="document"
       >
@@ -57,7 +57,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
             onClick={onClose}
             size="sm"
             variant="pry"
-            className="absolute right-4 top-4 p-2"
+            className="sticky top-0 right-0 float-right p-2 z-10 bg-white"
             aria-label="Close modal"
           >
             <PiMarkerCircleDuotone className="w-5 h-5 text-neutral-600" />

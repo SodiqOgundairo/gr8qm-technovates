@@ -1,6 +1,7 @@
 import React, { type ReactNode, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiLogout } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -8,6 +9,14 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear any auth tokens/session data here
+    localStorage.removeItem("admin_token");
+    // Redirect to login
+    navigate("/admin/login");
+  };
 
   return (
     <div className="flex h-screen bg-light">
@@ -47,10 +56,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <h1 className="text-xl font-bold text-oxford">Admin Dashboard</h1>
             </div>
             <div className="flex items-center gap-4">
-              {/* User info or logout button can go here */}
               <span className="text-sm text-gray-600 hidden sm:block">
                 Admin User
               </span>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                title="Logout"
+              >
+                <HiLogout className="h-4 w-4" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
             </div>
           </div>
         </header>

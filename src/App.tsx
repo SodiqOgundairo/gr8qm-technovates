@@ -23,9 +23,12 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminCourses from "./pages/admin/Courses";
 import AdminMessages from "./pages/admin/Messages";
+import AdminApplications from "./pages/admin/Applications";
+import AdminServiceRequests from "./pages/admin/ServiceRequests";
+import AdminInvoices from "./pages/admin/Invoices";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import AdminLayout from "./components/admin/AdminLayout";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import PayInvoice from "./pages/PayInvoice";
 import NotFound from "./pages/PageNotFound";
 
 function App() {
@@ -67,24 +70,33 @@ function App() {
         {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Admin area – single guard + layout */}
+        {/* Admin area – protected routes */}
         <Route
           path="/admin/*"
           element={
             <ProtectedRoute>
-              <AdminLayout children={undefined} />
+              <Routes>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="courses" element={<AdminCourses />} />
+                <Route path="applications" element={<AdminApplications />} />
+                <Route
+                  path="service-requests"
+                  element={<AdminServiceRequests />}
+                />
+                <Route path="invoices" element={<AdminInvoices />} />
+                <Route path="messages" element={<AdminMessages />} />
+                {/* Future admin routes go here */}
+              </Routes>
             </ProtectedRoute>
           }
-        >
-          <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="courses" element={<AdminCourses />} />
-          <Route path="messages" element={<AdminMessages />} />
-          {/* Future admin routes go here */}
-        </Route>
+        />
 
         {/* Public payment‑success page */}
         <Route path="/payment-success" element={<PaymentSuccess />} />
+
+        {/* Public invoice payment page */}
+        <Route path="/pay-invoice/:invoiceNumber" element={<PayInvoice />} />
       </Routes>
     </Router>
   );

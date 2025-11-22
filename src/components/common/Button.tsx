@@ -51,13 +51,21 @@ const Button: React.FC<ButtonProps> = ({
 
   const sizeClassName = sizes[size];
 
+  // Wrap children for sec variant (for animation)
+  const wrappedChildren =
+    variant === "sec" && !loading && !disabled ? (
+      <div className="button-content">{children}</div>
+    ) : (
+      children
+    );
+
   if (to && !disabled && !loading) {
     return (
       <Link
         to={to}
         className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
       >
-        {children}
+        {wrappedChildren}
       </Link>
     );
   }
@@ -70,7 +78,7 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {loading && <CgSpinner className="animate-spin text-xl" />}
-      {children}
+      {wrappedChildren}
     </button>
   );
 };

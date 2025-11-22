@@ -10,6 +10,7 @@ export interface PaystackConfig {
   callback_url?: string;
   metadata?: Record<string, any>;
   currency?: string;
+  onClose?: () => void;
 }
 
 export interface PaystackResponse {
@@ -50,16 +51,23 @@ export const initializePayment = (config: PaystackConfig): void => {
     ref: config.reference,
     metadata: config.metadata,
     callback: function (response: any) {
-      // Payment successful
-      if (config.callback_url) {
-        window.location.href = `${config.callback_url}?reference=${response.reference}`;
-      } else {
-        window.location.href = `/payment-success?reference=${response.reference}`;
-      }
+      // Read metadata from Paystack response (they return what we sent)
+      const metadata = response.metadata || {};
+      const type = metadata.type || "";
+      
+      console.log('💳 Paystack callback received:', response);
+      console.log('📦 Metadata:', metadata);
+      console.log('🏷️ Type:', type);
+      
+      // Payment successful - redirect to success page
+      window.location.href = `/payment-success?reference=${response.reference}${type ? `&type=${type}` : ''}`;
     },
     onClose: function () {
       // User closed payment modal
       console.log("Payment cancelled");
+      if (config.onClose) {
+        config.onClose();
+      }
     },
   });
 
@@ -90,11 +98,14 @@ export const formatAmount = (amount: number): string => {
  * Note: This is a client-side check. Server-side verification is recommended
  */
 export const verifyPayment = async (
-//   reference: string
+  reference: string
 ): Promise<{ success: boolean; message: string }> => {
   try {
     // In production, you should verify via your backend
     // For now, we'll just check if the reference exists
+    if (!reference) {
+      throw new Error("No reference provided");
+    }
     return {
       success: true,
       message: "Payment verified successfully",

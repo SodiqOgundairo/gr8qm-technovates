@@ -78,13 +78,14 @@ const CourseApplicationForm: React.FC<CourseApplicationFormProps> = ({
         amount: course.commitment_fee,
         reference: paymentRef,
         metadata: {
+          type: "course", // For PaymentSuccess page routing
           course_id: course.id,
           course_name: course.name,
           application_id: application.id,
           applicant_name: formData.name,
           payment_type: "course_commitment_fee",
         },
-        callback_url: `/payment-success?type=course&ref=${paymentRef}`,
+        // callback_url: `/payment-success?type=course&reference=${paymentRef}`,
       });
 
       // Close modal after payment initialization

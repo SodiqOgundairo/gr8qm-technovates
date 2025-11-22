@@ -3,11 +3,12 @@ import Modal from "../layout/Modal";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import { supabase } from "../../utils/supabase";
+import { emailTemplates } from "../../utils/email";
 
 interface ServiceRequestModalProps {
   open: boolean;
   onClose: () => void;
-  serviceType: "build" | "print";
+  serviceType: "design-build" | "print-shop" | "other";
   serviceName: string;
 }
 
@@ -21,7 +22,9 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
     name: "",
     email: "",
     phone: "",
-    message: "",
+    budget_range: "",
+    timeline: "",
+    project_description: "",
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -34,36 +37,61 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
 
     try {
       // Insert service request
+      const requestData = {
+        service_type: serviceType,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        budget_range: formData.budget_range || null,
+        timeline: formData.timeline || null,
+        project_description: formData.project_description,
+        status: "pending",
+      };
+
       const { error: insertError } = await supabase
         .from("service_requests")
-        .insert([
-          {
-            service_type: serviceType,
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            message: formData.message,
-          },
-        ]);
+        .insert([requestData]);
 
       if (insertError) throw insertError;
 
-      // Send email notification (optional - using Supabase Edge Function)
+      // Send email notification to admin (hello@gr8qm.com)
       try {
-        await supabase.functions.invoke("send-service-request-email", {
-          body: {
-            ...formData,
-            serviceType: serviceName,
-            to: "hello@gr8qm.com",
-          },
+        const emailTemplate = emailTemplates.serviceRequestNotification({
+          ...requestData,
+          service_type: serviceName,
         });
+
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+        await fetch(`${supabaseUrl}/functions/v1/send-receipt-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseKey}`,
+          },
+          body: JSON.stringify({
+            to: "hello@gr8qm.com",
+            subject: emailTemplate.subject,
+            html: emailTemplate.html,
+          }),
+        });
+
+        console.log("✅ Service request notification sent to hello@gr8qm.com");
       } catch (emailError) {
         console.error("Email notification failed:", emailError);
         // Don't fail the whole request if email fails
       }
 
       setSuccess(true);
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        budget_range: "",
+        timeline: "",
+        project_description: "",
+      });
 
       // Close modal after 2 seconds
       setTimeout(() => {
@@ -79,7 +107,14 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
 
   const handleClose = () => {
     if (!loading) {
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        budget_range: "",
+        timeline: "",
+        project_description: "",
+      });
       setSuccess(false);
       setError(null);
       onClose();
@@ -155,6 +190,26 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
               required
             />
 
+            <Input
+              showLabel
+              labelText="Budget Range (Optional)"
+              placeholder="e.g., ₦500,000 - ₦1,000,000"
+              value={formData.budget_range}
+              onChange={(e) =>
+                setFormData({ ...formData, budget_range: e.target.value })
+              }
+            />
+
+            <Input
+              showLabel
+              labelText="Timeline (Optional)"
+              placeholder="e.g., 2-3 months"
+              value={formData.timeline}
+              onChange={(e) =>
+                setFormData({ ...formData, timeline: e.target.value })
+              }
+            />
+
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-700">
                 Project Details <span className="text-red-500">*</span>
@@ -162,9 +217,12 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
               <textarea
                 className="w-full rounded-md border outline-none transition-all duration-200 border-[var(--color-gray-1)] text-[var(--color-dark)] placeholder:text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-32"
                 placeholder="Tell us about your project requirements..."
-                value={formData.message}
+                value={formData.project_description}
                 onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
+                  setFormData({
+                    ...formData,
+                    project_description: e.target.value,
+                  })
                 }
                 required
               />
@@ -183,10 +241,10 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
               <Button
                 type="submit"
                 variant="pry"
-                loading={loading}
+                disabled={loading}
                 className="flex-1"
               >
-                Submit Request
+                {loading ? "Submitting..." : "Submit Request"}
               </Button>
             </div>
           </form>
