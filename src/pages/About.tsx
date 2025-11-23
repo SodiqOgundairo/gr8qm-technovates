@@ -9,9 +9,16 @@ import { FiUser } from "react-icons/fi";
 import { SlBadge } from "react-icons/sl";
 import { LuShield } from "react-icons/lu";
 
+import { SEO } from "../components/common/SEO";
+
 const AboutPage: React.FC = () => {
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="About Us" 
+        description="A kingdom-rooted Innovation Collective. We exist to research, design, and develop impactful AI technologies while equipping individuals through transformative training."
+      />
+      <main className="flex flex-col">
       <div className="py-12 md:py-20 lg:py-28 xl:py-32 2xl:py-40 bg-gradient-to-br from-skyblue/20 to-orange/20">
         <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
@@ -185,6 +192,7 @@ const AboutPage: React.FC = () => {
         </Container>
       </div>
     </main>
+    </>
   );
 };
 

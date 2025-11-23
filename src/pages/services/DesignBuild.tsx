@@ -8,6 +8,8 @@ import { FaCheck } from "react-icons/fa";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
 import { useNavigate } from "react-router-dom";
 
+import { SEO } from "../../components/common/SEO";
+
 const DesignBuildPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -74,7 +76,12 @@ const DesignBuildPage: React.FC = () => {
   ];
 
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="Design & Build" 
+        description="From Vision to Reality. We design and build custom digital solutions that transform your ideas into powerful, user-friendly applications."
+      />
+      <main className="flex flex-col">
       {/* Hero Section */}
       <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
         <Container className="flex flex-col md:flex-row items-center gap-12">
@@ -268,6 +275,7 @@ const DesignBuildPage: React.FC = () => {
         serviceName="Design & Build"
       />
     </main>
+    </>
   );
 };
 

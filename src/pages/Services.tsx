@@ -3,6 +3,8 @@ import Container from "../components/layout/Container";
 import ServiceCard from "../components/services/ServiceCard";
 import { useNavigate } from "react-router-dom";
 
+import { SEO } from "../components/common/SEO";
+
 const ServicesPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -58,7 +60,12 @@ const ServicesPage: React.FC = () => {
   ];
 
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="Our Services" 
+        description="Empowering Your Digital Journey. We offer comprehensive services to help you build, brand, and grow your business. From custom development to professional printing and FREE tech training."
+      />
+      <main className="flex flex-col">
       {/* Hero Section */}
       <div className="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-skyblue/10 via-iceblue/10 to-orange/10">
         <Container className="text-center">
@@ -156,6 +163,7 @@ const ServicesPage: React.FC = () => {
         </Container>
       </div>
     </main>
+    </>
   );
 };
 

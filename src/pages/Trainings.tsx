@@ -23,6 +23,8 @@ interface Course {
   created_at?: string;
 }
 
+import { SEO } from "../components/common/SEO";
+
 const TrainingsPage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,7 +89,12 @@ const TrainingsPage: React.FC = () => {
   ];
 
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="Tech Training" 
+        description="Browse Our FREE Courses. World-class training programs to launch your tech career. All courses are 100% FREE with a refundable commitment fee."
+      />
+      <main className="flex flex-col">
       {/* Hero Section */}
       <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
         <Container className="text-center">
@@ -259,6 +266,7 @@ const TrainingsPage: React.FC = () => {
         </Modal>
       )}
     </main>
+    </>
   );
 };
 

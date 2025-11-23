@@ -5,6 +5,8 @@ import { useState } from "react";
 import { supabase } from "../utils/supabase";
 import Input from "../components/common/Input";
 
+import { SEO } from "../components/common/SEO";
+
 const ContactPage: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -50,7 +52,12 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="Contact Us" 
+        description="Get in touch with Gr8QM Technovates. We'd love to hear from you. Whether it's partnerships, services, or questions—send us a message."
+      />
+      <main className="flex flex-col">
       <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
         <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
@@ -137,6 +144,7 @@ const ContactPage: React.FC = () => {
         </Container>
       </div>
     </main>
+    </>
   );
 };
 

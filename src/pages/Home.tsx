@@ -6,9 +6,16 @@ import { LuBrain } from "react-icons/lu";
 import { RiExchange2Line } from "react-icons/ri";
 import Container from "../components/layout/Container";
 
+import { SEO } from "../components/common/SEO";
+
 const Home: React.FC = () => {
   return (
-    <main className="flex flex-col">
+    <>
+      <SEO 
+        title="Home" 
+        description="Faith that builds. Impact that lasts. We are a kingdom-rooted innovation collective advancing AI through thoughtful research, purposeful design, and principled development."
+      />
+      <main className="flex flex-col">
       <div
         className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20"
         id="hero"
@@ -244,6 +251,7 @@ const Home: React.FC = () => {
         </div>
       </Container>
     </main>
+    </>
   );
 };
 
