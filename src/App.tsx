@@ -26,6 +26,7 @@ import AdminMessages from "./pages/admin/Messages";
 import AdminApplications from "./pages/admin/Applications";
 import AdminServiceRequests from "./pages/admin/ServiceRequests";
 import AdminInvoices from "./pages/admin/Invoices";
+import AdminPortfolio from "./pages/admin/Portfolio";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
@@ -86,6 +87,7 @@ function App() {
                 />
                 <Route path="invoices" element={<AdminInvoices />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="portfolio" element={<AdminPortfolio />} />
                 {/* Future admin routes go here */}
               </Routes>
             </ProtectedRoute>
