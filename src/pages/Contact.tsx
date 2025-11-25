@@ -34,11 +34,37 @@ const ContactPage: React.FC = () => {
         .from("messages")
         .insert([{ name, email, message }]);
       if (error) throw error;
+
+      // Send email notification to hello@gr8qm.com
       try {
-        await supabase.functions.invoke("send-contact-email", {
-          body: { name, email, message },
+        const { emailTemplates } = await import("../utils/email");
+        const emailTemplate = emailTemplates.contactMessage({
+          name,
+          email,
+          message,
         });
-      } catch {}
+
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+        await fetch(`${supabaseUrl}/functions/v1/send-receipt-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseKey}`,
+          },
+          body: JSON.stringify({
+            to: "hello@gr8qm.com",
+            subject: emailTemplate.subject,
+            html: emailTemplate.html,
+            replyTo: email,
+          }),
+        });
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // Don't fail the whole submission if email fails
+      }
+
       setSuccess(true);
       setName("");
       setEmail("");
@@ -53,97 +79,98 @@ const ContactPage: React.FC = () => {
 
   return (
     <>
-      <SEO 
-        title="Contact Us" 
+      <SEO
+        title="Contact Us"
         description="Get in touch with Gr8QM Technovates. We'd love to hear from you. Whether it's partnerships, services, or questions—send us a message."
       />
       <main className="flex flex-col">
-      <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
-        <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
-            <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0">
-              <p className="text-sm text-oxford">Get in touch</p>
+        <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
+          <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
+              <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0">
+                <p className="text-sm text-oxford">Get in touch</p>
+              </div>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight">
+                <span className="text-oxford">Contact</span>{" "}
+                <span className="text-skyblue">Gr8QM</span>
+              </h1>
+              <p className="text-dark md:text-sm lg:text-base max-w-[650px] mx-auto md:mx-0">
+                We'd love to hear from you. Whether it's partnerships, services,
+                or questions—send us a message and our team will respond
+                promptly.
+              </p>
+              <div className="flex justify-start items-center gap-3"></div>
             </div>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight">
-              <span className="text-oxford">Contact</span>{" "}
-              <span className="text-skyblue">Gr8QM</span>
-            </h1>
-            <p className="text-dark md:text-sm lg:text-base max-w-[650px] mx-auto md:mx-0">
-              We'd love to hear from you. Whether it's partnerships, services,
-              or questions—send us a message and our team will respond promptly.
-            </p>
-            <div className="flex justify-start items-center gap-3"></div>
-          </div>
-          <div className="w-full md:w-1/2">
-            <CloudinaryImage
-              imageKey="contactHero"
-              className="rounded-2xl w-full object-cover"
-              alt="Contact Hero"
-            />
-          </div>
-        </Container>
-      </div>
+            <div className="w-full md:w-1/2">
+              <CloudinaryImage
+                imageKey="contactHero"
+                className="rounded-2xl w-full object-cover"
+                alt="Contact Hero"
+              />
+            </div>
+          </Container>
+        </div>
 
-      <div className="py-16 md:py-24 lg:py-32 bg-light">
-        <Container className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-oxford">
-              Send us a message
-            </h2>
-            {success && (
-              <p className="text-green-600">Message sent successfully!</p>
-            )}
-            {error && <p className="text-red-600">{error}</p>}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input
-                type="text"
-                value={hp}
-                onChange={(e) => setHp(e.target.value)}
-                className="hidden"
-                aria-hidden="true"
-                tabIndex={-1}
-              />
-              <Input
-                showLabel
-                labelText="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-              <Input
-                showLabel
-                labelText="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm font-medium text-gray-700">
-                  Message
-                </label>
-                <textarea
-                  className="w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-32"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+        <div className="py-16 md:py-24 lg:py-32 bg-light">
+          <Container className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-oxford">
+                Send us a message
+              </h2>
+              {success && (
+                <p className="text-green-600">Message sent successfully!</p>
+              )}
+              {error && <p className="text-red-600">{error}</p>}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <input
+                  type="text"
+                  value={hp}
+                  onChange={(e) => setHp(e.target.value)}
+                  className="hidden"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                />
+                <Input
+                  showLabel
+                  labelText="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
-              </div>
-              <Button variant="pry" type="submit" loading={loading}>
-                Send Message
-              </Button>
-            </form>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-oxford">
-              Contact details
-            </h2>
-            <p className="text-gray-2">Email: hello@gr8qm.com</p>
-            <p className="text-gray-2">Phone: +234 901 329 4248</p>
-          </div>
-        </Container>
-      </div>
-    </main>
+                <Input
+                  showLabel
+                  labelText="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="text-sm font-medium text-gray-700">
+                    Message
+                  </label>
+                  <textarea
+                    className="w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-32"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button variant="pry" type="submit" loading={loading}>
+                  Send Message
+                </Button>
+              </form>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-oxford">
+                Contact details
+              </h2>
+              <p className="text-gray-2">Email: hello@gr8qm.com</p>
+              <p className="text-gray-2">Phone: +234 901 329 4248</p>
+            </div>
+          </Container>
+        </div>
+      </main>
     </>
   );
 };

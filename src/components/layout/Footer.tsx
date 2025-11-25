@@ -143,15 +143,37 @@ const Footer: React.FC<FooterProps> = ({
             message: formData.message,
           },
         ]);
+
+        // Send email notification to hello@gr8qm.com
         try {
-          await supabase.functions.invoke("send-contact-email", {
-            body: {
-              name: formData.name,
-              email: formData.email,
-              message: formData.message,
-            },
+          const { emailTemplates } = await import("../../utils/email");
+          const emailTemplate = emailTemplates.contactMessage({
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
           });
-        } catch {}
+
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+          await fetch(`${supabaseUrl}/functions/v1/send-receipt-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${supabaseKey}`,
+            },
+            body: JSON.stringify({
+              to: "hello@gr8qm.com",
+              subject: emailTemplate.subject,
+              html: emailTemplate.html,
+              replyTo: formData.email,
+            }),
+          });
+        } catch (emailError) {
+          console.error("Failed to send email notification:", emailError);
+          // Don't fail the whole submission if email fails
+        }
+
         if (onSubscribe) {
           onSubscribe(formData);
         }
