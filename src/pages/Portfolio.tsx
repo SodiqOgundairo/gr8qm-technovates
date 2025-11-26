@@ -64,7 +64,7 @@ const PortfolioPage = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-12 md:py-20 lg:py-24 bg-gradient-to-br from-skyblue/20 to-orange/20">
+        <div className="py-12 md:py-20 lg:py-24 bg-linear-to-br from-skyblue/20 to-orange/20">
           <Container className="text-center">
             <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto mb-4">
               <p className="text-sm text-oxford">Our Work</p>
@@ -132,7 +132,7 @@ const PortfolioPage = () => {
                           <FaStar /> Featured
                         </div>
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                      <div className="absolute bottom-0 left-0 right-0 bg-lnear-to-t from-black/70 to-transparent p-4">
                         <span className="inline-block bg-white/90 text-oxford px-3 py-1 rounded-full text-xs font-medium">
                           {getCategoryLabel(item.category)}
                         </span>
