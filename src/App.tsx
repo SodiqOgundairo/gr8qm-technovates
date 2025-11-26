@@ -14,6 +14,7 @@ import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import ServicesPage from "./pages/Services";
 import TrainingsPage from "./pages/Trainings";
+import PortfolioPage from "./pages/Portfolio";
 import DesignBuildPage from "./pages/services/DesignBuild";
 import PrintShopPage from "./pages/services/PrintShop";
 import TechTrainingPage from "./pages/services/TechTraining";
@@ -60,6 +61,7 @@ function App() {
                   element={<TechTrainingPage />}
                 />
                 <Route path="/trainings" element={<TrainingsPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
