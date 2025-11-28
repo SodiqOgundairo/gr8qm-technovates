@@ -10,6 +10,7 @@ import {
   HiCurrencyDollar,
   HiUserGroup,
 } from "react-icons/hi";
+import { motion } from "framer-motion";
 
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState({
@@ -133,7 +134,13 @@ const AdminDashboard: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-skyblue">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0 }}
+            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+            className="bg-white p-6 rounded-lg shadow border-l-4 border-skyblue cursor-default"
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-skyblue/10 p-3 rounded-full">
                 <HiUserGroup className="h-6 w-6 text-skyblue" />
@@ -145,9 +152,15 @@ const AdminDashboard: React.FC = () => {
             <div className="text-2xl font-bold text-oxford">
               {loading ? "..." : stats.totalApplications}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+            className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500 cursor-default"
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-green-100 p-3 rounded-full">
                 <HiCurrencyDollar className="h-6 w-6 text-green-600" />
@@ -159,9 +172,15 @@ const AdminDashboard: React.FC = () => {
             <div className="text-2xl font-bold text-oxford">
               {loading ? "..." : formatCurrency(stats.totalRevenue)}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-orange">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+            className="bg-white p-6 rounded-lg shadow border-l-4 border-orange cursor-default"
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-orange/10 p-3 rounded-full">
                 <HiDocumentText className="h-6 w-6 text-orange" />
@@ -173,9 +192,15 @@ const AdminDashboard: React.FC = () => {
             <div className="text-2xl font-bold text-oxford">
               {loading ? "..." : stats.pendingRequests}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-oxford">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+            className="bg-white p-6 rounded-lg shadow border-l-4 border-oxford cursor-default"
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-oxford/10 p-3 rounded-full">
                 <HiMail className="h-6 w-6 text-oxford" />
@@ -187,7 +212,7 @@ const AdminDashboard: React.FC = () => {
             <div className="text-2xl font-bold text-oxford">
               {loading ? "..." : stats.unreadMessages}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Quick Actions Grid */}
@@ -196,21 +221,30 @@ const AdminDashboard: React.FC = () => {
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {quickActions.map((action) => (
-              <Link
-                key={action.path}
-                to={action.path}
-                className="bg-white rounded-lg p-6 shadow hover:shadow-xl transition-all duration-300 group"
-              >
-                <div
-                  className={`${action.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+            {quickActions.map((action, index) => (
+              <Link key={action.path} to={action.path}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
+                  whileHover={{
+                    y: -8,
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+                  }}
+                  className="bg-white rounded-lg p-6 shadow group cursor-pointer"
                 >
-                  <action.icon className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors">
-                  {action.name}
-                </h3>
-                <p className="text-sm text-gray-600">{action.description}</p>
+                  <motion.div
+                    className={`${action.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <action.icon className="h-6 w-6 text-white" />
+                  </motion.div>
+                  <h3 className="text-lg font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors">
+                    {action.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">{action.description}</p>
+                </motion.div>
               </Link>
             ))}
           </div>

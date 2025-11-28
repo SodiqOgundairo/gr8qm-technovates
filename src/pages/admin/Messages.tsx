@@ -9,6 +9,7 @@ import {
   IoIosArrowRoundBack,
   IoMdRefresh,
 } from "react-icons/io";
+import { motion } from "framer-motion";
 
 interface Message {
   id: string;
@@ -84,7 +85,12 @@ const AdminMessages: React.FC = () => {
             onClick={() => fetchMessages(page, pageSize, query)}
             className="px-4!"
           >
-            <IoMdRefresh className="text-xl" />
+            <motion.div
+              whileTap={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            >
+              <IoMdRefresh className="text-xl" />
+            </motion.div>
           </Button>
         </div>
 
@@ -145,8 +151,17 @@ const AdminMessages: React.FC = () => {
                   ))
                 ) : (
                   <>
-                    {messages.map((m) => (
-                      <tr key={m.id} className="hover:bg-gray-50">
+                    {messages.map((m, index) => (
+                      <motion.tr
+                        key={m.id}
+                        className="hover:bg-gray-50 transition-colors"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{
+                          backgroundColor: "rgba(241, 245, 249, 1)",
+                        }}
+                      >
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                           {new Date(m.created_at).toLocaleString()}
                         </td>
@@ -159,7 +174,7 @@ const AdminMessages: React.FC = () => {
                         <td className="px-6 py-4 text-sm text-gray-700">
                           <p className="line-clamp-2">{m.message}</p>
                         </td>
-                      </tr>
+                      </motion.tr>
                     ))}
                     {messages.length === 0 && (
                       <tr>

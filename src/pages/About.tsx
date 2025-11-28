@@ -24,37 +24,41 @@ const AboutPage: React.FC = () => {
       />
       <main className="flex flex-col">
         <div className="py-12 md:py-20 lg:py-28 xl:py-32 2xl:py-40 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
-              <ScrollReveal>
+          <Container className="flex flex-col md:flex-row w-full justify-between items-center gap-8">
+            <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-2/3">
+              <ScrollReveal className="w-full">
                 <div className="bg-skyblue rounded-2xl  p-4 py-8 md:p-5 lg:p-16 xl:p-16 2xl:p-24 space-y-4">
-                  <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0">
-                    <p className="text-sm text-oxford">About Us</p>
+                  <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0 flex items-center gap-2">
+                    <PiSparkleLight className="text-oxford" />
+                    <p className="text-sm text-oxford">
+                      Kingdom-Rooted Innovation
+                    </p>
                   </div>
                   <h1 className="text-3xl lg:text-4xl font-black tracking-tight wrap-break-word">
-                    <span className="text-iceblue">A kingdom-rooted</span>{" "}
-                    <span className="text-iceblue">Innovation</span>{" "}
-                    <span className="text-oxford">Collective</span>
+                    <span className="text-white">Faith</span>{" "}
+                    <span className="text-oxford">that builds.</span>
+                    <br />
+                    <span className="text-white">Impact</span>{" "}
+                    <span className="text-oxford">that last.</span>
                   </h1>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
-                <div className="bg-orange p-2 py-4 md:p-5 lg:p-16 xl:p-16 2xl:p-24 rounded-2xl">
-                  <p className="text-light md:text-sm lg:text-base max-w-[650px] mx-auto md:mx-0">
-                    We exist to research, design, and develop impactful AI
-                    technologies while equipping individuals through
-                    transformative training. Our mission is to build with
-                    excellence, serve with integrity, and create tech that
-                    reflects our faith-driven purpose.
+                <div className="bg-orange p-2 py-4 md:p-5 lg:p-2 xl:p-2 2xl:p-24 rounded-2xl">
+                  <p className="text-light  lg:text-base max-w-[650px] mx-auto md:mx-0">
+                    We are a kingdom-rooted innovation collective advancing AI
+                    through thoughtful research, purposeful design, and
+                    principled development. Transforming lives through
+                    technology anchored in faith.
                   </p>
                 </div>
               </ScrollReveal>
             </div>
             {/* <div className="w-full"> */}
-            <ScrollReveal delay={0.4}>
+            <ScrollReveal delay={0.4} className="w-full md:w-1/3" width="100%">
               <CloudinaryImage
                 imageKey="aboutUsHero"
-                className="object-cover md:w-1/2 max--[600px]"
+                className="object-cover w-full max-w-[600px]"
                 alt="About Us Hero"
               />
             </ScrollReveal>

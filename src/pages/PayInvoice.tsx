@@ -202,7 +202,7 @@ export default function PayInvoice() {
                 variant="pry"
                 onClick={handlePayment}
                 disabled={paying}
-                className="w-full py-4 "
+                className="w-full py-4"
                 size="lg"
               >
                 {paying

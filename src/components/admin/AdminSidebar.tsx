@@ -10,7 +10,9 @@ import {
   HiPhotograph,
   HiCurrencyDollar,
   HiX,
+  HiClipboardCheck,
 } from "react-icons/hi";
+import { motion } from "framer-motion";
 
 interface AdminSidebarProps {
   onClose?: () => void;
@@ -24,6 +26,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { name: "Dashboard", path: "/admin/dashboard", icon: HiHome },
+  { name: "Forms", path: "/admin/forms", icon: HiClipboardCheck },
   { name: "Courses", path: "/admin/courses", icon: HiAcademicCap },
   { name: "Applications", path: "/admin/applications", icon: HiClipboardList },
   {
@@ -60,7 +63,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-6">
         <div className="space-y-1 px-3">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <NavLink
               key={item.path}
               to={item.path}
@@ -73,8 +76,22 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
                 }`
               }
             >
-              <item.icon className="h-5 w-5 shrink-0" />
-              <span className="font-medium">{item.name}</span>
+              {() => (
+                <motion.div
+                  className="flex items-center gap-3 w-full"
+                  initial={{ x: -10, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <item.icon className="h-5 w-5 shrink-0" />
+                  </motion.div>
+                  <span className="font-medium">{item.name}</span>
+                </motion.div>
+              )}
             </NavLink>
           ))}
         </div>
