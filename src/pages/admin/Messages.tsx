@@ -82,7 +82,7 @@ const AdminMessages: React.FC = () => {
           <Button
             variant="pry"
             onClick={() => fetchMessages(page, pageSize, query)}
-            className="!px-4"
+            className="px-4!"
           >
             <IoMdRefresh className="text-xl" />
           </Button>

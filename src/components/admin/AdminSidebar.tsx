@@ -73,7 +73,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
                 }`
               }
             >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
+              <item.icon className="h-5 w-5 shrink-0" />
               <span className="font-medium">{item.name}</span>
             </NavLink>
           ))}

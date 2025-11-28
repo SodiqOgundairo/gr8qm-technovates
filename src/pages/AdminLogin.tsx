@@ -35,7 +35,7 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-skyblue/20 to-orange/20 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-linear-to-br from-skyblue/20 to-orange/20 flex items-center justify-center py-12 px-4">
       <Container>
         <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-8">

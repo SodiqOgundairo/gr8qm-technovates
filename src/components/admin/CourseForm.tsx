@@ -253,7 +253,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
           onChange={handleChange}
           required
           rows={4}
-          className="w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3"
+          className="w-full rounded-md border outline-none transition-all duration-200 text-start border-gray-1 text-gray-1 focus:bg-iceblue focus:text-oxford focus:border-none focus:outline-dark px-4 py-3"
           placeholder="Brief description of the course..."
         />
       </div>

@@ -166,7 +166,7 @@ const AdminMessages: React.FC = () => {
             variant="pry"
             onClick={() => fetchMessages(0, pageSize, query)}
             size="md"
-            className="!px-4"
+            className="px-4!"
             aria-label="Refresh messages"
           >
             <IoMdRefresh className="text-xl" />

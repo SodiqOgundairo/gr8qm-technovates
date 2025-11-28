@@ -11,6 +11,7 @@ import { RiTwitterXFill } from "react-icons/ri";
 import Button from "../common/Button";
 import Container from "./Container";
 import Input from "../common/Input";
+import { motion } from "framer-motion";
 
 interface FooterLink {
   label: string;
@@ -258,8 +259,8 @@ const Footer: React.FC<FooterProps> = ({
                 <label className="text-sm font-medium text-gray-300">
                   Message
                 </label>
-                <textarea
-                  className="w-full rounded-md border outline-none transition-all duration-200 text-start border-[var(--color-gray-1)] text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-24"
+                <motion.textarea
+                  className="w-full rounded-md border outline-none transition-all duration-200 text-start border-gray-1 text-gray-1 focus:bg-iceblue focus:text-oxford focus:border-none focus:outline-dark px-4 py-3 h-24"
                   name="message"
                   value={formData.message}
                   onChange={(e) =>
@@ -268,6 +269,7 @@ const Footer: React.FC<FooterProps> = ({
                       message: e.target.value,
                     }))
                   }
+                  whileFocus={{ scale: 1.01 }}
                 />
               </div>
               <Button
@@ -294,14 +296,18 @@ const Footer: React.FC<FooterProps> = ({
                 <p className="text-orange text-sm">{section.title}</p>
                 <ul className="list-none text-light space-y-2">
                   {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
+                    <motion.li
+                      key={linkIndex}
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <Link
                         to={link.path}
                         className="font-light hover:text-iceblue transition-colors"
                       >
                         {link.label}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </div>
@@ -360,16 +366,18 @@ const Footer: React.FC<FooterProps> = ({
 
         <div className="flex justify-between gap-8 text-white text-2xl">
           {socialLinks.map((social, index) => (
-            <a
+            <motion.a
               key={index}
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
               className="hover:text-iceblue transition-colors"
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
             >
               {social.icon}
-            </a>
+            </motion.a>
           ))}
         </div>
       </Container>

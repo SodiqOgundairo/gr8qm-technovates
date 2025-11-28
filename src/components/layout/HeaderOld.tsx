@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-gradient-to-r from-light/50 to-skyblue/20 backdrop-blur-sm sticky top-0 z-50 px-4 py-3">
+      <nav className="bg-linear-to-r from-light/50 to-skyblue/20 backdrop-blur-sm sticky top-0 z-50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link to="/" aria-label="Homepage">
