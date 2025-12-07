@@ -37,12 +37,14 @@ export const SEO = ({
     "logo": `${siteUrl}/assets/logo.png`, // Placeholder
     "sameAs": [
       "https://www.linkedin.com/company/gr8qm-technovates",
-      "https://twitter.com/gr8qm"
+      "https://www.x.com/gr8qmtechnovate",
+      "https://www.instagram.com/gr8qmtechnovate",
+      "https://web.facebook.com/profile.php?id=61559404115455&sk=about"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+1-555-555-5555", // Placeholder
-      "contactType": "customer service"
+      "telephone": "+234 901 329 4248",
+      "contactType": "Administration"
     }
   };
 

@@ -311,7 +311,7 @@ const Footer: React.FC<FooterProps> = ({
         >
           <Link to="/" aria-label="Homepage">
             <CloudinaryImage
-              imageKey="verticalLogo"
+              imageKey="verticalLogoInvert"
               className="hover:scale-105 transition-transform ease-in-out hover:-rotate-2 w-2/5 md:w-full"
               alt="Gr8QM Logo"
             />

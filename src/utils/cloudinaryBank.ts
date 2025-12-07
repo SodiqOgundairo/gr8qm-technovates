@@ -18,6 +18,11 @@ export const cloudinaryImages = {
     .format("auto")
     .quality("auto"),
 
+  verticalLogoInvert: cld
+    .image(`${svgIcons}/Gr8QMLogo_straight-invertDefault_dhkisd`)
+    .format("auto")
+    .quality("auto"),
+
   heroBg: cld
     .image(`${Img}/heroImg_lfqqdw`)
     .format("auto")
