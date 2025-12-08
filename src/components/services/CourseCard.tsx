@@ -45,7 +45,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
         </h3>
 
         {/* Description */}
-        <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
+        <p className="text-gray-600 mb-4 grow line-clamp-3">
           {course.description}
         </p>
 

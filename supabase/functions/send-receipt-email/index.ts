@@ -1,6 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+interface EmailRequest {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;    // Plain text version (improves deliverability)
+  replyTo?: string;
+}
 
 serve(async (req) => {
   // Handle CORS preflight
@@ -8,52 +14,67 @@ serve(async (req) => {
     return new Response("ok", {
       headers: {
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST",
         "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
       },
     });
   }
 
   try {
-    const { to, subject, html } = await req.json();
-
-    console.log("📧 Sending email to:", to);
-    console.log("📧 Subject:", subject);
+    const emailData: EmailRequest = await req.json();
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
     if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY environment variable is not set");
+      throw new Error("RESEND_API_KEY not configured");
     }
 
-    if (!to || !subject || !html) {
+    // Validate required fields
+    if (!emailData.to || !emailData.subject || !emailData.html) {
       throw new Error("Missing required fields: to, subject, or html");
     }
 
+    console.log("📧 Sending email to:", emailData.to);
+    console.log("📧 Subject:", emailData.subject);
+
+    // Prepare email payload
+    const emailPayload: any = {
+      from: "Faith from Gr8QM <hello@gr8qm.com>",
+      to: [emailData.to],
+      subject: emailData.subject,
+      html: emailData.html,
+    };
+
+    // Add plain text version if provided (improves deliverability)
+    if (emailData.text) {
+      emailPayload.text = emailData.text;
+    }
+
+    // Add reply-to if provided (useful for service requests)
+    if (emailData.replyTo) {
+      emailPayload.reply_to = emailData.replyTo;
+    }
+
     // Send email using Resend API
-    const response = await fetch("https://api.resend.com/emails", {
+    const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
-      body: JSON.stringify({
-        from: "GR8QM Technovates <onboarding@resend.dev>", // Use Resend test domain
-        // After domain verification, change to: "GR8QM Technovates <noreply@gr8qm.com>"
-        to: [to],
-        subject,
-        html,
-      }),
+      body: JSON.stringify(emailPayload),
     });
 
-    const data = await response.json();
+    const resendData = await resendResponse.json();
 
-    if (!response.ok) {
-      console.error("❌ Resend API error:", data);
-      throw new Error(data.message || "Failed to send email via Resend");
+    if (!resendResponse.ok) {
+      console.error("❌ Resend API error:", resendData);
+      throw new Error(resendData.message || "Failed to send email via Resend");
     }
 
-    console.log("✅ Email sent successfully:", data);
+    console.log("✅ Email sent successfully:", resendData);
 
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ success: true, data: resendData }),
       {
         status: 200,
         headers: {
@@ -64,11 +85,11 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("❌ Error sending email:", error);
-    
+
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: false,
-        error: error.message 
+        error: error.message,
       }),
       {
         status: 500,

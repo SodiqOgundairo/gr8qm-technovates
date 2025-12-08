@@ -293,7 +293,7 @@ export default function PaymentSuccess() {
           </div>
 
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-8 border border-gray-100 relative">
-            <div className="h-2 bg-gradient-to-r from-skyblue via-purple-500 to-orange"></div>
+            <div className="h-2 bg-linear-to-r from-skyblue via-purple-500 to-orange"></div>
 
             <div className="p-8 md:p-12" ref={receiptRef}>
               <div className="flex justify-between items-start mb-8 border-b border-gray-100 pb-8">

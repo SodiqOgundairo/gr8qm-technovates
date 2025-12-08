@@ -13,6 +13,7 @@ import {
   IoIosArrowRoundBack,
   IoMdRefresh,
   IoMdAdd,
+  IoMdCopy,
 } from "react-icons/io";
 import { FaEye, FaPrint, FaEnvelope, FaCheck } from "react-icons/fa";
 
@@ -264,6 +265,40 @@ export default function Invoices() {
     printWindow.print();
   };
 
+  const copyInvoiceDetails = (invoice: Invoice) => {
+    const paymentLink = `${window.location.origin}/pay-invoice/${invoice.invoice_number}`;
+    const text = `
+INVOICE DETAILS
+--------------
+Invoice #: ${invoice.invoice_number}
+Date: ${new Date(invoice.created_at).toLocaleDateString()}
+Due Date: ${new Date(invoice.due_date).toLocaleDateString()}
+
+Bill To:
+${invoice.client_name}
+${invoice.client_email}
+${invoice.client_phone || ""}
+
+Service: ${invoice.service_description}
+Amount: ${formatAmount(invoice.amount)}
+
+Payment Link: ${paymentLink}
+
+Thank you for your business!
+GR8QM Technovates
+    `.trim();
+
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Invoice details copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+        alert("Failed to copy to clipboard");
+      });
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -279,7 +314,7 @@ export default function Invoices() {
             <Button
               variant="pry"
               onClick={() => fetchInvoices(page, pageSize, query, statusFilter)}
-              className="!px-4"
+              className="px-4!"
             >
               <IoMdRefresh className="text-xl" />
             </Button>
@@ -566,6 +601,13 @@ export default function Invoices() {
               <div className="flex gap-3 pt-4">
                 <Button
                   variant="pry"
+                  onClick={() => copyInvoiceDetails(selectedInvoice)}
+                >
+                  <IoMdCopy className="mr-2" />
+                  Copy Details
+                </Button>
+                <Button
+                  variant="sec"
                   onClick={() => printInvoice(selectedInvoice)}
                 >
                   <FaPrint className="mr-2" />

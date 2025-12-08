@@ -147,7 +147,7 @@ export default function ServiceRequests() {
             onClick={() =>
               fetchRequests(page, pageSize, query, statusFilter, serviceFilter)
             }
-            className="!px-4"
+            className="px-4!"
           >
             <IoMdRefresh className="text-xl" />
           </Button>

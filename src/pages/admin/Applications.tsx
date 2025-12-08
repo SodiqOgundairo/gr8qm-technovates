@@ -160,7 +160,7 @@ export default function Applications() {
                 paymentFilter
               )
             }
-            className="!px-4"
+            className="px-4!"
           >
             <IoMdRefresh className="text-xl" />
           </Button>

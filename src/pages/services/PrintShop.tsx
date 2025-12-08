@@ -7,6 +7,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaPrint, FaStar } from "react-icons/fa";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const PrintShopPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -81,7 +82,7 @@ const PrintShopPage: React.FC = () => {
   return (
     <main className="flex flex-col">
       {/* Hero Section */}
-      <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-gradient-to-br from-skyblue/20 to-orange/20">
+      <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
         <Container className="flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 flex flex-col gap-6">
             <div className="bg-orange/20 border border-orange rounded-full px-4 py-2 w-fit">
@@ -265,9 +266,19 @@ const PrintShopPage: React.FC = () => {
                 text: "They handled our rush order perfectly. Professional and reliable!",
               },
             ].map((testimonial, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300"
+                className="bg-white rounded-xl p-6 shadow-md border border-transparent"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{
+                  y: -5,
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  borderColor: "var(--color-orange)",
+                }}
               >
                 <div className="flex gap-1 mb-4 text-orange">
                   {[...Array(5)].map((_, i) => (
@@ -281,14 +292,14 @@ const PrintShopPage: React.FC = () => {
                   <p className="font-bold text-oxford">{testimonial.name}</p>
                   <p className="text-sm text-gray-600">{testimonial.role}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Container>
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 md:py-24 bg-gradient-to-r from-orange to-skyblue">
+      <div className="py-16 md:py-24 bg-linear-to-r from-orange to-skyblue">
         <Container className="text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Print?

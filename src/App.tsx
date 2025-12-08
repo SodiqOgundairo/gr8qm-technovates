@@ -14,18 +14,27 @@ import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import ServicesPage from "./pages/Services";
 import TrainingsPage from "./pages/Trainings";
+import PortfolioPage from "./pages/Portfolio";
 import DesignBuildPage from "./pages/services/DesignBuild";
 import PrintShopPage from "./pages/services/PrintShop";
 import TechTrainingPage from "./pages/services/TechTraining";
+import PublicForm from "./pages/PublicForm";
+import FormSuccess from "./pages/FormSuccess";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminForms from "./pages/admin/Forms";
+import FormBuilder from "./pages/admin/FormBuilder";
+import FormResponses from "./pages/admin/FormResponses";
+import FormAnalytics from "./pages/admin/FormAnalytics";
 import AdminCourses from "./pages/admin/Courses";
 import AdminMessages from "./pages/admin/Messages";
 import AdminApplications from "./pages/admin/Applications";
 import AdminServiceRequests from "./pages/admin/ServiceRequests";
 import AdminInvoices from "./pages/admin/Invoices";
+import AdminPortfolio from "./pages/admin/Portfolio";
+import AdminTransactions from "./pages/admin/Transactions";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
@@ -59,7 +68,13 @@ function App() {
                   element={<TechTrainingPage />}
                 />
                 <Route path="/trainings" element={<TrainingsPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/forms/:shortCode" element={<PublicForm />} />
+                <Route
+                  path="/forms/:shortCode/success"
+                  element={<FormSuccess />}
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
@@ -78,6 +93,17 @@ function App() {
               <Routes>
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="forms" element={<AdminForms />} />
+                <Route path="forms/create" element={<FormBuilder />} />
+                <Route path="forms/:id/edit" element={<FormBuilder />} />
+                <Route
+                  path="forms/:formId/responses"
+                  element={<FormResponses />}
+                />
+                <Route
+                  path="forms/:formId/analytics"
+                  element={<FormAnalytics />}
+                />
                 <Route path="courses" element={<AdminCourses />} />
                 <Route path="applications" element={<AdminApplications />} />
                 <Route
@@ -86,6 +112,8 @@ function App() {
                 />
                 <Route path="invoices" element={<AdminInvoices />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="portfolio" element={<AdminPortfolio />} />
+                <Route path="transactions" element={<AdminTransactions />} />
                 {/* Future admin routes go here */}
               </Routes>
             </ProtectedRoute>

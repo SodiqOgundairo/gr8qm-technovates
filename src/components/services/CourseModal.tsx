@@ -128,7 +128,7 @@ const CourseModal: React.FC<CourseModalProps> = ({
                   key={index}
                   className="flex items-start gap-2 text-sm text-gray-700"
                 >
-                  <FaCheckCircle className="text-skyblue mt-1 flex-shrink-0" />
+                  <FaCheckCircle className="text-skyblue mt-1 shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}

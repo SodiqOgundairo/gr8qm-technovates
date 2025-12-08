@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { HiArrowLongRight } from 'react-icons/hi2';
-import Container from './layout/Container';
+import { motion } from "framer-motion";
+import { HiArrowLongRight } from "react-icons/hi2";
+import Container from "./layout/Container";
 // import { cloudinaryImages } from '../utils/cloudinaryBank';
 
 const Hero = () => {
@@ -13,40 +13,45 @@ const Hero = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-light/50 to-skyblue/20"></div>
+      <div className="absolute inset-0 bg-linear-to-r from-light/50 to-skyblue/20"></div>
       <div className="absolute inset-0 flex items-center justify-center text-center">
         <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-
-          <p className="rounded-full bg-iceblue/40 border-2 border-skyblue py-2 px-10 mx-auto max-w-fit my-6"> Tech with purpose</p>
-          <h1 className="drop-shadow-2xl text-7xl font-black">            
-            {/* Tech with <span className="text-skyblue">  purpose. </span><br /> */}
-             <span className="text-orange">Faith</span> that builds. <br /><span className="text-skyblue">Impact </span> that lasts.</h1>
-          <p className="text-lg md:text-xl mt-6 md:max-w-2xl">We are a research, design, and development company creating products, services, and learning pathways for people who want to build a better world.</p>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.0 }}
-            className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4"
+            transition={{ duration: 1, delay: 0.5 }}
           >
-            <a href="/tech-school" className="btn-pry">
-             
+            <p className="rounded-full bg-iceblue/40 border-2 border-skyblue py-2 px-10 mx-auto max-w-fit my-6">
+              {" "}
+              Tech with purpose
+            </p>
+            <h1 className="drop-shadow-2xl text-7xl font-black">
+              {/* Tech with <span className="text-skyblue">  purpose. </span><br /> */}
+              <span className="text-orange">Faith</span> that builds. <br />
+              <span className="text-skyblue">Impact </span> that lasts.
+            </h1>
+            <p className="text-lg md:text-xl mt-6 md:max-w-2xl">
+              We are a research, design, and development company creating
+              products, services, and learning pathways for people who want to
+              build a better world.
+            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1.0 }}
+              className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4"
+            >
+              <a href="/tech-school" className="btn-pry">
+                Explore Solutions
+              </a>
 
-                Explore Solutions 
-            </a>
-
-            <a href="/designu-online" className="btn-sec">
-              <span className="button-content">
-
-                Enter the DSGN LAB <HiArrowLongRight className='arrow' />
-              </span>
-            </a>
+              <a href="/designu-online" className="btn-sec">
+                <span className="button-content">
+                  Enter the DSGN LAB <HiArrowLongRight className="arrow" />
+                </span>
+              </a>
+            </motion.div>
           </motion.div>
-        </motion.div>
         </Container>
       </div>
     </motion.div>

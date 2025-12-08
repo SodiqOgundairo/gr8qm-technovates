@@ -27,6 +27,9 @@ export const sendReceiptEmail = async (receipt: EmailReceipt) => {
       throw new Error('Missing Supabase configuration');
     }
 
+    // Generate email template
+    const emailTemplate = emailTemplates.courseReceipt(receipt);
+
     const response = await fetch(
       `${supabaseUrl}/functions/v1/send-receipt-email`,
       {
@@ -35,7 +38,11 @@ export const sendReceiptEmail = async (receipt: EmailReceipt) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${supabaseAnonKey}`,
         },
-        body: JSON.stringify(receipt),
+        body: JSON.stringify({
+          to: receipt.to,
+          subject: emailTemplate.subject,
+          html: emailTemplate.html,
+        }),
       }
     );
 
@@ -285,6 +292,44 @@ export const emailTemplates = {
               </div>
               
               <p>Log in to the admin panel to respond to this request.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  contactMessage: (data: { name: string; email: string; message: string }) => ({
+    subject: `New Contact Message from ${data.name}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: 'Epilogue', Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; background: white; }
+            .header { background: #0098da; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { padding: 30px; border: 1px solid #e5e5e5; border-top: none; }
+            .info-box { background: #f8f9fa; border-left: 4px solid #0098da; padding: 15px; margin: 20px 0; }
+            .label { font-weight: 600; color: #05235a; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0;">📬 New Contact Message</h1>
+            </div>
+            <div class="content">
+              <p style="font-size: 16px; color: #666;">You have received a new message from your website's contact form.</p>
+              
+              <div class="info-box">
+                <p><span class="label">Name:</span> ${data.name}</p>
+                <p><span class="label">Email:</span> <a href="mailto:${data.email}">${data.email}</a></p>
+                <p><span class="label">Message:</span><br>${data.message || 'No message provided'}</p>
+              </div>
+              
+              <p>You can reply directly to <a href="mailto:${data.email}">${data.email}</a> or view all messages in the admin panel.</p>
             </div>
           </div>
         </body>

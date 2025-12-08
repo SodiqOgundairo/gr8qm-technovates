@@ -119,7 +119,7 @@ export default function PayInvoice() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-skyblue/10 to-orange/10 p-4 md:p-8">
+    <div className="min-h-screen bg-linear-to-br from-skyblue/10 to-orange/10 p-4 md:p-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -131,7 +131,7 @@ export default function PayInvoice() {
 
         {/* Invoice Card */}
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-skyblue to-orange p-6 text-white">
+          <div className="bg-linear-to-r from-skyblue to-orange p-6 text-white">
             <h2 className="text-2xl font-bold mb-1">Invoice</h2>
             <p className="text-white/90">{invoice.invoice_number}</p>
           </div>
@@ -202,7 +202,8 @@ export default function PayInvoice() {
                 variant="pry"
                 onClick={handlePayment}
                 disabled={paying}
-                className="w-full !py-4 !text-lg"
+                className="w-full py-4"
+                size="lg"
               >
                 {paying
                   ? "Processing..."

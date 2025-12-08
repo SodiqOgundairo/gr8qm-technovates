@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { CgSpinner } from "react-icons/cg";
+import { motion, type HTMLMotionProps } from "framer-motion";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, "ref"> {
   variant: "pry" | "sec" | "inverted";
   children: React.ReactNode;
   onClick?: () => void;
@@ -10,7 +11,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "sm" | "md" | "lg";
   to?: string;
   loading?: boolean;
+  disabled?: boolean;
 }
+
+const MotionLink = motion.create(Link);
 
 const Button: React.FC<ButtonProps> = ({
   variant,
@@ -24,10 +28,10 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const variants = {
-    pry: "bg-skyblue text-white hover:bg-light hover:text-skyblue hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
+    pry: "bg-skyblue text-white hover:bg-light hover:text-skyblue hover:shadow-lg",
     sec: "btn-sec",
     inverted:
-      "bg-oxford text-white hover:bg-iceblue hover:text-[var(--color-oxford)] hover:shadow-lg transform hover:scale-95 transition-all duration-300 ease-in-out",
+      "bg-oxford text-white hover:bg-iceblue hover:text-[var(--color-oxford)] hover:shadow-lg",
   };
 
   const sizes = {
@@ -37,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const baseClassName =
-    "rounded-md font-medium cursor-pointer whitespace-nowrap flex items-center justify-center gap-2";
+    "rounded-md font-medium cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 transition-colors duration-300";
 
   let variantClassName = variants[variant];
   if (disabled || loading) {
@@ -59,27 +63,37 @@ const Button: React.FC<ButtonProps> = ({
       children
     );
 
+  const motionProps =
+    disabled || loading
+      ? {}
+      : {
+          whileHover: { scale: 1.02 },
+          whileTap: { scale: 0.98 },
+        };
+
   if (to && !disabled && !loading) {
     return (
-      <Link
+      <MotionLink
         to={to}
         className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
+        {...motionProps}
       >
         {wrappedChildren}
-      </Link>
+      </MotionLink>
     );
   }
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
       disabled={disabled || loading}
       className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
       {...props}
+      {...motionProps}
     >
       {loading && <CgSpinner className="animate-spin text-xl" />}
       {wrappedChildren}
-    </button>
+    </motion.button>
   );
 };
 

@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
       <nav
         className={`bg-light/30 to-skyblue/20 backdrop-blur-xl ${
           stickyHeader ? "sticky top-0" : ""
-        } z-50 py-3`}
+        } z-50 py-3 transition-all duration-300`}
       >
         <Container className="flex justify-between items-center">
           {/* Logo */}
@@ -196,13 +196,16 @@ const Header: React.FC<HeaderProps> = ({
                 <Link
                   key={item.label}
                   to={item.path}
-                  className="text-oxford hover:text-skyblue transition-colors"
+                  className="relative group"
                 >
-                  {item.label}
+                  <span className="text-oxford hover:text-skyblue transition-colors">
+                    {item.label}
+                  </span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-skyblue transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               ) : (
                 // Dropdown menu trigger
-                <div key={item.label} className="relative">
+                <div key={item.label} className="relative group">
                   <button
                     ref={(el) => setDropdownButtonRef(index, el)}
                     onClick={() => toggleDropdown(index)}
@@ -229,25 +232,31 @@ const Header: React.FC<HeaderProps> = ({
                     </svg>
                   </button>
                   {/* Dropdown menu content */}
-                  {isDropdownOpen === index && item.dropdownLinks && (
-                    <div
-                      ref={(el) => setDropdownRef(index, el)}
-                      className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
-                      role="menu"
-                    >
-                      {item.dropdownLinks.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.label}
-                          to={dropdownItem.path || "#"}
-                          className="block px-4 py-2 text-sm text-oxford hover:bg-iceblue/50 hover:text-skyblue transition-colors"
-                          onClick={() => setIsDropdownOpen(null)}
-                          role="menuitem"
-                        >
-                          {dropdownItem.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {isDropdownOpen === index && item.dropdownLinks && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        ref={(el) => setDropdownRef(index, el)}
+                        className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        role="menu"
+                      >
+                        {item.dropdownLinks.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.label}
+                            to={dropdownItem.path || "#"}
+                            className="block px-4 py-2 text-sm text-oxford hover:bg-iceblue/50 hover:text-skyblue transition-colors"
+                            onClick={() => setIsDropdownOpen(null)}
+                            role="menuitem"
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               )
             )}
@@ -267,11 +276,11 @@ const Header: React.FC<HeaderProps> = ({
           {isMobileMenuOpen && (
             <motion.div
               ref={mobileMenuRef}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 space-y-5 px-4"
+              className="md:hidden mt-4 space-y-5 px-4 overflow-hidden bg-white/95 backdrop-blur-md shadow-lg rounded-b-xl pb-6"
               role="menu"
               aria-label="Mobile navigation"
               id="mobile-menu"
@@ -279,15 +288,14 @@ const Header: React.FC<HeaderProps> = ({
               {navLinks.map((item, index) => (
                 <motion.div
                   key={item.label}
-                  initial={{ x: -50, opacity: 0 }}
+                  initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -50, opacity: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: index * 0.1 }}
                 >
                   {item.path ? (
                     <Link
                       to={item.path}
-                      className="block text-dark hover:text-skyblue transition-colors"
+                      className="block text-dark hover:text-skyblue transition-colors py-2 border-b border-gray-100"
                       onClick={() => setIsMobileMenuOpen(false)}
                       role="menuitem"
                       tabIndex={0}
@@ -299,7 +307,7 @@ const Header: React.FC<HeaderProps> = ({
                     <div>
                       <button
                         onClick={() => toggleDropdown(index)}
-                        className="flex justify-between items-center w-full text-left text-dark hover:text-skyblue transition-colors"
+                        className="flex justify-between items-center w-full text-left text-dark hover:text-skyblue transition-colors py-2 border-b border-gray-100"
                         aria-expanded={isDropdownOpen === index}
                       >
                         {item.label}
@@ -320,38 +328,47 @@ const Header: React.FC<HeaderProps> = ({
                           />
                         </svg>
                       </button>
-                      {isDropdownOpen === index && item.dropdownLinks && (
-                        <div className="mt-2 space-y-4 pl-4 border-l border-skyblue">
-                          {item.dropdownLinks.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.label}
-                              to={dropdownItem.path || "#"}
-                              className="block text-sm text-dark hover:text-skyblue transition-colors"
-                              onClick={() => {
-                                setIsMobileMenuOpen(false);
-                                setIsDropdownOpen(null);
-                              }}
-                              role="menuitem"
-                            >
-                              {dropdownItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
+                      <AnimatePresence>
+                        {isDropdownOpen === index && item.dropdownLinks && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="mt-2 space-y-2 pl-4 border-l-2 border-skyblue ml-2">
+                              {item.dropdownLinks.map((dropdownItem) => (
+                                <Link
+                                  key={dropdownItem.label}
+                                  to={dropdownItem.path || "#"}
+                                  className="block text-sm text-dark hover:text-skyblue transition-colors py-1"
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsDropdownOpen(null);
+                                  }}
+                                  role="menuitem"
+                                >
+                                  {dropdownItem.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   )}
                 </motion.div>
               ))}
               <motion.div
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -50, opacity: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: navLinks.length * 0.1 }}
+                className="pt-4"
               >
                 <Button
                   to="/contact"
                   variant="pry"
-                  className="w-full"
+                  className="w-full justify-center"
                   aria-label={ctaButton.label}
                 >
                   {ctaButton.label}

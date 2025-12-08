@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../common/Button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { FaPrint, FaGraduationCap } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface ServiceCardProps {
   title: string;
@@ -23,7 +24,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   portfolioCategory,
 }) => {
   const navigate = useNavigate();
-  const [isHovered, setIsHovered] = useState(false);
 
   const getIcon = () => {
     switch (icon) {
@@ -45,17 +45,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   };
 
   return (
-    <div
-      className={`bg-white rounded-2xl p-8 shadow-lg border-2 transition-all duration-300 ${
-        isHovered
-          ? "border-skyblue shadow-2xl transform -translate-y-2"
-          : "border-gray-100"
-      }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <motion.div
+      className="bg-white rounded-2xl p-8 shadow-lg border-2 border-gray-100"
+      whileHover={{
+        y: -8,
+        borderColor: "var(--color-skyblue)",
+        boxShadow:
+          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      }}
+      transition={{ duration: 0.3 }}
     >
       {/* Icon */}
-      <div className="mb-6 flex justify-center">{getIcon()}</div>
+      <motion.div
+        className="mb-6 flex justify-center"
+        whileHover={{ rotate: [0, -10, 10, -10, 10, 0], scale: 1.1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {getIcon()}
+      </motion.div>
 
       {/* Title */}
       <h3 className="text-2xl md:text-3xl font-bold text-oxford mb-4 text-center">
@@ -71,7 +78,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       <ul className="space-y-3 mb-8">
         {features.map((feature, index) => (
           <li key={index} className="flex items-start gap-3">
-            <IoIosArrowRoundForward className="text-skyblue text-2xl flex-shrink-0 mt-0.5" />
+            <IoIosArrowRoundForward className="text-skyblue text-2xl shrink-0 mt-0.5" />
             <span className="text-gray-700">{feature}</span>
           </li>
         ))}
@@ -95,7 +102,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           View Portfolio
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

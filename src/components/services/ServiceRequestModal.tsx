@@ -215,7 +215,7 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
                 Project Details <span className="text-red-500">*</span>
               </label>
               <textarea
-                className="w-full rounded-md border outline-none transition-all duration-200 border-[var(--color-gray-1)] text-[var(--color-dark)] placeholder:text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-none focus:outline-[var(--color-dark)] px-4 py-3 h-32"
+                className="w-full rounded-md border outline-none transition-all duration-200 border-gray-1 text-dark placeholder:text-gray-1 focus:bg-iceblue focus:text-oxford focus:border-none focus:outline-dark px-4 py-3 h-32"
                 placeholder="Tell us about your project requirements..."
                 value={formData.project_description}
                 onChange={(e) =>
