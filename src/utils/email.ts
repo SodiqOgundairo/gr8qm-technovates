@@ -10,6 +10,7 @@ export interface EmailReceipt {
   reference: string;
   date: string;
   type: "course" | "service";
+  itemName?: string;
 }
 
 /**
@@ -28,7 +29,13 @@ export const sendReceiptEmail = async (receipt: EmailReceipt) => {
     }
 
     // Generate email template
-    const emailTemplate = emailTemplates.courseReceipt(receipt);
+    let emailTemplate;
+    
+    if (receipt.type === "course") {
+      emailTemplate = emailTemplates.courseReceipt(receipt);
+    } else {
+      emailTemplate = emailTemplates.serviceReceipt(receipt);
+    }
 
     const response = await fetch(
       `${supabaseUrl}/functions/v1/send-receipt-email`,
@@ -184,6 +191,122 @@ export const emailTemplates = {
                 </div>
               </div>
               <span class="badge">100% REFUNDABLE UPON COURSE COMPLETION</span>
+            </div>
+            <div class="footer">
+              <p style="margin: 0 0 10px 0; font-weight: 600; color: #05235a;">GR8QM Technovates</p>
+              <p style="margin: 0 0 10px 0;">Faith that builds. Impact that lasts.</p>
+              <p style="margin: 0;">
+                Need help? Contact us at <a href="mailto:hello@gr8qm.com">hello@gr8qm.com</a>
+              </p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
+
+  serviceReceipt: (receipt: EmailReceipt) => ({
+    subject: `Payment Receipt - ${receipt.itemName || "Service Payment"}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { 
+              font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              margin: 0;
+              padding: 0;
+              background-color: #f5f5f5;
+            }
+            .container {
+              max-width: 600px;
+              margin: 20px auto;
+              background: white;
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            .header {
+              background: linear-gradient(135deg, #0098da 0%, #f58634 100%);
+              padding: 40px 20px;
+              text-align: center;
+              color: white;
+            }
+            .header h1 {
+              margin: 0;
+              font-size: 28px;
+              font-weight: 700;
+            }
+            .content {
+              padding: 40px 30px;
+            }
+            .receipt-box {
+              background: #fafafa;
+              border: 2px solid #c9ebfb;
+              border-radius: 8px;
+              padding: 20px;
+              margin: 20px 0;
+            }
+            .receipt-row {
+              display: flex;
+              justify-content: space-between;
+              padding: 10px 0;
+              border-bottom: 1px solid #e5e5e5;
+            }
+            .receipt-row:last-child {
+              border-bottom: none;
+            }
+            .label {
+              font-weight: 600;
+              color: #05235a;
+            }
+            .value {
+              color: #333;
+            }
+            .footer {
+              background: #f8f9fa;
+              padding: 30px;
+              text-align: center;
+              color: #666;
+              font-size: 14px;
+            }
+            .footer a {
+              color: #0098da;
+              text-decoration: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>✓ Payment Confirmed!</h1>
+              <p style="margin: 10px 0 0 0; font-size: 16px;">Verified Payment for ${receipt.customerName}</p>
+            </div>
+            <div class="content">
+              <h2 style="color: #05235a; margin-top: 0;">Payment Receipt</h2>
+              <div class="receipt-box">
+                <div class="receipt-row">
+                  <span class="label">Item:</span>
+                  <span class="value">${receipt.courseName}</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="label">Amount Paid:</span>
+                  <span class="value" style="font-weight: 700; color: #0098da;">₦${receipt.amount.toLocaleString()}</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="label">Payment Reference:</span>
+                  <span class="value">${receipt.reference}</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="label">Date:</span>
+                  <span class="value">${receipt.date}</span>
+                </div>
+              </div>
+              <p>We have successfully received your payment for the above invoice/service.</p>
             </div>
             <div class="footer">
               <p style="margin: 0 0 10px 0; font-weight: 600; color: #05235a;">GR8QM Technovates</p>

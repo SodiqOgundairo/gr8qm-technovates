@@ -76,13 +76,14 @@ const PublicForm: React.FC = () => {
       let formData = null;
 
       // 1. Try to find in short_urls first (for click tracking)
-      const { data: shortUrlData } = await supabase
+      const { data: shortUrlData, error: shortUrlError } = await supabase
         .from("short_urls")
         .select("*")
         .eq("short_code", shortCode)
-        .maybeSingle();
+        .limit(1)
+        .single();
 
-      if (shortUrlData) {
+      if (shortUrlData && !shortUrlError) {
         // Increment click count
         await supabase.rpc("increment_clicks", { row_id: shortUrlData.id });
 
@@ -95,35 +96,38 @@ const PublicForm: React.FC = () => {
           .eq("id", shortUrlData.id);
 
         // Fetch form by ID from short_url
-        const { data: formById } = await supabase
+        const { data: formById, error: formByIdError } = await supabase
           .from("forms")
           .select("*")
           .eq("status", "published")
           .eq("id", shortUrlData.form_id)
-          .maybeSingle();
+          .limit(1)
+          .single();
 
-        formData = formById;
+        formData = formByIdError ? null : formById;
       } else {
         // 2. Fallback: Try to find form by short_code column on forms table (legacy/direct)
-        const { data: formByCode } = await supabase
+        const { data: formByCode, error: formByCodeError } = await supabase
           .from("forms")
           .select("*")
           .eq("status", "published")
           .eq("short_code", shortCode)
-          .maybeSingle();
+          .limit(1)
+          .single();
 
-        if (formByCode) {
+        if (formByCode && !formByCodeError) {
           formData = formByCode;
         } else {
           // 3. Fallback: Try by ID
-          const { data: formById } = await supabase
+          const { data: formById, error: formByIdError } = await supabase
             .from("forms")
             .select("*")
             .eq("status", "published")
             .eq("id", shortCode)
-            .maybeSingle();
+            .limit(1)
+            .single();
 
-          formData = formById;
+          formData = formByIdError ? null : formById;
         }
       }
 
@@ -140,7 +144,7 @@ const PublicForm: React.FC = () => {
         .from("form_fields")
         .select("*")
         .eq("form_id", formData.id)
-        .order("order_index");
+        .order("order_index", { ascending: true });
 
       if (fieldsError) throw fieldsError;
 

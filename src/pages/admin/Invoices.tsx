@@ -15,7 +15,14 @@ import {
   IoMdAdd,
   IoMdCopy,
 } from "react-icons/io";
-import { FaEye, FaPrint, FaEnvelope, FaCheck } from "react-icons/fa";
+import {
+  FaEye,
+  FaPrint,
+  FaEnvelope,
+  FaCheck,
+  FaEdit,
+  FaTrash,
+} from "react-icons/fa";
 
 interface Invoice {
   id: string;
@@ -43,6 +50,7 @@ export default function Invoices() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const fetchInvoices = async (
@@ -173,6 +181,37 @@ export default function Invoices() {
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const deleteInvoice = async (invoice: Invoice) => {
+    if (
+      !confirm(
+        `Are you sure you want to delete invoice ${invoice.invoice_number}? This cannot be undone.`
+      )
+    )
+      return;
+
+    setActionLoading(`delete-${invoice.id}`);
+    try {
+      const { error } = await supabase
+        .from("invoices")
+        .delete()
+        .eq("id", invoice.id);
+
+      if (error) throw error;
+
+      alert("Invoice deleted successfully!");
+      fetchInvoices(page, pageSize, query, statusFilter);
+    } catch (err: any) {
+      alert(`Error deleting invoice: ${err.message}`);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleEdit = (invoice: Invoice) => {
+    setEditingInvoice(invoice);
+    setShowCreateModal(true);
   };
 
   const printInvoice = (invoice: Invoice) => {
@@ -466,6 +505,29 @@ GR8QM Technovates
                                 <FaCheck size={16} />
                               </button>
                             )}
+
+                            {/* Edit/Delete for unpaid invoices */}
+                            {invoice.payment_status !== "paid" && (
+                              <>
+                                <button
+                                  onClick={() => handleEdit(invoice)}
+                                  className="text-orange hover:text-orange-700 transition-colors p-1"
+                                  title="Edit Invoice"
+                                >
+                                  <FaEdit size={16} />
+                                </button>
+                                <button
+                                  onClick={() => deleteInvoice(invoice)}
+                                  disabled={
+                                    actionLoading === `delete-${invoice.id}`
+                                  }
+                                  className="text-red-500 hover:text-red-700 transition-colors p-1 disabled:opacity-50"
+                                  title="Delete Invoice"
+                                >
+                                  <FaTrash size={16} />
+                                </button>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -637,10 +699,14 @@ GR8QM Technovates
           </Modal>
         )}
 
-        {/* Create Invoice Modal */}
+        {/* Create/Edit Invoice Modal */}
         <InvoiceForm
           open={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
+          onClose={() => {
+            setShowCreateModal(false);
+            setEditingInvoice(null);
+          }}
+          initialData={editingInvoice}
           onSuccess={() => {
             fetchInvoices(page, pageSize, query, statusFilter);
           }}

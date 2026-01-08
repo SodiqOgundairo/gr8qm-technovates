@@ -9,6 +9,7 @@ interface InvoiceFormProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialData?: any; // Using any to avoid type duplication issues, or define Interface
 }
 
 interface InvoiceFormData {
@@ -36,6 +37,7 @@ export default function InvoiceForm({
   open,
   onClose,
   onSuccess,
+  initialData,
 }: InvoiceFormProps) {
   const [formData, setFormData] = useState<InvoiceFormData>({
     client_name: "",
@@ -46,6 +48,32 @@ export default function InvoiceForm({
     due_date: "",
     notes: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        client_name: initialData.client_name,
+        client_email: initialData.client_email,
+        client_phone: initialData.client_phone || "",
+        service_description: initialData.service_description,
+        amount: initialData.amount.toString(),
+        due_date: initialData.due_date.split("T")[0],
+        notes: initialData.notes || "",
+      });
+    } else {
+      // Reset logic for creat mode
+      setFormData({
+        client_name: "",
+        client_email: "",
+        client_phone: "",
+        service_description: "",
+        amount: "",
+        due_date: "",
+        notes: "",
+      });
+      setSelectedRequestId("");
+    }
+  }, [initialData, open]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([]);
@@ -127,61 +155,78 @@ export default function InvoiceForm({
     setError(null);
 
     try {
-      const invoice_number = generateInvoiceNumber();
       const amount = parseFloat(formData.amount);
 
       if (isNaN(amount) || amount <= 0) {
         throw new Error("Please enter a valid amount");
       }
 
-      const { error: insertError } = await supabase.from("invoices").insert({
-        invoice_number,
-        client_name: formData.client_name,
-        client_email: formData.client_email,
-        client_phone: formData.client_phone || null,
-        service_description: formData.service_description,
-        amount,
-        due_date: formData.due_date,
-        payment_status: "pending",
-        notes: formData.notes || null,
-      });
+      if (initialData) {
+        // Update existing invoice
+        const { error: updateError } = await supabase
+          .from("invoices")
+          .update({
+            client_name: formData.client_name,
+            client_email: formData.client_email,
+            client_phone: formData.client_phone || null,
+            service_description: formData.service_description,
+            amount,
+            due_date: formData.due_date,
+            notes: formData.notes || null,
+          })
+          .eq("id", initialData.id);
 
-      if (insertError) throw insertError;
-
-      // Send invoice email automatically
-      try {
-        const invoiceData = {
+        if (updateError) throw updateError;
+      } else {
+        // Create new invoice
+        const invoice_number = generateInvoiceNumber();
+        const { error: insertError } = await supabase.from("invoices").insert({
           invoice_number,
           client_name: formData.client_name,
           client_email: formData.client_email,
+          client_phone: formData.client_phone || null,
           service_description: formData.service_description,
-          amount, // This is already parsed as a number
+          amount,
           due_date: formData.due_date,
+          payment_status: "pending",
           notes: formData.notes || null,
-        };
-
-        const emailTemplate = emailTemplates.invoice(invoiceData);
-
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-        await fetch(`${supabaseUrl}/functions/v1/send-receipt-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseKey}`,
-          },
-          body: JSON.stringify({
-            to: formData.client_email,
-            subject: emailTemplate.subject,
-            html: emailTemplate.html,
-          }),
         });
 
-        console.log("✅ Invoice email sent to", formData.client_email);
-      } catch (emailError) {
-        console.error("⚠️ Invoice created but email failed:", emailError);
-        // Don't fail the whole process if email fails
+        if (insertError) throw insertError;
+
+        // Send invoice email automatically ONLY FOR NEW INVOICES
+        try {
+          const invoiceData = {
+            invoice_number,
+            client_name: formData.client_name,
+            client_email: formData.client_email,
+            service_description: formData.service_description,
+            amount,
+            due_date: formData.due_date,
+            notes: formData.notes || null,
+          };
+
+          const emailTemplate = emailTemplates.invoice(invoiceData);
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+          await fetch(`${supabaseUrl}/functions/v1/send-receipt-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${supabaseKey}`,
+            },
+            body: JSON.stringify({
+              to: formData.client_email,
+              subject: emailTemplate.subject,
+              html: emailTemplate.html,
+            }),
+          });
+
+          console.log("✅ Invoice email sent to", formData.client_email);
+        } catch (emailError) {
+          console.error("⚠️ Invoice created but email failed:", emailError);
+        }
       }
 
       // Reset form
@@ -199,7 +244,7 @@ export default function InvoiceForm({
       onSuccess();
       onClose();
     } catch (err: any) {
-      setError(err.message || "Failed to create invoice");
+      setError(err.message || "Failed to save invoice");
     } finally {
       setLoading(false);
     }
@@ -218,8 +263,12 @@ export default function InvoiceForm({
     <Modal
       open={open}
       onClose={onClose}
-      title="Create New Invoice"
-      description="Link to a service request or create manually"
+      title={initialData ? "Edit Invoice" : "Create New Invoice"}
+      description={
+        initialData
+          ? `Editing invoice ${initialData.invoice_number}`
+          : "Link to a service request or create manually"
+      }
       width="max-w-2xl"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -349,7 +398,11 @@ export default function InvoiceForm({
 
         <div className="flex gap-3 pt-4">
           <Button type="submit" variant="pry" disabled={loading}>
-            {loading ? "Creating..." : "Create Invoice"}
+            {loading
+              ? "Saving..."
+              : initialData
+              ? "Update Invoice"
+              : "Create Invoice"}
           </Button>
           <Button
             type="button"

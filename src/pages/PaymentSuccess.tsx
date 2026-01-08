@@ -205,6 +205,92 @@ export default function PaymentSuccess() {
                 console.error("❌ Email send error:", error);
               });
           }
+        } else if (type === "invoice") {
+          console.log("✅ Step 2a: Processing invoice payment...");
+
+          // Verify valid reference format or fetch by reference
+          // Verify valid reference format or fetch by reference
+          // Note: The redundant direct check was removed here in favor of parsing logic below
+
+          // Actually, we should look up by the metadata we sent or just assume the reference is unique enough if stored?
+          // But wait, the reference was generated as `INV-PAY-${invoice.invoice_number}-${Date.now()}`
+          // We don't store the transaction reference in the invoice table generally until now.
+          // Let's use the metadata approach or parse the reference?
+          // Better: We passed metadata { invoice_id, invoice_number } to Paystack.
+          // But here in the callback, we only have the reference and type in the URL.
+          // The verification response from Paystack (if backend verified) would have metadata.
+          // Since we are doing client-side verification (mock/simple), we need to rely on the reference format
+          // OR verifyPayment should return the metadata if it was a real backend call.
+
+          // Let's extract invoice number from reference if possible: INV-PAY-{invoice_number}-{timestamp}
+          // This is fragile. A better way is to query the invoice using the invoice_number if embedded in ref.
+
+          let invoiceNumber = "";
+          const parts = ref.split("-");
+          if (parts.length >= 4 && parts[0] === "INV" && parts[1] === "PAY") {
+            // parts[2] might be the invoice number.
+            // But if invoice number has hyphens, this breaks.
+            // Let's use a regex or just substring?
+            // Helper: match INV-PAY-(.*)-\d+
+            const match = ref.match(/INV-PAY-(.+)-\d+/);
+            if (match) {
+              invoiceNumber = match[1];
+            }
+          }
+
+          if (!invoiceNumber) {
+            console.warn(
+              "⚠️ Could not extract invoice number from reference. Trying fallback search..."
+            );
+            // Maybe the user passed the invoice ID/Number directly as ref? (Unlikely given our code)
+          }
+
+          console.log("🔍 Looking for invoice:", invoiceNumber);
+
+          const { data: invoice, error: dbError } = await supabase
+            .from("invoices")
+            .select("*")
+            .eq("invoice_number", invoiceNumber)
+            .single();
+
+          if (dbError || !invoice) {
+            throw new Error("Invoice not found for this payment.");
+          }
+
+          // Update invoice status
+          const { error: updateError } = await supabase
+            .from("invoices")
+            .update({
+              payment_status: "paid",
+              payment_date: new Date().toISOString(),
+            })
+            .eq("id", invoice.id);
+
+          if (updateError) throw updateError;
+
+          setDetails({
+            reference: ref,
+            amount: invoice.amount,
+            date: new Date().toISOString().split("T")[0],
+            customerName: invoice.client_name,
+            customerEmail: invoice.client_email,
+            itemName: `Invoice #${invoice.invoice_number} - ${invoice.service_description}`,
+            type: "invoice" as any, // casting as any/custom type if needed, or update interface
+          });
+
+          setStatus("success");
+          setMessage("Invoice payment confirmed!");
+
+          // Send receipt email
+          sendReceiptEmail({
+            to: invoice.client_email,
+            customerName: invoice.client_name,
+            courseName: `Invoice #${invoice.invoice_number}`, // overloading courseName for now or update interface
+            amount: invoice.amount,
+            reference: ref,
+            date: new Date().toLocaleDateString(),
+            type: "service", // Use 'service' or 'invoice'
+          });
         } else {
           setStatus("success");
           setMessage("Payment recorded.");
