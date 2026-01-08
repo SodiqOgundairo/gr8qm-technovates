@@ -22,6 +22,7 @@ import {
   FaCheck,
   FaEdit,
   FaTrash,
+  FaLink,
 } from "react-icons/fa";
 
 interface Invoice {
@@ -338,6 +339,13 @@ GR8QM Technovates
       });
   };
 
+  const copyPaymentLink = (invoice: Invoice) => {
+    const paymentLink = `${window.location.origin}/pay-invoice/${invoice.invoice_number}`;
+    navigator.clipboard.writeText(paymentLink).then(() => {
+      alert("Payment link copied!");
+    });
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -480,6 +488,13 @@ GR8QM Technovates
                               title="Print"
                             >
                               <FaPrint size={16} />
+                            </button>
+                            <button
+                              onClick={() => copyPaymentLink(invoice)}
+                              className="text-gray-600 hover:text-gray-800 transition-colors p-1"
+                              title="Copy Payment Link"
+                            >
+                              <FaLink size={16} />
                             </button>
                             <button
                               onClick={() => sendInvoiceEmail(invoice)}
