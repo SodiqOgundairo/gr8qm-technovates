@@ -283,7 +283,7 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>✓ Payment Confirmed!</h1>
+              <h1>✓ Payment Received!</h1>
               <p style="margin: 10px 0 0 0; font-size: 16px;">Verified Payment for ${receipt.customerName}</p>
             </div>
             <div class="content">

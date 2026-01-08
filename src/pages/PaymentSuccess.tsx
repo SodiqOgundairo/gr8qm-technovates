@@ -31,6 +31,9 @@ export default function PaymentSuccess() {
     if (ref.startsWith("COURSE-")) {
       type = "course";
       console.log("🔍 Auto-detected type from reference:", type);
+    } else if (ref.startsWith("INV-PAY-")) {
+      type = "invoice";
+      console.log("🔍 Auto-detected type from reference:", type);
     }
   }
 
