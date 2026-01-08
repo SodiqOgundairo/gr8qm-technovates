@@ -13,7 +13,6 @@ import {
   IoIosArrowRoundBack,
   IoMdRefresh,
   IoMdAdd,
-  IoMdCopy,
 } from "react-icons/io";
 import {
   FaEye,
@@ -303,40 +302,6 @@ export default function Invoices() {
     printWindow.document.write(html);
     printWindow.document.close();
     printWindow.print();
-  };
-
-  const copyInvoiceDetails = (invoice: Invoice) => {
-    const paymentLink = `${window.location.origin}/pay-invoice/${invoice.invoice_number}`;
-    const text = `
-INVOICE DETAILS
---------------
-Invoice #: ${invoice.invoice_number}
-Date: ${new Date(invoice.created_at).toLocaleDateString()}
-Due Date: ${new Date(invoice.due_date).toLocaleDateString()}
-
-Bill To:
-${invoice.client_name}
-${invoice.client_email}
-${invoice.client_phone || ""}
-
-Service: ${invoice.service_description}
-Amount: ${formatAmount(invoice.amount)}
-
-Payment Link: ${paymentLink}
-
-Thank you for your business!
-GR8QM Technovates
-    `.trim();
-
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        alert("Invoice details copied to clipboard!");
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-        alert("Failed to copy to clipboard");
-      });
   };
 
   const copyPaymentLink = (invoice: Invoice) => {
@@ -638,10 +603,17 @@ GR8QM Technovates
                       <span className="font-semibold">Due:</span>{" "}
                       {new Date(selectedInvoice.due_date).toLocaleDateString()}
                     </p>
-                    <p className="text-sm">
-                      <span className="font-semibold">Status:</span>{" "}
+                    <div className="text-sm flex items-center gap-2">
+                      <span className="font-semibold">Status:</span>
                       {getStatusBadge(selectedInvoice.payment_status)}
-                    </p>
+                      <button
+                        onClick={() => copyPaymentLink(selectedInvoice)}
+                        className="text-gray-500 hover:text-skyblue transition-colors"
+                        title="Copy Payment Link"
+                      >
+                        <FaLink size={14} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -676,13 +648,6 @@ GR8QM Technovates
               )}
 
               <div className="flex gap-3 pt-4">
-                <Button
-                  variant="pry"
-                  onClick={() => copyInvoiceDetails(selectedInvoice)}
-                >
-                  <IoMdCopy className="mr-2" />
-                  Copy Details
-                </Button>
                 <Button
                   variant="sec"
                   onClick={() => printInvoice(selectedInvoice)}
