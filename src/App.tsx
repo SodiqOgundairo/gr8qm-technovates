@@ -20,6 +20,7 @@ import PrintShopPage from "./pages/services/PrintShop";
 import TechTrainingPage from "./pages/services/TechTraining";
 import PublicForm from "./pages/PublicForm";
 import FormSuccess from "./pages/FormSuccess";
+import Cohort4 from "./pages/Cohort4";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
@@ -81,6 +82,9 @@ function App() {
             </>
           }
         />
+
+        {/* Standalone Pages */}
+        <Route path="/cohort4" element={<Cohort4 />} />
 
         {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />

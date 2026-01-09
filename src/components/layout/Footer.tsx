@@ -7,7 +7,7 @@ import shape1 from "../../assets/img/shape.png";
 import shape2 from "../../assets/img/shape2.png";
 import arrow from "../../assets/img/arrow_corner.svg";
 import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
-import { RiTwitterXFill } from "react-icons/ri";
+import { RiTwitterXFill, RiTiktokFill } from "react-icons/ri";
 import Button from "../common/Button";
 import Container from "./Container";
 import Input from "../common/Input";
@@ -87,6 +87,11 @@ const defaultSocialLinks: SocialLink[] = [
     icon: <RiTwitterXFill />,
     url: "https://www.x.com/gr8qmtechnovate",
     label: "Twitter",
+  },
+  {
+    icon: <RiTiktokFill />,
+    url: "https://www.tiktok.com/@gr8qmtechnovates",
+    label: "TikTok",
   },
   {
     icon: <LiaFacebookF />,
