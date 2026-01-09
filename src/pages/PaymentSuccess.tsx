@@ -408,7 +408,7 @@ export default function PaymentSuccess() {
                   </p>
                   {details?.type === "course" && (
                     <span className="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold mt-2">
-                      100% REFUNDABLE
+                      COMMITMENT FEE
                     </span>
                   )}
                 </div>
@@ -454,8 +454,7 @@ export default function PaymentSuccess() {
                       <li>• Our team will review your application details.</li>
                       <li>• You will be added to the course cohort group.</li>
                       <li>
-                        • Remember: This fee is refunded upon 100% course
-                        completion!
+                        • Remember: This fee secures your spot in the cohort.
                       </li>
                     </>
                   ) : (

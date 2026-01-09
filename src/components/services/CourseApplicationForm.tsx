@@ -115,7 +115,7 @@ const CourseApplicationForm: React.FC<CourseApplicationFormProps> = ({
       {/* FREE Course Notice */}
       <div className="bg-iceblue/30 border-2 border-skyblue rounded-xl p-4 mb-6">
         <p className="text-sm text-gray-700">
-          <strong>This training is 100% FREE!</strong> We're committed to making
+          <strong>This training is Sponsored!</strong> We're committed to making
           quality tech education accessible. The commitment fee ensures you're
           serious about your learning journey and helps us maintain course
           quality.

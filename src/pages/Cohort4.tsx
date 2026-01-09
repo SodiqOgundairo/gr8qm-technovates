@@ -5,6 +5,8 @@ import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
 import { RiTwitterXFill } from "react-icons/ri";
 import arrow from "../assets/img/arrow_corner.svg";
 import CloudinaryImage from "../utils/cloudinaryImage";
+import FloatingShapes from "../components/animations/FloatingShapes";
+import TextReveal from "../components/animations/TextReveal";
 
 export default function Cohort4() {
   const currentYear = new Date().getFullYear();
@@ -38,9 +40,10 @@ export default function Cohort4() {
   ];
 
   return (
-    <div className="min-h-screen bg-oxford text-white overflow-hidden font-sans flex flex-col">
+    <div className="min-h-screen bg-oxford text-white overflow-hidden font-sans flex flex-col relative">
+      <FloatingShapes variant="dark" className="opacity-60" />
       {/* Main Grid Container */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_auto_auto_auto_auto] md:grid-rows-3 h-full w-full p-0">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_auto_auto_auto_auto] md:grid-rows-3 h-full w-full p-0 relative z-10">
         {/* Zone 1: Top Left - Branding */}
         <div className="order-1 md:order-0 border border-white/20 p-6 md:p-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start gap-4 relative">
           <CloudinaryImage
@@ -75,24 +78,29 @@ export default function Cohort4() {
 
         {/* Zone 2: Center (Spans Full Width on Mobile, Left col on Desktop) - Main Hero */}
         {/* Adjusted to fit the 2 col layout: Row 2, Col 1 */}
-        <div className="order-2 md:order-0 border border-white/20 p-6 md:p-12 flex flex-col justify-center relative md:row-span-2">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tighter mb-6">
-            WE DON'T
-            <br />
-            TEACH THEORY.
-            <br />
+        <div className="order-2 md:order-0 border border-white/20 p-6 md:p-12 flex flex-col justify-center relative md:row-span-2 backdrop-blur-sm bg-oxford/30">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tighter mb-6 flex flex-col items-start gap-2">
+            <span className="block">
+              <TextReveal delay={0.1}>WE DON'T PREDICT</TextReveal>
+            </span>
+            <span className="block">
+              <TextReveal delay={0.3}>THE FUTURE.</TextReveal>
+            </span>
             <span
-              className="text-stroke text-transparent stroke-white"
+              className="block text-transparent"
               style={{ WebkitTextStroke: "1px white" }}
             >
-              WE BUILD LEGACIES.
+              <TextReveal delay={0.5}>WE BUILD IT.</TextReveal>
             </span>
           </h1>
-          <p className="font-mono text-sm md:text-base text-gray-400 max-w-md border-l-2 border-skyblue pl-4">
-            Design is not about making things pretty. It’s about solving
-            problems at the quantum level. Stop watching tutorials and start
-            shipping real work.
-          </p>
+          <div className="border-l-2 border-skyblue pl-6 py-1">
+            <p className="font-mono text-sm md:text-base text-gray-300 max-w-md">
+              Design is not about making things pretty. It’s about solving
+              problems at the quantum level. Stop watching tutorials and start
+              shipping real work. <br /> <br /> Join the elite design & dev
+              force. 12 weeks to build a portfolio that makes you undeniable.
+            </p>
+          </div>
         </div>
 
         {/* Zone 4: Middle Right - Curriculum */}

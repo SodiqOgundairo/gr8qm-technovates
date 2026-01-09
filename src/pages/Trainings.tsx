@@ -92,7 +92,7 @@ const TrainingsPage: React.FC = () => {
     <>
       <SEO
         title="Tech Training"
-        description="Browse Our FREE Courses. World-class training programs to launch your tech career. All courses are 100% FREE with a refundable commitment fee."
+        description="Browse Our Courses. World-class training programs to launch your tech career. Sponsored opportunities available with a commitment fee."
       />
       <main className="flex flex-col">
         {/* Hero Section */}
@@ -100,17 +100,17 @@ const TrainingsPage: React.FC = () => {
           <Container className="text-center">
             <div className="bg-iceblue/40 border border-skyblue rounded-full px-6 py-2 w-fit mx-auto mb-6">
               <p className="text-sm text-oxford font-medium">
-                FREE TECH TRAINING
+                SPONSORED TECH TRAINING
               </p>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6">
               <span className="text-oxford">Browse Our</span>{" "}
-              <span className="text-skyblue">FREE Courses</span>
+              <span className="text-skyblue">Sponsored Courses</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
               World-class training programs to launch your tech career. All
-              courses are 100% FREE with a refundable commitment fee. Choose a
-              course and start your journey today!
+              courses are largely sponsored with a small commitment fee. Choose
+              a course and start your journey today!
             </p>
           </Container>
         </div>
@@ -212,8 +212,8 @@ const TrainingsPage: React.FC = () => {
               {[
                 {
                   icon: "🎓",
-                  title: "100% FREE",
-                  desc: "Only a refundable commitment fee required",
+                  title: "Sponsored",
+                  desc: "Only a commitment fee required",
                 },
                 {
                   icon: "👨‍💼",

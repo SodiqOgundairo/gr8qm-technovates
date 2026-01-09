@@ -47,7 +47,7 @@ const ServicesPage: React.FC = () => {
     {
       title: "Tech Training",
       description:
-        "FREE tech training programs with a commitment fee. Learn in-demand skills from industry experts and launch your tech career.",
+        "Sponsored tech training programs with a commitment fee. Learn in-demand skills from industry experts and launch your tech career.",
       icon: "training" as const,
       features: [
         "Product Design & Management",
@@ -55,7 +55,7 @@ const ServicesPage: React.FC = () => {
         "DevOps & Cloud Computing",
         "Cybersecurity Fundamentals",
         "QA Testing & Automation",
-        "100% FREE with Commitment Fee",
+        "Sponsored with Commitment Fee",
       ],
       portfolioCategory: "tech-training",
       onContactClick: () => navigate("/services/tech-training"),
@@ -66,7 +66,7 @@ const ServicesPage: React.FC = () => {
     <PageTransition>
       <SEO
         title="Our Services"
-        description="Empowering Your Digital Journey. We offer comprehensive services to help you build, brand, and grow your business. From custom development to professional printing and FREE tech training."
+        description="Empowering Your Digital Journey. We offer comprehensive services to help you build, brand, and grow your business. From custom development to professional printing and specialized tech training."
       />
       <main className="flex flex-col">
         {/* Hero Section */}
@@ -87,7 +87,7 @@ const ServicesPage: React.FC = () => {
               <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 We offer comprehensive services to help you build, brand, and
                 grow your business. From custom development to professional
-                printing and FREE tech training.
+                printing and specialized tech training.
               </p>
             </ScrollReveal>
           </Container>

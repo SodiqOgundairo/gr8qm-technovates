@@ -106,13 +106,13 @@ const CourseModal: React.FC<CourseModalProps> = ({
         <div className="bg-iceblue/30 border-2 border-skyblue rounded-xl p-4 mb-6">
           <h3 className="font-bold text-oxford mb-2 flex items-center gap-2">
             <FaCheckCircle className="text-green-500" />
-            This Course is 100% FREE
+            This Course is <strong className="text-skyblue">Sponsored</strong>
           </h3>
           <p className="text-gray-700 text-sm">
-            The commitment fee of ₦{course.commitment_fee.toLocaleString()} is{" "}
-            <strong>fully refundable</strong> upon course completion and
-            maintaining at least 80% attendance. It demonstrates your dedication
-            to learning and ensures serious learners.
+            We require a commitment fee to ensure serious participation. This
+            fee is <strong>essential</strong> to secure your spot. It
+            demonstrates your dedication to learning and ensures serious
+            learners.
           </p>
         </div>
 

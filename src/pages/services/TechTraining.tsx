@@ -64,9 +64,8 @@ const TechTrainingPage: React.FC = () => {
   const benefits = [
     {
       icon: "🎓",
-      title: "100% FREE Training",
       description:
-        "World-class education at no cost. You only pay a refundable commitment fee.",
+        "World-class education. You only pay a commitment fee to secure your spot.",
     },
     {
       icon: "👨‍💼",
@@ -90,19 +89,19 @@ const TechTrainingPage: React.FC = () => {
 
   const faqs = [
     {
-      question: "Is the training really FREE?",
+      question: "Is the training sponsored?",
       answer:
-        "Yes! The training is 100% FREE. The commitment fee is refundable upon course completion and ensures serious learners.",
+        "Yes! The training is fully sponsored. The commitment fee ensures serious learners and secures your place in the cohort.",
     },
     {
       question: "What is the commitment fee for?",
       answer:
-        "The commitment fee demonstrates your dedication. It's fully refundable when you complete the course and attend at least 80% of classes.",
+        "The commitment fee demonstrates your dedication. It allows us to prioritize applicants who are ready to complete the rigorous curriculum.",
     },
     {
-      question: "What if I miss classes?",
+      question: "What happens if I miss a class?",
       answer:
-        "All sessions are recorded, so you can catch up. However, you must maintain at least 80% attendance to qualify for the refund.",
+        "All sessions are recorded, so you can catch up. However, active participation is key to mastering the material.",
     },
     {
       question: "Do I need prior experience?",
@@ -128,15 +127,15 @@ const TechTrainingPage: React.FC = () => {
               <ScrollReveal delay={0.2}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
                   <span className="text-oxford">Launch Your Tech Career,</span>{" "}
-                  <span className="text-skyblue">100% FREE</span>
+                  <span className="text-skyblue">Sponsored</span>
                 </h1>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Master in-demand tech skills with our FREE training programs.
-                  Learn from industry experts, build real projects, and start
-                  your journey to a rewarding tech career. Only a refundable
-                  commitment fee required.
+                  Master in-demand tech skills with our specialized training
+                  programs. Learn from industry experts, build real projects,
+                  and start your journey to a rewarding tech career. Only a
+                  small commitment fee required.
                 </p>
               </ScrollReveal>
               <ScrollReveal delay={0.6}>
@@ -176,15 +175,14 @@ const TechTrainingPage: React.FC = () => {
           <Container>
             <ScrollReveal>
               <div className="max-w-3xl mx-auto text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-oxford mb-6">
-                  Why Is This <span className="text-skyblue">FREE</span>?
+                <h2 className="text-2xl md:text-3xl font-bold text-oxford">
+                  Launch Your Tech Career with <br />
+                  <span className="text-skyblue">Sponsored Training</span>
                 </h2>
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  We believe talent exists everywhere, but opportunity doesn't.
-                  Our mission is to equip individuals from overlooked spaces
-                  with world-class tech skills. The commitment fee ensures
-                  serious learners while keeping education accessible to all.
-                  Complete the course, and your fee is fully refunded.
+                <p className="text-base text-gray-2 max-w-[612px]">
+                  We believe financial barriers shouldn't stop talent. Start
+                  your journey to a rewarding tech career. Only a small
+                  commitment fee required.
                 </p>
               </div>
             </ScrollReveal>
@@ -197,9 +195,9 @@ const TechTrainingPage: React.FC = () => {
                       Commitment Fee Policy
                     </h3>
                     <p className="text-gray-700">
-                      Pay a one-time commitment fee when you enroll. Attend at
-                      least 80% of classes and complete the course an earn a
-                      certificate. It's that simple.
+                      Pay a one-time commitment fee when you enroll. This
+                      secures your spot and ensures serious participation in the
+                      cohort. It's that simple.
                     </p>
                   </div>
                 </div>
@@ -321,7 +319,7 @@ const TechTrainingPage: React.FC = () => {
                 {
                   step: "2",
                   title: "Apply & Pay Fee",
-                  desc: "Fill the application form and pay the refundable commitment fee",
+                  desc: "Fill the application form and pay the commitment fee",
                 },
                 {
                   step: "3",
@@ -331,7 +329,7 @@ const TechTrainingPage: React.FC = () => {
                 {
                   step: "4",
                   title: "Graduate & Succeed",
-                  desc: "Complete the course, get your refund, and land your dream job",
+                  desc: "Complete the course and land your dream job",
                 },
               ].map((item, index) => (
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
@@ -398,7 +396,7 @@ const TechTrainingPage: React.FC = () => {
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
                 Join hundreds of students who have launched successful tech
-                careers through our FREE training programs.
+                careers through our specialized training programs.
               </p>
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button

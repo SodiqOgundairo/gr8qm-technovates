@@ -8,7 +8,10 @@ import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
 
-import { motion } from "framer-motion";
+import TextReveal from "../components/animations/TextReveal";
+import Card3D from "../components/animations/Card3D";
+import FloatingShapes from "../components/animations/FloatingShapes";
+import GeometricBackground from "../components/animations/GeometricBackground";
 import { SEO } from "../components/common/SEO";
 
 const Home: React.FC = () => {
@@ -20,10 +23,11 @@ const Home: React.FC = () => {
       />
       <main className="flex flex-col">
         <div
-          className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20"
+          className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20 relative overflow-hidden"
           id="hero"
         >
-          <Container className="flex flex-col md:flex-row justify-between items-center">
+          <FloatingShapes variant="vibrant" />
+          <Container className="flex flex-col md:flex-row justify-between items-center relative z-10">
             <div className="flex flex-col justify-center items-center md:items-start gap-4 my-4 md:my-0 text-center md:text-start w-full md:w-2/3">
               <ScrollReveal>
                 <div className="bg-iceblue flex justify-center items-center py-1 px-2 lg:py-2 lg:px-4 rounded-full border border-skyblue gap-2 lg:gap-4">
@@ -35,11 +39,19 @@ const Home: React.FC = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={0.2}>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black md:leadin lg:leading-20 tracking-tighter lg:max-w-[690px]">
-                  <span className="text-skyblue">Faith</span>{" "}
-                  <span className="text-oxford">that builds. </span>
-                  <span className="text-orange">Impact</span>{" "}
-                  <span className="text-oxford">that lasts.</span>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black md:leadin lg:leading-20 tracking-tighter lg:max-w-[690px] flex flex-wrap justify-center md:justify-start gap-x-3 gap-y-1">
+                  <TextReveal className="text-skyblue inline-block" delay={0.2}>
+                    Faith
+                  </TextReveal>
+                  <TextReveal className="text-oxford inline-block" delay={0.4}>
+                    that builds.
+                  </TextReveal>
+                  <TextReveal className="text-orange inline-block" delay={0.6}>
+                    Impact
+                  </TextReveal>
+                  <TextReveal className="text-oxford inline-block" delay={0.8}>
+                    that lasts.
+                  </TextReveal>
                 </h1>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
@@ -92,10 +104,11 @@ const Home: React.FC = () => {
         </div>
 
         <div
-          className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-light"
+          className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-light relative overflow-hidden"
           id="purpose"
         >
-          <Container className="flex flex-col justify-between items-center gap-4 md:gap-8">
+          <GeometricBackground />
+          <Container className="flex flex-col justify-between items-center gap-4 md:gap-8 relative z-10">
             <ScrollReveal>
               <div className="flex flex-col text-center md:gap-3 ">
                 <h2 className="text-2xl md:text-3xl font-bold text-oxford">
@@ -151,10 +164,11 @@ const Home: React.FC = () => {
 
         <div className="flex flex-col bg-iceblue">
           <div
-            className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-oxford"
+            className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-oxford relative overflow-hidden"
             id="purpose"
           >
-            <Container className="flex flex-col justify-between items-center gap-4 md:gap-8">
+            <FloatingShapes variant="dark" />
+            <Container className="flex flex-col justify-between items-center gap-4 md:gap-8 relative z-10">
               <ScrollReveal>
                 <div className="bg-iceblue/20 flex justify-center items-center py-1 px-2 lg:py-2 lg:px-4 rounded-full border border-skyblue">
                   <p className="text-sm  text-light">
@@ -182,131 +196,112 @@ const Home: React.FC = () => {
             <Container className="flex flex-col justify-between items-center gap-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-8 w-full">
                 <ScrollReveal delay={0.2} width="100%">
-                  <motion.div
-                    className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent"
-                    whileHover={{
-                      y: -8,
-                      borderColor: "var(--color-skyblue)",
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <CloudinaryImage
-                      imageKey="ResearchDesignImage"
-                      className="hover:scale-105 transition-transform ease-in-out hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
-                      alt="Research & Design"
-                    />
-                    <div className="p-6 flex flex-col gap-3 grow">
-                      <h3 className="text-lg font-bold text-oxford">
-                        Design & Build
-                      </h3>
-                      <p className="text-gray-2 text-sm grow">
-                        From concept to deployment, we design and build custom
-                        digital solutions. Whether it's a website, mobile app,
-                        or enterprise system, we transform your vision into
-                        powerful, user-friendly applications that drive results.
-                      </p>
-                      <Button
-                        to="/services/design-build"
-                        variant="sec"
-                        className="w-fit mt-auto"
-                      >
-                        <div className="button-content">
-                          Learn More
-                          <HiArrowLongRight className="arrow" />
-                        </div>
-                      </Button>
+                  <Card3D className="h-full">
+                    <div className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent group transition-colors duration-300 hover:border-skyblue hover:shadow-2xl">
+                      <CloudinaryImage
+                        imageKey="ResearchDesignImage"
+                        className="group-hover:scale-105 transition-transform ease-in-out group-hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
+                        alt="Research & Design"
+                      />
+                      <div className="p-6 flex flex-col gap-3 grow">
+                        <h3 className="text-lg font-bold text-oxford">
+                          Design & Build
+                        </h3>
+                        <p className="text-gray-2 text-sm grow">
+                          From concept to deployment, we design and build custom
+                          digital solutions. Whether it's a website, mobile app,
+                          or enterprise system, we transform your vision into
+                          powerful, user-friendly applications that drive
+                          results.
+                        </p>
+                        <Button
+                          to="/services/design-build"
+                          variant="sec"
+                          className="w-fit mt-auto"
+                        >
+                          <div className="button-content">
+                            Learn More
+                            <HiArrowLongRight className="arrow" />
+                          </div>
+                        </Button>
+                      </div>
                     </div>
-                  </motion.div>
+                  </Card3D>
                 </ScrollReveal>
 
                 <ScrollReveal delay={0.4} width="100%">
-                  <motion.div
-                    className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent"
-                    whileHover={{
-                      y: -8,
-                      borderColor: "var(--color-skyblue)",
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <CloudinaryImage
-                      imageKey="TrainingImage"
-                      className="hover:scale-105 transition-transform ease-in-out hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
-                      alt="Tech Training"
-                    />
-                    <div className="p-6 flex flex-col gap-3 grow">
-                      <h3 className="text-lg font-bold text-oxford">
-                        Tech Training
-                      </h3>
-                      <p className="text-gray-2 text-sm grow">
-                        Empowering individuals from overlooked spaces to lead
-                        with clarity and confidence. We equip educators,
-                        leaders, and institutions with tools to integrate
-                        technology, innovation, and human-centered design into
-                        their work.
-                      </p>
-                      <Button
-                        to="/services/tech-training"
-                        variant="sec"
-                        className="w-fit mt-auto"
-                      >
-                        <div className="button-content">
-                          Learn More
-                          <HiArrowLongRight className="arrow" />
-                        </div>
-                      </Button>
+                  <Card3D className="h-full">
+                    <div className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent group transition-colors duration-300 hover:border-skyblue hover:shadow-2xl">
+                      <CloudinaryImage
+                        imageKey="TrainingImage"
+                        className="group-hover:scale-105 transition-transform ease-in-out group-hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
+                        alt="Tech Training"
+                      />
+                      <div className="p-6 flex flex-col gap-3 grow">
+                        <h3 className="text-lg font-bold text-oxford">
+                          Tech Training
+                        </h3>
+                        <p className="text-gray-2 text-sm grow">
+                          Empowering individuals from overlooked spaces to lead
+                          with clarity and confidence. We equip educators,
+                          leaders, and institutions with tools to integrate
+                          technology, innovation, and human-centered design into
+                          their work.
+                        </p>
+                        <Button
+                          to="/services/tech-training"
+                          variant="sec"
+                          className="w-fit mt-auto"
+                        >
+                          <div className="button-content">
+                            Learn More
+                            <HiArrowLongRight className="arrow" />
+                          </div>
+                        </Button>
+                      </div>
                     </div>
-                  </motion.div>
+                  </Card3D>
                 </ScrollReveal>
 
                 <ScrollReveal delay={0.6} width="100%">
-                  <motion.div
-                    className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent"
-                    whileHover={{
-                      y: -8,
-                      borderColor: "var(--color-skyblue)",
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <CloudinaryImage
-                      imageKey="PintShop"
-                      className="hover:scale-105 transition-transform ease-in-out hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
-                      alt="Print Shop"
-                    />
+                  <Card3D className="h-full">
+                    <div className="bg-white rounded-2xl shadow-[0px_8px_16px_0px_rgba(0,0,0,0.05)] overflow-hidden h-full flex flex-col border-2 border-transparent group transition-colors duration-300 hover:border-skyblue hover:shadow-2xl">
+                      <CloudinaryImage
+                        imageKey="PintShop"
+                        className="group-hover:scale-105 transition-transform ease-in-out group-hover:-rotate-2 w-full h-56 md:h-48 lg:h-56 object-cover"
+                        alt="Print Shop"
+                      />
 
-                    <div className="p-6 flex flex-col gap-3 grow">
-                      <h3 className="text-lg font-bold text-oxford">
-                        Print Shop
-                      </h3>
-                      <p className="text-gray-2 text-sm grow">
-                        Premium printing that brings your vision to life with
-                        excellence and attention to detail.
-                      </p>
-                      <Button
-                        to="/services/print-shop"
-                        variant="sec"
-                        className="w-fit mt-auto"
-                      >
-                        <div className="button-content">
-                          Learn More
-                          <HiArrowLongRight className="arrow" />
-                        </div>
-                      </Button>
+                      <div className="p-6 flex flex-col gap-3 grow">
+                        <h3 className="text-lg font-bold text-oxford">
+                          Print Shop
+                        </h3>
+                        <p className="text-gray-2 text-sm grow">
+                          Premium printing that brings your vision to life with
+                          excellence and attention to detail.
+                        </p>
+                        <Button
+                          to="/services/print-shop"
+                          variant="sec"
+                          className="w-fit mt-auto"
+                        >
+                          <div className="button-content">
+                            Learn More
+                            <HiArrowLongRight className="arrow" />
+                          </div>
+                        </Button>
+                      </div>
                     </div>
-                  </motion.div>
+                  </Card3D>
                 </ScrollReveal>
               </div>
             </Container>
           </div>
         </div>
-        <Container className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 ">
+        <Container className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 relative">
+          <FloatingShapes variant="soft" className="opacity-50" />
           <ScrollReveal>
-            <div className="flex flex-col text-center md:gap-3 bg-gray-1/30 p-4 md:p-8 lg:p-12 xl:p-16 2xl:p-24 rounded-xl">
+            <div className="flex flex-col text-center md:gap-3 bg-gray-1/30 p-4 md:p-8 lg:p-12 xl:p-16 2xl:p-24 rounded-xl relative z-10 backdrop-blur-sm">
               <h2 className="text-2xl md:text-3xl font-bold text-oxford">
                 Why Partner with us?
               </h2>
