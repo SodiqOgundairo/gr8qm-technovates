@@ -143,7 +143,9 @@ export default function Cohort4() {
           <Button
             variant="inverted"
             className="relative z-10 bg-skyblue! text-oxford! border-none! text-lg! font-bold! px-8! py-4! hover:bg-white! hover:scale-105! transition-all w-full md:w-auto"
-            onClick={() => window.open("https://gr8qm.com", "_blank")}
+            onClick={() =>
+              window.open("https://forms.gle/8TKjU22QRQpDAa4Z6", "_blank")
+            }
           >
             SECURE YOUR SEAT →
           </Button>
