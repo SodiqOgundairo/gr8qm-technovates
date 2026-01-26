@@ -13,13 +13,30 @@ import Card3D from "../components/animations/Card3D";
 import FloatingShapes from "../components/animations/FloatingShapes";
 import GeometricBackground from "../components/animations/GeometricBackground";
 import { SEO } from "../components/common/SEO";
+import { getPageSEO } from "../utils/seo-config";
+import {
+  generateWebSiteSchema,
+  generateBreadcrumbSchema,
+} from "../utils/structured-data";
 
 const Home: React.FC = () => {
+  const pageSEO = getPageSEO("home");
+
+  // Generate structured data for home page
+  const websiteSchema = generateWebSiteSchema();
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://gr8qm.com/" },
+  ]);
+
   return (
     <PageTransition>
       <SEO
-        title="Home"
-        description="Faith that builds. Impact that lasts. We are a kingdom-rooted innovation collective advancing AI through thoughtful research, purposeful design, and principled development."
+        title={pageSEO.title}
+        description={pageSEO.description}
+        keywords={pageSEO.keywords}
+        type={pageSEO.type}
+        url="/"
+        structuredData={[websiteSchema, breadcrumbSchema]}
       />
       <main className="flex flex-col">
         <div

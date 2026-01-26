@@ -12,10 +12,30 @@ import { motion } from "framer-motion";
 import { SEO } from "../../components/common/SEO";
 import PageTransition from "../../components/layout/PageTransition";
 import ScrollReveal from "../../components/common/ScrollReveal";
+import { getPageSEO } from "../../utils/seo-config";
+import {
+  generateServiceSchema,
+  generateBreadcrumbSchema,
+} from "../../utils/structured-data";
 
 const DesignBuildPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+  const pageSEO = getPageSEO("designBuild");
+
+  // Generate structured data
+  const serviceSchema = generateServiceSchema({
+    name: "UX Design & Product Design Services",
+    description:
+      "Expert UX design and product design services including web development, mobile apps, UI/UX design, and enterprise systems with faith-based excellence.",
+    serviceType: "Design and Development",
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://gr8qm.com/" },
+    { name: "Services", url: "https://gr8qm.com/services" },
+    { name: "Design & Build", url: "https://gr8qm.com/services/design-build" },
+  ]);
 
   const services = [
     {
@@ -81,8 +101,12 @@ const DesignBuildPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO
-        title="Design & Build"
-        description="From Vision to Reality. We design and build custom digital solutions that transform your ideas into powerful, user-friendly applications."
+        title={pageSEO.title}
+        description={pageSEO.description}
+        keywords={pageSEO.keywords}
+        type={pageSEO.type}
+        url="/services/design-build"
+        structuredData={[serviceSchema, breadcrumbSchema]}
       />
       <main className="flex flex-col">
         {/* Hero Section */}

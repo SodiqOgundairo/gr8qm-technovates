@@ -10,9 +10,17 @@ import { motion } from "framer-motion";
 
 import PageTransition from "../../components/layout/PageTransition";
 import ScrollReveal from "../../components/common/ScrollReveal";
+import { SEO } from "../../components/common/SEO";
+import { getPageSEO } from "../../utils/seo-config";
+import {
+  generateFAQSchema,
+  generateEducationalOrganizationSchema,
+  generateBreadcrumbSchema,
+} from "../../utils/structured-data";
 
 const TechTrainingPage: React.FC = () => {
   const navigate = useNavigate();
+  const pageSEO = getPageSEO("techTraining");
 
   const courses = [
     {
@@ -110,8 +118,25 @@ const TechTrainingPage: React.FC = () => {
     },
   ];
 
+  // Generate structured data
+  const faqSchema = generateFAQSchema(faqs);
+  const eduOrgSchema = generateEducationalOrganizationSchema();
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://gr8qm.com/" },
+    { name: "Services", url: "https://gr8qm.com/services" },
+    { name: "Tech Training", url: "https://gr8qm.com/services/tech-training" },
+  ]);
+
   return (
     <PageTransition>
+      <SEO
+        title={pageSEO.title}
+        description={pageSEO.description}
+        keywords={pageSEO.keywords}
+        type={pageSEO.type}
+        url="/services/tech-training"
+        structuredData={[faqSchema, eduOrgSchema, breadcrumbSchema]}
+      />
       <main className="flex flex-col">
         {/* Hero Section */}
         <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">

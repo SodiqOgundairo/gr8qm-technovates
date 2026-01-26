@@ -14,13 +14,26 @@ import { motion } from "framer-motion";
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
+import { getPageSEO } from "../utils/seo-config";
+import { generateBreadcrumbSchema } from "../utils/structured-data";
 
 const AboutPage: React.FC = () => {
+  const pageSEO = getPageSEO("about");
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://gr8qm.com/" },
+    { name: "About", url: "https://gr8qm.com/about" },
+  ]);
+
   return (
     <PageTransition>
       <SEO
-        title="About Us"
-        description="A kingdom-rooted Innovation Collective. We exist to research, design, and develop impactful AI technologies while equipping individuals through transformative training."
+        title={pageSEO.title}
+        description={pageSEO.description}
+        keywords={pageSEO.keywords}
+        type={pageSEO.type}
+        url="/about"
+        structuredData={[breadcrumbSchema]}
       />
       <main className="flex flex-col">
         <div className="py-12 md:py-20 lg:py-28 xl:py-32 2xl:py-40 bg-linear-to-br from-skyblue/20 to-orange/20">
