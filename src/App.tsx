@@ -40,11 +40,13 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
 import NotFound from "./pages/PageNotFound";
+import CursorTrail from "./components/animations/CursorTrail";
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
+      <CursorTrail />
       <Routes>
         {/* Public routes – keep Header/Footer */}
         <Route

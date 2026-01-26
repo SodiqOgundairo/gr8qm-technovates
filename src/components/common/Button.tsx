@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CgSpinner } from "react-icons/cg";
 import { motion, type HTMLMotionProps } from "framer-motion";
+import { useRipple } from "../../hooks/useRipple";
 
 interface ButtonProps extends Omit<HTMLMotionProps<"button">, "ref"> {
   variant: "pry" | "sec" | "inverted";
@@ -27,6 +28,17 @@ const Button: React.FC<ButtonProps> = ({
   loading,
   ...props
 }) => {
+  // Ripple effect colors based on variant
+  const rippleColors = {
+    pry: "rgba(255, 255, 255, 0.4)",
+    sec: "rgba(0, 174, 239, 0.3)",
+    inverted: "rgba(232, 244, 248, 0.4)",
+  };
+
+  const { rippleRef, createRipple } = useRipple({
+    color: rippleColors[variant],
+    duration: 600,
+  });
   const variants = {
     pry: "bg-skyblue text-white hover:bg-light hover:text-skyblue hover:shadow-lg",
     sec: "btn-sec",
@@ -41,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const baseClassName =
-    "rounded-md font-medium cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 transition-colors duration-300";
+    "rounded-md font-medium cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 transition-colors duration-300 ripple-container";
 
   let variantClassName = variants[variant];
   if (disabled || loading) {
@@ -75,6 +87,9 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <MotionLink
         to={to}
+        // @ts-expect-error - ref type mismatch between motion and ripple
+        ref={rippleRef}
+        onClick={createRipple}
         className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
         {...motionProps}
       >
@@ -85,7 +100,12 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <motion.button
-      onClick={onClick}
+      // @ts-expect-error - ref type mismatch between motion and ripple
+      ref={rippleRef}
+      onClick={(e) => {
+        createRipple(e);
+        onClick?.();
+      }}
       disabled={disabled || loading}
       className={`${baseClassName} ${variantClassName} ${sizeClassName} ${className}`}
       {...props}
