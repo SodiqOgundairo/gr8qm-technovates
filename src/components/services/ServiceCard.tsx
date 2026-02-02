@@ -1,18 +1,13 @@
 import React from "react";
-import Button from "../common/Button";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { MdOutlineDesignServices } from "react-icons/md";
-import { FaPrint, FaGraduationCap } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { HiArrowRight, HiCheck } from "react-icons/hi";
 
 interface ServiceCardProps {
   title: string;
   description: string;
-  icon: "design" | "print" | "training";
+  icon: string;
   features: string[];
-  onContactClick?: () => void;
-  portfolioCategory?: string;
+  onContactClick: () => void;
+  portfolioCategory: string;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -23,86 +18,47 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   onContactClick,
   portfolioCategory,
 }) => {
-  const navigate = useNavigate();
-
-  const getIcon = () => {
-    switch (icon) {
+  const getIcon = (type: string) => {
+    switch (type) {
       case "design":
-        return <MdOutlineDesignServices className="text-6xl text-skyblue" />;
+        return "💻";
       case "print":
-        return <FaPrint className="text-6xl text-orange" />;
+        return "🖨️";
       case "training":
-        return <FaGraduationCap className="text-6xl text-iceblue" />;
-    }
-  };
-
-  const handlePortfolioClick = () => {
-    if (portfolioCategory) {
-      navigate(`/portfolio?category=${portfolioCategory}`);
-    } else {
-      navigate("/portfolio");
+        return "🎓";
+      default:
+        return "⚡";
     }
   };
 
   return (
-    <motion.div
-      className="bg-white rounded-2xl p-8 shadow-lg border-2 border-gray-100"
-      whileHover={{
-        y: -8,
-        borderColor: "var(--color-skyblue)",
-        boxShadow:
-          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-      }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Icon */}
-      <motion.div
-        className="mb-6 flex justify-center"
-        whileHover={{ rotate: [0, -10, 10, -10, 10, 0], scale: 1.1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {getIcon()}
-      </motion.div>
+    <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col group">
+      <div className="mb-6 inline-block p-4 bg-sky-50 rounded-2xl group-hover:bg-skyblue group-hover:text-white transition-colors duration-300 w-fit">
+        <div className="text-4xl">{getIcon(icon)}</div>
+      </div>
 
-      {/* Title */}
-      <h3 className="text-2xl md:text-3xl font-bold text-oxford mb-4 text-center">
+      <h3 className="text-2xl font-bold text-oxford mb-4 group-hover:text-skyblue transition-colors duration-300">
         {title}
       </h3>
 
-      {/* Description */}
-      <p className="text-gray-600 mb-6 text-center leading-relaxed">
-        {description}
-      </p>
+      <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
 
-      {/* Features */}
-      <ul className="space-y-3 mb-8">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start gap-3">
-            <IoIosArrowRoundForward className="text-skyblue text-2xl shrink-0 mt-0.5" />
-            <span className="text-gray-700">{feature}</span>
+      <ul className="space-y-3 mb-8 flex-1">
+        {features.map((feature, idx) => (
+          <li key={idx} className="flex items-start text-gray-600 text-sm">
+            <HiCheck className="text-skyblue mt-0.5 mr-2 flex-shrink-0" />
+            <span>{feature}</span>
           </li>
         ))}
       </ul>
 
-      {/* Action Buttons */}
-      <div className="flex flex-col gap-3">
-        <Button
-          variant="pry"
-          onClick={onContactClick}
-          className="w-full justify-center"
-        >
-          Learn More
-          <IoIosArrowRoundForward className="text-2xl" />
-        </Button>
-        <Button
-          variant="sec"
-          onClick={handlePortfolioClick}
-          className="w-full justify-center"
-        >
-          View Portfolio
-        </Button>
-      </div>
-    </motion.div>
+      <button
+        onClick={onContactClick}
+        className="w-full py-3 flex items-center justify-center gap-2 bg-gray-50 text-oxford font-semibold rounded-xl group-hover:bg-skyblue group-hover:text-white transition-all duration-300"
+      >
+        Learn More <HiArrowRight />
+      </button>
+    </div>
   );
 };
 

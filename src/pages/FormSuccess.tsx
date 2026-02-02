@@ -1,55 +1,54 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { HiCheckCircle, HiArrowLeft } from "react-icons/hi";
 import { motion } from "framer-motion";
-import { HiCheckCircle } from "react-icons/hi";
-import Button from "../components/common/Button";
 
 const FormSuccess: React.FC = () => {
   const { shortCode } = useParams<{ shortCode: string }>();
 
+  useEffect(() => {
+    // Scroll to top on mount
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-iceblue to-white flex items-center justify-center px-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center"
-      >
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="inline-block mb-6"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white py-12 px-6 shadow-xl rounded-2xl sm:px-10 text-center relative overflow-hidden"
         >
-          <HiCheckCircle className="w-20 h-20 text-green-500" />
-        </motion.div>
+          {/* Confetti or decorative background could go here */}
 
-        <h1 className="text-3xl font-bold text-oxford mb-4">Thank You!</h1>
-        <p className="text-gray-600 mb-8">
-          Your response has been submitted successfully. We appreciate you
-          taking the time to complete this form.
-        </p>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+            className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6"
+          >
+            <HiCheckCircle className="h-12 w-12 text-green-600" />
+          </motion.div>
 
-        <div className="space-y-3">
-          <Link to="/">
-            <Button variant="pry" className="w-full">
-              Go to Homepage
-            </Button>
-          </Link>
-          <Link to={`/forms/${shortCode}`}>
-            <Button variant="sec" className="w-full">
-              Submit Another Response
-            </Button>
-          </Link>
-        </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            Submission Received!
+          </h2>
 
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-500">
-            Powered by{" "}
-            <span className="font-bold text-skyblue">GR8QM Technovates</span>
+          <p className="text-gray-600 mb-8 text-lg">
+            Thank you for filling out the form. Your response has been recorded
+            successfully.
           </p>
-        </div>
-      </motion.div>
+
+          <Link
+            to={shortCode ? `/forms/${shortCode}` : "/"}
+            className="inline-flex items-center text-skyblue hover:text-oxford font-semibold transition-colors"
+          >
+            <HiArrowLeft className="mr-2" />
+            Back to Form
+          </Link>
+        </motion.div>
+      </div>
     </div>
   );
 };

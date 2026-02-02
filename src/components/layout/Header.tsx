@@ -42,6 +42,7 @@ const defaultNavLinks: NavItem[] = [
     ],
   },
   { label: "Portfolio", path: "/portfolio" },
+  { label: "Careers", path: "/careers" },
 ];
 
 const defaultLogo = {
@@ -130,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const setDropdownButtonRef = (
     index: number,
-    element: HTMLButtonElement | null
+    element: HTMLButtonElement | null,
   ) => {
     if (element) {
       dropdownButtonRefs.current.set(index, element);
@@ -258,7 +259,7 @@ const Header: React.FC<HeaderProps> = ({
                     )}
                   </AnimatePresence>
                 </div>
-              )
+              ),
             )}
           </div>
           <Button

@@ -1,6 +1,5 @@
 import React from "react";
-import { FaClock, FaMoneyBillWave } from "react-icons/fa";
-import { IoIosArrowRoundForward } from "react-icons/io";
+import { HiClock, HiCurrencyDollar, HiCalendar } from "react-icons/hi";
 
 interface Course {
   id: string;
@@ -9,10 +8,9 @@ interface Course {
   icon: string;
   duration: string;
   commitment_fee: number;
-  cohort_name?: string;
+  category?: string;
   start_date?: string;
   applications_open: boolean;
-  category?: string;
 }
 
 interface CourseCardProps {
@@ -22,80 +20,65 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 hover:border-skyblue hover:shadow-xl transition-all duration-300 cursor-pointer group">
-      <div className="flex flex-col h-full">
-        {/* Icon and Status */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="text-5xl">{course.icon}</div>
-          {!course.applications_open && (
-            <span className="bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">
-              Closed
-            </span>
-          )}
-          {course.applications_open && (
-            <span className="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
-              Open
-            </span>
-          )}
+    <div
+      onClick={onClick}
+      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group h-full flex flex-col"
+    >
+      <div className="relative h-48 bg-gray-100 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-skyblue/10 to-oxford/10 group-hover:scale-105 transition-transform duration-500">
+          <span className="text-6xl">{course.icon || "🎓"}</span>
         </div>
 
-        {/* Course Title */}
-        <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors">
-          {course.name}
-        </h3>
-
-        {/* Description */}
-        <p className="text-gray-600 mb-4 grow line-clamp-3">
-          {course.description}
-        </p>
-
-        {/* Cohort Info (if available) */}
-        {course.cohort_name && (
-          <div className="mb-3 text-sm">
-            <span className="text-oxford font-semibold">
-              {course.cohort_name}
+        {course.category && (
+          <div className="absolute top-4 right-4 z-20">
+            <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-oxford uppercase tracking-wider shadow-sm">
+              {course.category}
             </span>
-            {course.start_date && (
-              <span className="text-gray-500">
-                {" "}
-                • Starts{" "}
-                {new Date(course.start_date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-            )}
           </div>
         )}
 
-        {/* Course Details */}
-        <div className="flex items-center justify-between text-sm mb-4 pt-4 border-t border-gray-200">
-          <div className="flex items-center gap-2 text-gray-600">
-            <FaClock className="text-skyblue" />
-            <span>{course.duration}</span>
+        {course.applications_open && (
+          <div className="absolute bottom-4 left-4 z-20">
+            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              Open for Applications
+            </span>
           </div>
-          <div className="flex items-center gap-2 text-skyblue font-semibold">
-            <FaMoneyBillWave />
-            <span>₦{course.commitment_fee.toLocaleString()}</span>
-          </div>
-        </div>
+        )}
+      </div>
 
-        {/* Action Button */}
-        <button
-          onClick={onClick}
-          disabled={!course.applications_open}
-          className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
-            course.applications_open
-              ? "bg-skyblue text-white hover:bg-oxford group-hover:shadow-lg"
-              : "bg-gray-200 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          {course.applications_open ? "View Details" : "Applications Closed"}
-          {course.applications_open && (
-            <IoIosArrowRoundForward className="text-2xl group-hover:translate-x-1 transition-transform" />
+      <div className="p-6 flex-1 flex flex-col">
+        <h3 className="text-xl font-bold text-oxford group-hover:text-skyblue transition-colors line-clamp-2 mb-2">
+          {course.name}
+        </h3>
+
+        <p className="text-gray-600 mb-6 line-clamp-3 text-sm flex-1">
+          {course.description}
+        </p>
+
+        <div className="space-y-3 mt-auto pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center gap-1.5">
+              <HiClock className="text-skyblue text-lg" />
+              <span>{course.duration}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <HiCurrencyDollar className="text-skyblue text-lg" />
+              <span className="font-bold text-oxford">
+                ₦{course.commitment_fee.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {course.start_date && (
+            <div className="flex items-center gap-1.5 text-sm text-gray-500">
+              <HiCalendar className="text-skyblue text-lg" />
+              <span>
+                Starts {new Date(course.start_date).toLocaleDateString()}
+              </span>
+            </div>
           )}
-        </button>
+        </div>
       </div>
     </div>
   );

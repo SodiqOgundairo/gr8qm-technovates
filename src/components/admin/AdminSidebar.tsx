@@ -11,6 +11,7 @@ import {
   HiCurrencyDollar,
   HiX,
   HiClipboardCheck,
+  HiBriefcase,
 } from "react-icons/hi";
 import { motion } from "framer-motion";
 
@@ -27,6 +28,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: "Dashboard", path: "/admin/dashboard", icon: HiHome },
   { name: "Forms", path: "/admin/forms", icon: HiClipboardCheck },
+  { name: "Job Postings", path: "/admin/jobs", icon: HiBriefcase },
   { name: "Courses", path: "/admin/courses", icon: HiAcademicCap },
   { name: "Applications", path: "/admin/applications", icon: HiClipboardList },
   {

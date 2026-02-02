@@ -15,6 +15,7 @@ import ContactPage from "./pages/Contact";
 import ServicesPage from "./pages/Services";
 import TrainingsPage from "./pages/Trainings";
 import PortfolioPage from "./pages/Portfolio";
+import CareersPage from "./pages/Careers";
 import DesignBuildPage from "./pages/services/DesignBuild";
 import PrintShopPage from "./pages/services/PrintShop";
 import TechTrainingPage from "./pages/services/TechTraining";
@@ -36,6 +37,8 @@ import AdminServiceRequests from "./pages/admin/ServiceRequests";
 import AdminInvoices from "./pages/admin/Invoices";
 import AdminPortfolio from "./pages/admin/Portfolio";
 import AdminTransactions from "./pages/admin/Transactions";
+import AdminJobPostings from "./pages/admin/JobPostings";
+import JobPostingForm from "./pages/admin/JobPostingForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
@@ -72,6 +75,7 @@ function App() {
                 />
                 <Route path="/trainings" element={<TrainingsPage />} />
                 <Route path="/portfolio" element={<PortfolioPage />} />
+                <Route path="/careers" element={<CareersPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/forms/:shortCode" element={<PublicForm />} />
                 <Route
@@ -110,6 +114,9 @@ function App() {
                   path="forms/:formId/analytics"
                   element={<FormAnalytics />}
                 />
+                <Route path="jobs" element={<AdminJobPostings />} />
+                <Route path="jobs/create" element={<JobPostingForm />} />
+                <Route path="jobs/:id/edit" element={<JobPostingForm />} />
                 <Route path="courses" element={<AdminCourses />} />
                 <Route path="applications" element={<AdminApplications />} />
                 <Route
