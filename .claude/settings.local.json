@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm info:*)",
+      "Bash(npm:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:itshover.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}

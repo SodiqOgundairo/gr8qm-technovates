@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { CgSpinner } from "react-icons/cg";
+import { Loader2 } from "lucide-react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { useRipple } from "../../hooks/useRipple";
 
@@ -111,7 +111,7 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
       {...motionProps}
     >
-      {loading && <CgSpinner className="animate-spin text-xl" />}
+      {loading && <Loader2 className="animate-spin w-5 h-5" />}
       {wrappedChildren}
     </motion.button>
   );

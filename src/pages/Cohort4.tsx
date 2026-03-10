@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
 import Button from "../components/common/Button";
-import { RiTiktokFill } from "react-icons/ri";
-import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
-import { RiTwitterXFill } from "react-icons/ri";
+import {
+  LinkedinIcon,
+  InstagramIcon,
+  TwitterXIcon,
+  TiktokIcon,
+  FacebookIcon,
+} from "../components/icons";
 import arrow from "../assets/img/arrow_corner.svg";
 import CloudinaryImage from "../utils/cloudinaryImage";
 import FloatingShapes from "../components/animations/FloatingShapes";
@@ -13,27 +17,27 @@ export default function Cohort4() {
 
   const socialLinks = [
     {
-      icon: <LiaLinkedin />,
+      icon: <LinkedinIcon size={20} />,
       url: "https://www.linkedin.com/company/gr8qm",
       label: "LinkedIn",
     },
     {
-      icon: <LiaInstagram />,
+      icon: <InstagramIcon size={20} />,
       url: "https://www.instagram.com/gr8qmtechnovate",
       label: "Instagram",
     },
     {
-      icon: <RiTwitterXFill />,
+      icon: <TwitterXIcon size={20} />,
       url: "https://www.x.com/gr8qmtechnovate",
       label: "Twitter",
     },
     {
-      icon: <RiTiktokFill />,
+      icon: <TiktokIcon size={20} />,
       url: "https://www.tiktok.com/@gr8qmtechnovates",
       label: "TikTok",
     },
     {
-      icon: <LiaFacebookF />,
+      icon: <FacebookIcon size={20} />,
       url: "https://web.facebook.com/profile.php?id=61559404115455&sk=about",
       label: "Facebook",
     },

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import Button from "../common/Button";
-import { PiMarkerCircleDuotone } from "react-icons/pi";
+import { XIcon } from "../icons";
 
 interface BaseModalProps {
   open: boolean;
@@ -53,15 +52,13 @@ const BaseModal: React.FC<BaseModalProps> = ({
         role="document"
       >
         {showCloseButton && (
-          <Button
+          <button
             onClick={onClose}
-            size="sm"
-            variant="pry"
-            className="sticky top-0 right-0 float-right p-2 z-10 bg-white"
+            className="sticky top-0 right-0 float-right p-2 z-10 rounded-full hover:bg-gray-100 transition-colors text-neutral-500 hover:text-neutral-800 cursor-pointer"
             aria-label="Close modal"
           >
-            <PiMarkerCircleDuotone className="w-5 h-5 text-neutral-600" />
-          </Button>
+            <XIcon size={20} />
+          </button>
         )}
 
         <div className="">

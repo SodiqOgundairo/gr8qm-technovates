@@ -3,12 +3,16 @@ import Container from "../components/layout/Container";
 import CloudinaryImage from "../utils/cloudinaryImage";
 import Button from "../components/common/Button";
 import Card from "../components/layout/Card";
-import { PiSparkleLight, PiSpiral } from "react-icons/pi";
-import { IoIosHeartEmpty, IoIosTrendingUp } from "react-icons/io";
-import { HiOutlineLightBulb } from "react-icons/hi2";
-import { FiUser } from "react-icons/fi";
-import { SlBadge } from "react-icons/sl";
-import { LuShield } from "react-icons/lu";
+import {
+  SparklesIcon,
+  SpiralIcon,
+  HeartIcon,
+  TrendingUpIcon,
+  BulbIcon,
+  UserIcon,
+  BadgeIcon,
+  ShieldCheckIcon,
+} from "../components/icons";
 import { motion } from "framer-motion";
 
 import { SEO } from "../components/common/SEO";
@@ -40,34 +44,31 @@ const AboutPage: React.FC = () => {
           <Container className="flex flex-col md:flex-row w-full justify-between items-center gap-8">
             <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-2/3">
               <ScrollReveal className="w-full">
-                <div className="bg-skyblue rounded-2xl  p-4 py-8 md:p-5 lg:p-16 xl:p-16 2xl:p-24 space-y-4">
+                <div className="bg-skyblue rounded-2xl p-4 py-8 md:p-5 lg:p-16 xl:p-16 2xl:p-24 space-y-4">
                   <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0 flex items-center gap-2">
-                    <PiSparkleLight className="text-oxford" />
-                    <p className="text-sm text-oxford">
-                      Kingdom-Rooted Innovation
-                    </p>
+                    <SparklesIcon size={16} className="text-oxford" />
+                    <p className="text-sm text-oxford">The Gr8QM Story</p>
                   </div>
                   <h1 className="text-3xl lg:text-4xl font-black tracking-tight wrap-break-word">
-                    <span className="text-white">Faith</span>{" "}
-                    <span className="text-oxford">that builds.</span>
+                    <span className="text-white">We design</span>{" "}
+                    <span className="text-oxford">what's next.</span>
                     <br />
-                    <span className="text-white">Impact</span>{" "}
-                    <span className="text-oxford">that last.</span>
+                    <span className="text-white">We build</span>{" "}
+                    <span className="text-oxford">what lasts.</span>
                   </h1>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
-                <div className="bg-orange p-2 py-4 md:p-5 lg:p-2 xl:p-2 2xl:p-24 rounded-2xl">
-                  <p className="text-light  lg:text-base max-w-[650px] mx-auto md:mx-0">
-                    We are a kingdom-rooted innovation collective advancing AI
-                    through thoughtful research, purposeful design, and
-                    principled development. Transforming lives through
-                    technology anchored in faith.
+                <div className="bg-orange p-4 md:p-5 lg:p-6 rounded-2xl">
+                  <p className="text-light lg:text-base max-w-[650px] mx-auto md:mx-0">
+                    We're a design and technology studio that believes great work
+                    comes from clarity of purpose. Every product we ship, every
+                    student we train, every print we deliver reflects our
+                    commitment to craft and impact.
                   </p>
                 </div>
               </ScrollReveal>
             </div>
-            {/* <div className="w-full"> */}
             <ScrollReveal delay={0.4} className="w-full md:w-1/3" width="100%">
               <CloudinaryImage
                 imageKey="aboutUsHero"
@@ -75,7 +76,6 @@ const AboutPage: React.FC = () => {
                 alt="About Us Hero"
               />
             </ScrollReveal>
-            {/* </div> */}
           </Container>
         </div>
 
@@ -85,42 +85,41 @@ const AboutPage: React.FC = () => {
               <CloudinaryImage
                 imageKey="visionMision"
                 className=" hover:scale-105 transition-transform ease-in-out hover:-rotate-2 w-full lg:scale-105"
-                alt="Hero BG"
+                alt="Vision and Mission"
               />
             </ScrollReveal>
             <div className="flex flex-col items-start gap-12">
               <ScrollReveal delay={0.2}>
                 <div className="flex flex-col gap-4">
                   <h2 className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4">
-                    <PiSpiral className="text-skyblue" />
+                    <SpiralIcon size={28} className="text-skyblue" />
                     Our Vision
                   </h2>
                   <p className="text-gray-2">
-                    We lead innovation in research, purposeful design, and
-                    development, building solutions with integrity and impact.
-                    We envision communities thriving as technology aligns with
-                    faith and purpose.
+                    A world where technology serves people, not the other way
+                    around. We envision communities thriving because the tools
+                    they use were built with intention, empathy, and excellence.
                   </p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                 <div className="flex flex-col gap-4">
                   <h2 className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4">
-                    <PiSparkleLight className="text-orange" />
+                    <SparklesIcon size={28} className="text-orange" />
                     Our Mission
                   </h2>
                   <p className="text-gray-2">
-                    We equip individuals and institutions with tools to
-                    integrate technology, innovation, and human-centered design
-                    into their work while advancing principled development.
+                    To equip individuals and organizations with beautifully
+                    designed, expertly engineered solutions. We train talent,
+                    build products, and deliver print that makes people stop and
+                    look twice.
                   </p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.6}>
-                <div className="bg-iceblue p-2 md:p-4 rounded-full">
-                  <p className="text-basee font-bold italic text-oxford">
-                    "Innovating with faith, designing with purpose, and
-                    transforming lives."
+                <div className="bg-iceblue p-4 md:p-6 rounded-2xl">
+                  <p className="text-base font-bold italic text-oxford">
+                    "Good design is good business. Great design changes lives."
                   </p>
                 </div>
               </ScrollReveal>
@@ -133,17 +132,15 @@ const AboutPage: React.FC = () => {
             <ScrollReveal>
               <div className="flex flex-col gap-6">
                 <div className="bg-light w-fit m-auto py-2 px-4 rounded-full">
-                  <p className="text-sm text-skyblue">
-                    Kingdom-Rooted Innovation
-                  </p>
+                  <p className="text-sm text-skyblue">What Drives Us</p>
                 </div>
                 <div className="flex-col flex gap-2 w-full">
                   <h2 className="text-2xl md:text-3xl font-bold text-oxford text-center">
                     Our Core Values
                   </h2>
                   <p className="text-base text-dark text-center md:text-sm lg:text-base ">
-                    The principles that guide every decision, design, and line
-                    of code we create.
+                    The principles behind every pixel, every line of code, and
+                    every decision we make.
                   </p>
                 </div>
               </div>
@@ -152,41 +149,39 @@ const AboutPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  icon: <IoIosHeartEmpty className="text-2xl text-skyblue " />,
-                  title: "Kingdom-Rooted",
-                  desc: "We anchor every effort in faith, purpose, and values that transform lives.",
+                  icon: <HeartIcon size={24} className="text-skyblue" />,
+                  title: "Purpose First",
+                  desc: "We start with why. Every project begins with understanding the real problem before reaching for solutions.",
                   bg: "bg-skyblue/20",
                 },
                 {
-                  icon: (
-                    <HiOutlineLightBulb className="text-2xl text-orange " />
-                  ),
-                  title: "Innovation with Purpose",
-                  desc: "We design and build solutions that solve real problems with clarity and compassion.",
+                  icon: <BulbIcon size={24} className="text-orange" />,
+                  title: "Relentless Craft",
+                  desc: "We obsess over the details. The spacing, the transitions, the edge cases. Because good enough isn't.",
                   bg: "bg-orange/20",
                 },
                 {
-                  icon: <FiUser className="text-2xl text-skyblue " />,
-                  title: "Empowerment",
-                  desc: "We elevate overlooked communities with tools and training to lead confidently.",
+                  icon: <UserIcon size={24} className="text-skyblue" />,
+                  title: "Inclusive Growth",
+                  desc: "We build systems that leave no one behind. Our training programs are designed for people from every background.",
                   bg: "bg-skyblue/20",
                 },
                 {
-                  icon: <SlBadge className="text-2xl text-oxford " />,
-                  title: "Excellence First",
-                  desc: "We set uncompromising standards in design, research, and engineering.",
+                  icon: <BadgeIcon size={24} className="text-oxford" />,
+                  title: "Excellence as Standard",
+                  desc: "We don't have a 'premium tier.' The standard is premium. Every client gets our best work.",
                   bg: "bg-oxford/20",
                 },
                 {
-                  icon: <IoIosTrendingUp className="text-2xl text-orange " />,
-                  title: "Transformation",
-                  desc: "We build products and services that enable lasting impact through technology.",
+                  icon: <TrendingUpIcon size={24} className="text-orange" />,
+                  title: "Measurable Impact",
+                  desc: "Pretty isn't enough. We track outcomes, iterate on feedback, and make sure our work actually moves metrics.",
                   bg: "bg-orange/20",
                 },
                 {
-                  icon: <LuShield className="text-2xl text-oxford " />,
-                  title: "Integrity & Service",
-                  desc: "We act with honesty, serve with humility, and prioritize people over process.",
+                  icon: <ShieldCheckIcon size={24} className="text-oxford" />,
+                  title: "Integrity Always",
+                  desc: "Honest timelines, transparent pricing, and straight talk. We'd rather lose a deal than overpromise.",
                   bg: "bg-oxford/20",
                 },
               ].map((item, index) => (
@@ -218,17 +213,15 @@ const AboutPage: React.FC = () => {
           <Container className="flex flex-col items-center gap-6 text-center">
             <ScrollReveal>
               <h3 className="text-xl md:text-2xl font-bold text-oxford">
-                What makes us different
+                Ready to work with a team that cares as much as you do?
               </h3>
               <p className="text-gray-2 max-w-3xl mb-6">
-                Gr8QM Technovates is a kingdom-rooted innovation collective. We
-                advance AI through purposeful research, principled development,
-                and human-centered design. We build solutions that transform
-                communities and empower institutions while staying grounded in
-                faith.
+                We bring design thinking, engineering rigor, and a genuine
+                passion for craft to every project. If you're building something
+                that matters, we want to be part of it.
               </p>
               <Button to="/contact" variant="pry">
-                Start your project today
+                Let's talk
               </Button>
             </ScrollReveal>
           </Container>

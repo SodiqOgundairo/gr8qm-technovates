@@ -42,6 +42,7 @@ const defaultNavLinks: NavItem[] = [
     ],
   },
   { label: "Portfolio", path: "/portfolio" },
+  { label: "Blog", path: "/blog" },
   { label: "Careers", path: "/careers" },
 ];
 

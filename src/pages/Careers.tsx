@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { motion } from "framer-motion";
-import {
-  HiLocationMarker,
-  HiBriefcase,
-  HiClock,
-  HiSearch,
-} from "react-icons/hi";
+import { MapPin, Clock, Search } from "lucide-react";
+import { BriefcaseIcon } from "../components/icons";
 import JobDetailModal from "../components/careers/JobDetailModal";
 
 interface JobPosting {
@@ -137,7 +133,7 @@ const Careers: React.FC = () => {
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
             <div className="relative">
-              <HiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search jobs by title, department, or keyword..."
@@ -222,13 +218,13 @@ const Careers: React.FC = () => {
                   <div className="space-y-2 mb-4">
                     {job.location && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <HiLocationMarker className="text-skyblue" />
+                        <MapPin className="text-skyblue w-4 h-4" />
                         <span>{job.location}</span>
                       </div>
                     )}
                     {job.posted_date && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <HiClock className="text-skyblue" />
+                        <Clock className="text-skyblue w-4 h-4" />
                         <span>
                           Posted{" "}
                           {new Date(job.posted_date).toLocaleDateString()}
@@ -237,7 +233,7 @@ const Careers: React.FC = () => {
                     )}
                     {job.salary_range && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <HiBriefcase className="text-skyblue" />
+                        <BriefcaseIcon size={16} className="text-skyblue" />
                         <span>{job.salary_range}</span>
                       </div>
                     )}

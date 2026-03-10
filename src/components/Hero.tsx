@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { HiArrowLongRight } from "react-icons/hi2";
+import { ArrowRightIcon } from "./icons";
 import Container from "./layout/Container";
 // import { cloudinaryImages } from '../utils/cloudinaryBank';
 
@@ -47,7 +47,7 @@ const Hero = () => {
 
               <a href="/designu-online" className="btn-sec">
                 <span className="button-content">
-                  Enter the DSGN LAB <HiArrowLongRight className="arrow" />
+                  Enter the DSGN LAB <ArrowRightIcon size={18} className="arrow" />
                 </span>
               </a>
             </motion.div>

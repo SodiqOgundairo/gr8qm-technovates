@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import Container from "../../components/layout/Container";
 import Button from "../../components/common/Button";
 import CloudinaryImage from "../../utils/cloudinaryImage";
-import { HiArrowLongRight } from "react-icons/hi2";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaPrint, FaStar } from "react-icons/fa";
+import { ArrowRightIcon, PrinterIcon } from "../../components/icons";
+import { Star } from "lucide-react";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -54,7 +53,7 @@ const PrintShopPage: React.FC = () => {
 
   const features = [
     {
-      icon: <FaPrint className="text-3xl" />,
+      icon: <PrinterIcon size={28} />,
       title: "High-Quality Printing",
       description:
         "State-of-the-art equipment ensures crisp, vibrant prints every time.",
@@ -72,7 +71,7 @@ const PrintShopPage: React.FC = () => {
         "Our designers can help bring your vision to life at no extra cost.",
     },
     {
-      icon: <FaStar className="text-3xl" />,
+      icon: <Star className="w-7 h-7" />,
       title: "Premium Materials",
       description:
         "We use only the finest papers, inks, and materials for lasting quality.",
@@ -100,7 +99,7 @@ const PrintShopPage: React.FC = () => {
             <div className="flex gap-4 flex-wrap">
               <Button variant="pry" onClick={() => setModalOpen(true)}>
                 Request a Quote
-                <IoIosArrowRoundForward className="text-2xl" />
+                <ArrowRightIcon size={20} />
               </Button>
               <Button
                 variant="sec"
@@ -108,7 +107,7 @@ const PrintShopPage: React.FC = () => {
               >
                 <div className="button-content">
                   View Samples
-                  <HiArrowLongRight className="arrow" />
+                  <ArrowRightIcon size={18} className="arrow" />
                 </div>
               </Button>
             </div>
@@ -151,7 +150,7 @@ const PrintShopPage: React.FC = () => {
                       key={idx}
                       className="flex items-center gap-2 text-sm text-gray-700"
                     >
-                      <IoIosArrowRoundForward className="text-orange" />
+                      <ArrowRightIcon size={16} className="text-orange" />
                       {feature}
                     </li>
                   ))}
@@ -282,7 +281,7 @@ const PrintShopPage: React.FC = () => {
               >
                 <div className="flex gap-1 mb-4 text-orange">
                   {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} />
+                    <Star key={i} className="w-4 h-4 fill-current" />
                   ))}
                 </div>
                 <p className="text-gray-700 mb-4 italic">
@@ -310,7 +309,7 @@ const PrintShopPage: React.FC = () => {
           <div className="flex gap-4 justify-center flex-wrap">
             <Button variant="inverted" onClick={() => setModalOpen(true)}>
               Get a Quote
-              <IoIosArrowRoundForward className="text-2xl" />
+              <ArrowRightIcon size={20} />
             </Button>
             <Button
               variant="sec"
@@ -319,7 +318,7 @@ const PrintShopPage: React.FC = () => {
             >
               <div className="button-content">
                 View Portfolio
-                <HiArrowLongRight className="arrow" />
+                <ArrowRightIcon size={18} className="arrow" />
               </div>
             </Button>
           </div>

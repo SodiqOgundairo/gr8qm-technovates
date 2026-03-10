@@ -1,13 +1,19 @@
 import React, { useState, type FormEvent } from "react";
 import { supabase } from "../../utils/supabase";
-import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../../utils/cloudinaryImage";
 import shape1 from "../../assets/img/shape.png";
 import shape2 from "../../assets/img/shape2.png";
 import arrow from "../../assets/img/arrow_corner.svg";
-import { LiaFacebookF, LiaInstagram, LiaLinkedin } from "react-icons/lia";
-import { RiTwitterXFill, RiTiktokFill } from "react-icons/ri";
+import {
+  LinkedinIcon,
+  InstagramIcon,
+  TwitterXIcon,
+  TiktokIcon,
+  FacebookIcon,
+  ArrowRightIcon,
+  SendIcon,
+} from "../icons";
 import Button from "../common/Button";
 import Container from "./Container";
 import Input from "../common/Input";
@@ -74,34 +80,34 @@ const defaultContactInfo: ContactInfo = {
 
 const defaultSocialLinks: SocialLink[] = [
   {
-    icon: <LiaLinkedin />,
+    icon: <LinkedinIcon size={22} />,
     url: "https://www.linkedin.com/company/gr8qm",
     label: "LinkedIn",
   },
   {
-    icon: <LiaInstagram />,
+    icon: <InstagramIcon size={22} />,
     url: "https://www.instagram.com/gr8qmtechnovate",
     label: "Instagram",
   },
   {
-    icon: <RiTwitterXFill />,
+    icon: <TwitterXIcon size={22} />,
     url: "https://www.x.com/gr8qmtechnovate",
     label: "Twitter",
   },
   {
-    icon: <RiTiktokFill />,
+    icon: <TiktokIcon size={22} />,
     url: "https://www.tiktok.com/@gr8qmtechnovates",
     label: "TikTok",
   },
   {
-    icon: <LiaFacebookF />,
+    icon: <FacebookIcon size={22} />,
     url: "https://web.facebook.com/profile.php?id=61559404115455&sk=about",
     label: "Facebook",
   },
 ];
 
 const defaultTagline =
-  "Innovating with faith, designing with purpose, and transforming lives through kingdom-rooted technology.";
+  "Design-led. Purpose-driven. We craft digital products, train tech talent, and deliver print that stands out.";
 
 const Footer: React.FC<FooterProps> = ({
   sections = defaultSections,
@@ -205,10 +211,10 @@ const Footer: React.FC<FooterProps> = ({
           <div className="flex flex-col gap-4">
             <p className="text-orange text-xs md:text-sm">LET'S GO</p>
             <h2 className="text-2xl md:text-3xl text-gray-1 font-light">
-              Seeking personalized support?
+              Got an idea?
               <span className="text-light font-medium">
                 {" "}
-                Request a call from our team
+                Let's make it real.
               </span>
             </h2>
           </div>
@@ -284,7 +290,7 @@ const Footer: React.FC<FooterProps> = ({
                 loading={loading}
               >
                 {" "}
-                Send a request <IoIosArrowRoundForward />
+                Send a request <ArrowRightIcon size={18} />
               </Button>
             </form>
           )}

@@ -1,5 +1,6 @@
 import React from "react";
-import { HiClock, HiCurrencyDollar, HiCalendar } from "react-icons/hi";
+import { Clock, Calendar } from "lucide-react";
+import { DollarIcon, GraduationCapIcon } from "../icons";
 
 interface Course {
   id: string;
@@ -22,11 +23,15 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group h-full flex flex-col"
+      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group h-full flex flex-col border border-transparent hover:border-skyblue/30"
     >
       <div className="relative h-48 bg-gray-100 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-skyblue/10 to-oxford/10 group-hover:scale-105 transition-transform duration-500">
-          <span className="text-6xl">{course.icon || "🎓"}</span>
+          {course.icon ? (
+            <span className="text-6xl">{course.icon}</span>
+          ) : (
+            <GraduationCapIcon size={64} className="text-skyblue/50" />
+          )}
         </div>
 
         {course.category && (
@@ -59,11 +64,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
         <div className="space-y-3 mt-auto pt-4 border-t border-gray-100">
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center gap-1.5">
-              <HiClock className="text-skyblue text-lg" />
+              <Clock className="text-skyblue w-4 h-4" />
               <span>{course.duration}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <HiCurrencyDollar className="text-skyblue text-lg" />
+              <DollarIcon size={16} className="text-skyblue" />
               <span className="font-bold text-oxford">
                 ₦{course.commitment_fee.toLocaleString()}
               </span>
@@ -72,7 +77,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
 
           {course.start_date && (
             <div className="flex items-center gap-1.5 text-sm text-gray-500">
-              <HiCalendar className="text-skyblue text-lg" />
+              <Calendar className="text-skyblue w-4 h-4" />
               <span>
                 Starts {new Date(course.start_date).toLocaleDateString()}
               </span>

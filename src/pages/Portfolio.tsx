@@ -3,7 +3,7 @@ import { supabase } from "../utils/supabase";
 import Container from "../components/layout/Container";
 import Skeleton from "../components/common/Skeleton";
 import { SEO } from "../components/common/SEO";
-import { FaStar } from "react-icons/fa";
+import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
@@ -175,7 +175,7 @@ const PortfolioPage = () => {
                         />
                         {item.featured && (
                           <div className="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full text-sm flex items-center gap-2 shadow-lg z-10">
-                            <FaStar /> Featured
+                            <Star className="w-3 h-3 fill-current" /> Featured
                           </div>
                         )}
                         <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4 z-10">

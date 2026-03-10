@@ -2,9 +2,7 @@ import React from "react";
 import Container from "../../components/layout/Container";
 import Button from "../../components/common/Button";
 import CloudinaryImage from "../../utils/cloudinaryImage";
-import { HiArrowLongRight } from "react-icons/hi2";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaGraduationCap } from "react-icons/fa";
+import { ArrowRightIcon, GraduationCapIcon } from "../../components/icons";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -167,7 +165,7 @@ const TechTrainingPage: React.FC = () => {
                 <div className="flex gap-4 flex-wrap">
                   <Button variant="pry" onClick={() => navigate("/trainings")}>
                     Browse Courses
-                    <IoIosArrowRoundForward className="text-2xl" />
+                    <ArrowRightIcon size={20} />
                   </Button>
                   <Button
                     variant="sec"
@@ -177,7 +175,7 @@ const TechTrainingPage: React.FC = () => {
                   >
                     <div className="button-content">
                       Student Success Stories
-                      <HiArrowLongRight className="arrow" />
+                      <ArrowRightIcon size={18} className="arrow" />
                     </div>
                   </Button>
                 </div>
@@ -278,7 +276,7 @@ const TechTrainingPage: React.FC = () => {
               <div className="text-center mt-8">
                 <Button variant="pry" onClick={() => navigate("/trainings")}>
                   View All Courses & Apply
-                  <IoIosArrowRoundForward className="text-2xl" />
+                  <ArrowRightIcon size={20} />
                 </Button>
               </div>
             </ScrollReveal>
@@ -368,7 +366,7 @@ const TechTrainingPage: React.FC = () => {
                     <p className="text-gray-600">{item.desc}</p>
                     {index < 3 && (
                       <div className="hidden md:block absolute top-8 -right-4 transform z-10">
-                        <IoIosArrowRoundForward className="text-4xl text-skyblue" />
+                        <ArrowRightIcon size={32} className="text-skyblue" />
                       </div>
                     )}
                   </div>
@@ -401,7 +399,7 @@ const TechTrainingPage: React.FC = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <h3 className="text-lg font-bold text-oxford mb-3 flex items-start gap-2">
-                      <FaGraduationCap className="text-skyblue mt-1 shrink-0" />
+                      <GraduationCapIcon size={18} className="text-skyblue mt-1 shrink-0" />
                       {faq.question}
                     </h3>
                     <p className="text-gray-600 pl-7">{faq.answer}</p>
@@ -429,14 +427,14 @@ const TechTrainingPage: React.FC = () => {
                   onClick={() => navigate("/trainings")}
                 >
                   Browse Courses
-                  <IoIosArrowRoundForward className="text-2xl" />
+                  <ArrowRightIcon size={20} />
                 </Button>
                 <Button
                   variant="sec"
                   onClick={() => navigate("/portfolio?category=tech-training")}
                 >
                   See Student Work
-                  <HiArrowLongRight className="arrow" />
+                  <ArrowRightIcon size={18} className="arrow" />
                 </Button>
               </div>
             </ScrollReveal>

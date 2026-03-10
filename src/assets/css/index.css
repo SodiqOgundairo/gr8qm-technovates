@@ -3,6 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --family-font-body: "Epilogue";
   --family-font-header: "Epilogue";
@@ -47,6 +49,117 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--color-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-light: #0f1218;
+  --color-dark: #f0f0f0;
+  --color-gray-1: #6b7280;
+  --color-gray-2: #9ca3af;
+  --color-gray-3: #d1d5db;
+}
+
+.dark body,
+.dark {
+  background-color: #0f1218;
+  color: #e5e7eb;
+}
+
+.dark .bg-white {
+  background-color: #1a1f2e;
+}
+
+.dark .bg-light {
+  background-color: #0f1218;
+}
+
+.dark .text-oxford {
+  color: #a8c4e6;
+}
+
+.dark .text-dark {
+  color: #e5e7eb;
+}
+
+.dark .text-gray-2 {
+  color: #9ca3af;
+}
+
+.dark .text-gray-3 {
+  color: #d1d5db;
+}
+
+.dark .border-gray-100 {
+  border-color: #2a2f3e;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: #1a1f2e;
+}
+
+.dark .shadow,
+.dark .shadow-sm,
+.dark .shadow-lg {
+  --tw-shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark .bg-iceblue {
+  background-color: #0c2340;
+}
+
+.dark .text-iceblue {
+  color: #7cc4ed;
+}
+
+.dark .bg-oxford {
+  background-color: #0a1628;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1a1f2e;
+  border-color: #2a2f3e;
+  color: #e5e7eb;
+}
+
+.dark input:focus,
+.dark textarea:focus {
+  background-color: #1e2433;
+  border-color: #0098da;
+}
+
+.dark .input-field {
+  background-color: #1a1f2e;
+  border-color: #2a2f3e;
+  color: #9ca3af;
+}
+
+.dark .input-field:focus-visible {
+  background-color: #1e2433;
+  color: #e5e7eb;
+}
+
+.dark .bg-linear-to-br {
+  background-image: none;
+  background-color: #0f1218;
+}
+
+/* Dark scrollbar */
+.dark ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(30, 30, 30, 1);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #2a2f3e;
+}
+
+/* Keep header backdrop in dark mode */
+.dark nav.sticky {
+  background-color: rgba(15, 18, 24, 0.8);
 }
 
 /* Link defaults: let components decide color (use inherit) */

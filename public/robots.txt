@@ -2,5 +2,15 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /forms/*/success
+Disallow: /api/
+
+# Crawl delay for politeness
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
 
 Sitemap: https://gr8qm.com/sitemap.xml

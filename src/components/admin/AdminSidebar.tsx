@@ -1,19 +1,20 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import {
-  HiHome,
-  HiAcademicCap,
-  HiClipboardList,
-  HiMail,
-  HiDocumentText,
-  HiCreditCard,
-  HiPhotograph,
-  HiCurrencyDollar,
-  HiX,
-  HiClipboardCheck,
-  HiBriefcase,
-} from "react-icons/hi";
 import { motion } from "framer-motion";
+import {
+  DashboardIcon,
+  ClipboardCheckIcon,
+  BriefcaseIcon,
+  GraduationCapIcon,
+  ClipboardListIcon,
+  FileTextIcon,
+  BookIcon,
+  MailIcon,
+  CreditCardIcon,
+  ImageIcon,
+  DollarIcon,
+  XIcon,
+} from "../icons";
 
 interface AdminSidebarProps {
   onClose?: () => void;
@@ -22,24 +23,25 @@ interface AdminSidebarProps {
 interface NavItem {
   name: string;
   path: string;
-  icon: React.ElementType;
+  icon: React.FC<{ size?: number }>;
 }
 
 const navItems: NavItem[] = [
-  { name: "Dashboard", path: "/admin/dashboard", icon: HiHome },
-  { name: "Forms", path: "/admin/forms", icon: HiClipboardCheck },
-  { name: "Job Postings", path: "/admin/jobs", icon: HiBriefcase },
-  { name: "Courses", path: "/admin/courses", icon: HiAcademicCap },
-  { name: "Applications", path: "/admin/applications", icon: HiClipboardList },
+  { name: "Dashboard", path: "/admin/dashboard", icon: DashboardIcon },
+  { name: "Forms", path: "/admin/forms", icon: ClipboardCheckIcon },
+  { name: "Job Postings", path: "/admin/jobs", icon: BriefcaseIcon },
+  { name: "Courses", path: "/admin/courses", icon: GraduationCapIcon },
+  { name: "Applications", path: "/admin/applications", icon: ClipboardListIcon },
   {
     name: "Service Requests",
     path: "/admin/service-requests",
-    icon: HiDocumentText,
+    icon: FileTextIcon,
   },
-  { name: "Messages", path: "/admin/messages", icon: HiMail },
-  { name: "Invoices", path: "/admin/invoices", icon: HiCreditCard },
-  { name: "Portfolio", path: "/admin/portfolio", icon: HiPhotograph },
-  { name: "Transactions", path: "/admin/transactions", icon: HiCurrencyDollar },
+  { name: "Blog", path: "/admin/blog", icon: BookIcon },
+  { name: "Messages", path: "/admin/messages", icon: MailIcon },
+  { name: "Invoices", path: "/admin/invoices", icon: CreditCardIcon },
+  { name: "Portfolio", path: "/admin/portfolio", icon: ImageIcon },
+  { name: "Transactions", path: "/admin/transactions", icon: DollarIcon },
 ];
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
@@ -57,7 +59,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
             onClick={onClose}
             className="lg:hidden text-white hover:text-skyblue"
           >
-            <HiX className="h-6 w-6" />
+            <XIcon size={24} />
           </button>
         )}
       </div>
@@ -85,12 +87,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <item.icon className="h-5 w-5 shrink-0" />
-                  </motion.div>
+                  <item.icon size={20} />
                   <span className="font-medium">{item.name}</span>
                 </motion.div>
               )}
@@ -105,7 +102,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
           to="/"
           className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
         >
-          <span className="text-sm">← Back to Website</span>
+          <span className="text-sm">&larr; Back to Website</span>
         </NavLink>
       </div>
     </div>

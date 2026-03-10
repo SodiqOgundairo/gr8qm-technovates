@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import Container from "../../components/layout/Container";
 import Button from "../../components/common/Button";
 import CloudinaryImage from "../../utils/cloudinaryImage";
-import { HiArrowLongRight } from "react-icons/hi2";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaCheck } from "react-icons/fa";
+import { ArrowRightIcon } from "../../components/icons";
+import { CheckCircle } from "lucide-react";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -137,7 +136,7 @@ const DesignBuildPage: React.FC = () => {
                 <div className="flex gap-4 flex-wrap">
                   <Button variant="pry" onClick={() => setModalOpen(true)}>
                     Start Your Project
-                    <IoIosArrowRoundForward className="text-2xl" />
+                    <ArrowRightIcon size={20} />
                   </Button>
                   <Button
                     variant="sec"
@@ -147,7 +146,7 @@ const DesignBuildPage: React.FC = () => {
                   >
                     <div className="button-content">
                       View Our Work
-                      <HiArrowLongRight className="arrow" />
+                      <ArrowRightIcon size={18} className="arrow" />
                     </div>
                   </Button>
                 </div>
@@ -238,7 +237,7 @@ const DesignBuildPage: React.FC = () => {
                     </motion.div>
                     {index < process.length - 1 && (
                       <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                        <IoIosArrowRoundForward className="text-4xl text-skyblue" />
+                        <ArrowRightIcon size={32} className="text-skyblue" />
                       </div>
                     )}
                   </div>
@@ -267,7 +266,7 @@ const DesignBuildPage: React.FC = () => {
                       "Competitive pricing with no hidden costs",
                     ].map((item, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <FaCheck className="text-iceblue text-xl mt-1 shrink-0" />
+                        <CheckCircle className="text-iceblue w-5 h-5 mt-1 shrink-0" />
                         <p className="text-lg text-gray-200">{item}</p>
                       </div>
                     ))}
@@ -322,7 +321,7 @@ const DesignBuildPage: React.FC = () => {
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button variant="inverted" onClick={() => setModalOpen(true)}>
                   Get Started
-                  <IoIosArrowRoundForward className="text-2xl" />
+                  <ArrowRightIcon size={20} />
                 </Button>
                 <Button
                   variant="sec"
@@ -330,7 +329,7 @@ const DesignBuildPage: React.FC = () => {
                 >
                   <div className="button-content">
                     View Portfolio
-                    <HiArrowLongRight className="arrow" />
+                    <ArrowRightIcon size={18} className="arrow" />
                   </div>
                 </Button>
               </div>

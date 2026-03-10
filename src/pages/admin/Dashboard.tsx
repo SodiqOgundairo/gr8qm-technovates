@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
-import {
-  HiAcademicCap,
-  HiClipboardList,
-  HiMail,
-  HiDocumentText,
-  HiCurrencyDollar,
-  HiUserGroup,
-} from "react-icons/hi";
+import { GraduationCap, ClipboardList, Mail, FileText, DollarSign, Users } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AdminDashboard: React.FC = () => {
@@ -89,28 +82,28 @@ const AdminDashboard: React.FC = () => {
     {
       name: "Manage Courses",
       description: "Create, edit, and manage training courses",
-      icon: HiAcademicCap,
+      icon: GraduationCap,
       path: "/admin/courses",
       color: "bg-skyblue",
     },
     {
       name: "View Applications",
       description: "Review course applications and payments",
-      icon: HiClipboardList,
+      icon: ClipboardList,
       path: "/admin/applications",
       color: "bg-orange",
     },
     {
       name: "Service Requests",
       description: "Manage design & print service requests",
-      icon: HiDocumentText,
+      icon: FileText,
       path: "/admin/service-requests",
       color: "bg-iceblue",
     },
     {
       name: "Messages",
       description: "View contact form submissions",
-      icon: HiMail,
+      icon: Mail,
       path: "/admin/messages",
       color: "bg-oxford",
     },
@@ -143,7 +136,7 @@ const AdminDashboard: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-skyblue/10 p-3 rounded-full">
-                <HiUserGroup className="h-6 w-6 text-skyblue" />
+                <Users className="h-6 w-6 text-skyblue" />
               </div>
               <span className="text-xs font-semibold text-gray-500 uppercase">
                 Total Applications
@@ -163,7 +156,7 @@ const AdminDashboard: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-green-100 p-3 rounded-full">
-                <HiCurrencyDollar className="h-6 w-6 text-green-600" />
+                <DollarSign className="h-6 w-6 text-green-600" />
               </div>
               <span className="text-xs font-semibold text-gray-500 uppercase">
                 Total Revenue
@@ -183,7 +176,7 @@ const AdminDashboard: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-orange/10 p-3 rounded-full">
-                <HiDocumentText className="h-6 w-6 text-orange" />
+                <FileText className="h-6 w-6 text-orange" />
               </div>
               <span className="text-xs font-semibold text-gray-500 uppercase">
                 Pending Requests
@@ -203,7 +196,7 @@ const AdminDashboard: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="bg-oxford/10 p-3 rounded-full">
-                <HiMail className="h-6 w-6 text-oxford" />
+                <Mail className="h-6 w-6 text-oxford" />
               </div>
               <span className="text-xs font-semibold text-gray-500 uppercase">
                 Unread Messages

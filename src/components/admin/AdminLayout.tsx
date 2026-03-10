@@ -1,6 +1,6 @@
 import React, { type ReactNode, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
-import { HiMenu, HiX, HiLogout } from "react-icons/hi";
+import { Menu, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface AdminLayoutProps {
@@ -47,9 +47,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               className="lg:hidden text-gray-600 hover:text-oxford focus:outline-none"
             >
               {sidebarOpen ? (
-                <HiX className="h-6 w-6" />
+                <X className="h-6 w-6" />
               ) : (
-                <HiMenu className="h-6 w-6" />
+                <Menu className="h-6 w-6" />
               )}
             </button>
             <div className="flex items-center gap-4">
@@ -64,7 +64,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
                 title="Logout"
               >
-                <HiLogout className="h-4 w-4" />
+                <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">Logout</span>
               </button>
             </div>

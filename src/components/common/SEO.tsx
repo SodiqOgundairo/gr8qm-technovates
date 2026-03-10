@@ -29,18 +29,18 @@ export const SEO = ({
   nofollow = false,
 }: SEOProps) => {
   const defaultDescription =
-    "Leading UX design, product design, and tech training company in Nigeria. Faith-based innovation with AI-powered solutions and sponsored bootcamp programs.";
+    "Gr8QM Technovates is a design and technology studio in Lagos, Nigeria. We build digital products, deliver premium print, and run sponsored tech training programs.";
   const defaultKeywords = [
-    "UX design",
-    "product design",
-    "tech training",
-    "faith and tech",
-    "UI/UX design services",
+    "UX design agency Lagos",
+    "product design Nigeria",
+    "tech training Lagos",
+    "web development company Lagos",
+    "UI/UX design services Nigeria",
     "tech bootcamp Nigeria",
-    "product design agency",
-    "Christian tech company",
-    "sponsored tech training",
-    "software development training",
+    "product design agency Lagos",
+    "digital agency Lagos",
+    "print services Lagos",
+    "software development training Nigeria",
   ];
 
   const siteUrl =
@@ -125,11 +125,27 @@ export const SEO = ({
       <meta name="author" content={SITE_CONFIG.name} />
       <meta name="publisher" content={SITE_CONFIG.name} />
       <meta name="language" content="English" />
-      <meta
-        name="geo.region"
-        content={`${SITE_CONFIG.location.country}-${SITE_CONFIG.location.state}`}
-      />
-      <meta name="geo.placename" content={SITE_CONFIG.location.city} />
+      <meta name="content-language" content="en-NG" />
+      <meta httpEquiv="content-language" content="en-NG" />
+
+      {/* Geo Tags - Lagos, Nigeria */}
+      <meta name="geo.region" content="NG-LA" />
+      <meta name="geo.placename" content="Lagos, Nigeria" />
+      <meta name="geo.position" content="6.5244;3.3792" />
+      <meta name="ICBM" content="6.5244, 3.3792" />
+      <meta name="DC.title" content={metaTitle} />
+      <meta name="DC.creator" content={SITE_CONFIG.name} />
+      <meta name="DC.subject" content={metaKeywords} />
+      <meta name="DC.description" content={metaDescription} />
+      <meta name="DC.language" content="en" />
+      <meta name="DC.coverage" content="Lagos, Nigeria, West Africa" />
+      <meta name="distribution" content="global" />
+      <meta name="target" content="all" />
+      <meta name="audience" content="all" />
+      <meta name="rating" content="general" />
+      <meta name="revisit-after" content="3 days" />
+      <meta name="coverage" content="Worldwide" />
+      <meta name="classification" content="Technology, Design, Education, Printing" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -140,7 +156,9 @@ export const SEO = ({
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content={SITE_CONFIG.name} />
-      <meta property="og:locale" content="en_US" />
+      <meta property="og:locale" content="en_NG" />
+      <meta property="og:locale:alternate" content="en_US" />
+      <meta property="og:locale:alternate" content="en_GB" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />

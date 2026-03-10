@@ -22,6 +22,8 @@ import TechTrainingPage from "./pages/services/TechTraining";
 import PublicForm from "./pages/PublicForm";
 import FormSuccess from "./pages/FormSuccess";
 import Cohort4 from "./pages/Cohort4";
+import BlogIndex from "./pages/Blog/BlogIndex";
+import BlogPost from "./pages/Blog/BlogPost";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
@@ -39,17 +41,23 @@ import AdminPortfolio from "./pages/admin/Portfolio";
 import AdminTransactions from "./pages/admin/Transactions";
 import AdminJobPostings from "./pages/admin/JobPostings";
 import JobPostingForm from "./pages/admin/JobPostingForm";
+import AdminBlogList from "./pages/admin/Blog/BlogList";
+import AdminBlogEditor from "./pages/admin/Blog/BlogEditor";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
 import NotFound from "./pages/PageNotFound";
 import CursorTrail from "./components/animations/CursorTrail";
+import DarkModeToggle from "./components/common/DarkModeToggle";
+import ChatWidget from "./components/common/ChatWidget";
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
       <CursorTrail />
+      <DarkModeToggle />
+      <ChatWidget />
       <Routes>
         {/* Public routes – keep Header/Footer */}
         <Route
@@ -82,6 +90,8 @@ function App() {
                   path="/forms/:shortCode/success"
                   element={<FormSuccess />}
                 />
+                <Route path="/blog" element={<BlogIndex />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
@@ -127,6 +137,9 @@ function App() {
                 <Route path="messages" element={<AdminMessages />} />
                 <Route path="portfolio" element={<AdminPortfolio />} />
                 <Route path="transactions" element={<AdminTransactions />} />
+                <Route path="blog" element={<AdminBlogList />} />
+                <Route path="blog/create" element={<AdminBlogEditor />} />
+                <Route path="blog/:id/edit" element={<AdminBlogEditor />} />
                 {/* Future admin routes go here */}
               </Routes>
             </ProtectedRoute>

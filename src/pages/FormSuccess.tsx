@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { HiCheckCircle, HiArrowLeft } from "react-icons/hi";
+import { CheckCircle, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FormSuccess: React.FC = () => {
@@ -28,7 +28,7 @@ const FormSuccess: React.FC = () => {
             transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
             className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6"
           >
-            <HiCheckCircle className="h-12 w-12 text-green-600" />
+            <CheckCircle className="h-12 w-12 text-green-600" />
           </motion.div>
 
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
@@ -44,7 +44,7 @@ const FormSuccess: React.FC = () => {
             to={shortCode ? `/forms/${shortCode}` : "/"}
             className="inline-flex items-center text-skyblue hover:text-oxford font-semibold transition-colors"
           >
-            <HiArrowLeft className="mr-2" />
+            <ArrowLeft className="mr-2 w-4 h-4" />
             Back to Form
           </Link>
         </motion.div>

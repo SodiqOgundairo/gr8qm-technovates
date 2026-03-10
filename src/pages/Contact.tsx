@@ -5,6 +5,7 @@ import { useState } from "react";
 import { supabase } from "../utils/supabase";
 import Input from "../components/common/Input";
 import { motion } from "framer-motion";
+import { MailIcon, PhoneIcon, SendIcon } from "../components/icons";
 
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
@@ -92,20 +93,19 @@ const ContactPage: React.FC = () => {
             <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
               <ScrollReveal>
                 <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0">
-                  <p className="text-sm text-oxford">Get in touch</p>
+                  <p className="text-sm text-oxford">Say hello</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight">
-                  <span className="text-oxford">Contact</span>{" "}
-                  <span className="text-skyblue">Gr8QM</span>
+                  <span className="text-oxford">Let's build</span>{" "}
+                  <span className="text-skyblue">something great.</span>
                 </h1>
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                 <p className="text-dark md:text-sm lg:text-base max-w-[650px] mx-auto md:mx-0">
-                  We'd love to hear from you. Whether it's partnerships,
-                  services, or questions—send us a message and our team will
-                  respond promptly.
+                  Have a project in mind? Need a quote? Just want to say hi?
+                  Drop us a line and we'll get back to you within 24 hours.
                 </p>
               </ScrollReveal>
               <div className="flex justify-start items-center gap-3"></div>
@@ -184,7 +184,7 @@ const ContactPage: React.FC = () => {
                     />
                   </div>
                   <Button variant="pry" type="submit" loading={loading}>
-                    Send Message
+                    <SendIcon size={18} /> Send Message
                   </Button>
                 </form>
               </div>
@@ -194,25 +194,35 @@ const ContactPage: React.FC = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-oxford">
                   Contact details
                 </h2>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                  <p className="text-gray-2 mb-2">
-                    <span className="font-bold text-oxford">Email:</span>{" "}
-                    <a
-                      href="mailto:hello@gr8qm.com"
-                      className="text-skyblue hover:underline"
-                    >
-                      hello@gr8qm.com
-                    </a>
-                  </p>
-                  <p className="text-gray-2">
-                    <span className="font-bold text-oxford">Phone:</span>{" "}
-                    <a
-                      href="tel:+2349013294248"
-                      className="text-skyblue hover:underline"
-                    >
-                      +234 901 329 4248
-                    </a>
-                  </p>
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-iceblue/50 rounded-lg">
+                      <MailIcon size={20} className="text-skyblue" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-2 font-medium">Email</p>
+                      <a
+                        href="mailto:hello@gr8qm.com"
+                        className="text-oxford font-semibold hover:text-skyblue transition-colors"
+                      >
+                        hello@gr8qm.com
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-iceblue/50 rounded-lg">
+                      <PhoneIcon size={20} className="text-skyblue" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-2 font-medium">Phone</p>
+                      <a
+                        href="tel:+2349013294248"
+                        className="text-oxford font-semibold hover:text-skyblue transition-colors"
+                      >
+                        +234 901 329 4248
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </ScrollReveal>
