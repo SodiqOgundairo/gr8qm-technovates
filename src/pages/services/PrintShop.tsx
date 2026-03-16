@@ -7,6 +7,7 @@ import { Star } from "lucide-react";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Scene3D from "../../components/animations/Scene3D";
 
 const PrintShopPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -81,12 +82,17 @@ const PrintShopPage: React.FC = () => {
   return (
     <main className="flex flex-col">
       {/* Hero Section */}
-      <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
-        <Container className="flex flex-col md:flex-row items-center gap-12">
+      <div className="relative overflow-hidden py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+        <Scene3D variant="minimal" className="opacity-30" />
+        <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 flex flex-col gap-6">
-            <div className="bg-orange/20 border border-orange rounded-full px-4 py-2 w-fit">
+            <motion.div
+              className="bg-orange/20 border border-orange rounded-full px-4 py-2 w-fit"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               <p className="text-sm text-oxford font-medium">PRINT SHOP</p>
-            </div>
+            </motion.div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
               <span className="text-oxford">Quality Prints,</span>{" "}
               <span className="text-orange">Every Time</span>
@@ -113,11 +119,18 @@ const PrintShopPage: React.FC = () => {
             </div>
           </div>
           <div className="flex-1">
-            <CloudinaryImage
-              imageKey="PintShop"
-              className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
-              alt="Print Shop"
-            />
+            <div className="overflow-hidden rounded-2xl">
+              <motion.div
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              >
+                <CloudinaryImage
+                  imageKey="PintShop"
+                  className="rounded-2xl shadow-2xl"
+                  alt="Print Shop"
+                />
+              </motion.div>
+            </div>
           </div>
         </Container>
       </div>
@@ -135,12 +148,26 @@ const PrintShopPage: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-light border border-gray-200 rounded-xl p-6 hover:border-orange hover:shadow-lg transition-all duration-300"
+                className="group bg-light border border-gray-200 rounded-xl p-6 cursor-default"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  borderColor: "var(--color-orange)",
+                  boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
-                <div className="text-4xl mb-4">{product.icon}</div>
-                <h3 className="text-xl font-bold text-oxford mb-2">
+                <motion.div
+                  className="text-4xl mb-4"
+                  whileHover={{ rotate: 15, scale: 1.2 }}
+                  whileTap={{ rotate: -10, scale: 0.9 }}
+                >
+                  {product.icon}
+                </motion.div>
+                <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
                   {product.title}
                 </h3>
                 <p className="text-gray-600 mb-4">{product.description}</p>
@@ -150,12 +177,17 @@ const PrintShopPage: React.FC = () => {
                       key={idx}
                       className="flex items-center gap-2 text-sm text-gray-700"
                     >
-                      <ArrowRightIcon size={16} className="text-orange" />
+                      <motion.div
+                        whileHover={{ rotate: 15, scale: 1.2 }}
+                        whileTap={{ rotate: -10, scale: 0.9 }}
+                      >
+                        <ArrowRightIcon size={16} className="text-orange" />
+                      </motion.div>
                       {feature}
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Container>
@@ -174,26 +206,38 @@ const PrintShopPage: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-xl transition-shadow duration-300"
+                className="group bg-white rounded-xl p-6 text-center shadow-md cursor-default"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
-                <div className="text-orange mb-4 flex justify-center">
+                <motion.div
+                  className="text-orange mb-4 flex justify-center"
+                  whileHover={{ rotate: 15, scale: 1.2 }}
+                  whileTap={{ rotate: -10, scale: 0.9 }}
+                >
                   {feature.icon}
-                </div>
-                <h3 className="text-lg font-bold text-oxford mb-3">
+                </motion.div>
+                <h3 className="text-lg font-bold text-oxford mb-3 group-hover:text-skyblue transition-colors duration-300">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Container>
       </div>
 
       {/* Process Section */}
-      <div className="py-16 md:py-24 bg-oxford text-white">
-        <Container>
+      <div className="relative overflow-hidden py-16 md:py-24 bg-oxford text-white">
+        <Scene3D variant="minimal" className="opacity-30" />
+        <Container className="relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               How It Works
@@ -225,15 +269,28 @@ const PrintShopPage: React.FC = () => {
                 desc: "Pick up or we deliver to you",
               },
             ].map((item, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-orange text-white text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <motion.div
+                key={index}
+                className="group text-center cursor-default"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              >
+                <motion.div
+                  className="bg-orange text-white text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ rotate: 15, scale: 1.2 }}
+                  whileTap={{ rotate: -10, scale: 0.9 }}
+                >
                   {item.step}
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-iceblue">
+                </motion.div>
+                <h3 className="text-xl font-bold mb-2 text-iceblue group-hover:text-orange transition-colors duration-300">
                   {item.title}
                 </h3>
                 <p className="text-gray-300">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Container>
@@ -267,28 +324,37 @@ const PrintShopPage: React.FC = () => {
             ].map((testimonial, index) => (
               <motion.div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-md border border-transparent"
+                className="group bg-white rounded-xl p-6 shadow-md border border-transparent cursor-default"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 whileHover={{
-                  y: -5,
-                  boxShadow:
-                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                   borderColor: "var(--color-orange)",
                 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <div className="flex gap-1 mb-4 text-orange">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
+                    <motion.div
+                      key={i}
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      <Star className="w-4 h-4 fill-current" />
+                    </motion.div>
                   ))}
                 </div>
                 <p className="text-gray-700 mb-4 italic">
                   "{testimonial.text}"
                 </p>
                 <div>
-                  <p className="font-bold text-oxford">{testimonial.name}</p>
+                  <p className="font-bold text-oxford group-hover:text-skyblue transition-colors duration-300">
+                    {testimonial.name}
+                  </p>
                   <p className="text-sm text-gray-600">{testimonial.role}</p>
                 </div>
               </motion.div>

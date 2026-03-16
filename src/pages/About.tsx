@@ -14,12 +14,19 @@ import {
   ShieldCheckIcon,
 } from "../components/icons";
 import { motion } from "framer-motion";
+import Scene3D from "../components/animations/Scene3D";
 
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
 import { getPageSEO } from "../utils/seo-config";
 import { generateBreadcrumbSchema } from "../utils/structured-data";
+
+const springTransition = {
+  type: "spring" as const,
+  stiffness: 300,
+  damping: 15,
+};
 
 const AboutPage: React.FC = () => {
   const pageSEO = getPageSEO("about");
@@ -40,33 +47,57 @@ const AboutPage: React.FC = () => {
         structuredData={[breadcrumbSchema]}
       />
       <main className="flex flex-col">
-        <div className="py-12 md:py-20 lg:py-28 xl:py-32 2xl:py-40 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="flex flex-col md:flex-row w-full justify-between items-center gap-8">
+        <div className="relative overflow-hidden py-12 md:py-20 lg:py-28 xl:py-32 2xl:py-40 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col md:flex-row w-full justify-between items-center gap-8">
             <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-2/3">
               <ScrollReveal className="w-full">
                 <div className="bg-skyblue rounded-2xl p-4 py-8 md:p-5 lg:p-16 xl:p-16 2xl:p-24 space-y-4">
-                  <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0 flex items-center gap-2">
-                    <SparklesIcon size={16} className="text-oxford" />
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={springTransition}
+                    className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0 flex items-center gap-2"
+                  >
+                    <motion.span
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      <SparklesIcon size={16} className="text-oxford" />
+                    </motion.span>
                     <p className="text-sm text-oxford">The Gr8QM Story</p>
-                  </div>
-                  <h1 className="text-3xl lg:text-4xl font-black tracking-tight wrap-break-word">
+                  </motion.div>
+                  <motion.h1
+                    whileHover={{ scale: 1.02 }}
+                    transition={springTransition}
+                    className="text-3xl lg:text-4xl font-black tracking-tight wrap-break-word"
+                  >
                     <span className="text-white">We design</span>{" "}
                     <span className="text-oxford">what's next.</span>
                     <br />
                     <span className="text-white">We build</span>{" "}
                     <span className="text-oxford">what lasts.</span>
-                  </h1>
+                  </motion.h1>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
-                <div className="bg-orange p-4 md:p-5 lg:p-6 rounded-2xl">
+                <motion.div
+                  whileHover={{
+                    y: -6,
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={springTransition}
+                  className="bg-orange p-4 md:p-5 lg:p-6 rounded-2xl"
+                >
                   <p className="text-light lg:text-base max-w-[650px] mx-auto md:mx-0">
                     We're a design and technology studio that believes great work
                     comes from clarity of purpose. Every product we ship, every
                     student we train, every print we deliver reflects our
                     commitment to craft and impact.
                   </p>
-                </div>
+                </motion.div>
               </ScrollReveal>
             </div>
             <ScrollReveal delay={0.4} className="w-full md:w-1/3" width="100%">
@@ -79,8 +110,9 @@ const AboutPage: React.FC = () => {
           </Container>
         </div>
 
-        <div id="mission" className="py-16 md:py-24 lg:py-32 bg-light">
-          <Container className="flex flex-col lg:flex-row justify-center gap-10 items-center">
+        <div id="mission" className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-light">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col lg:flex-row justify-center gap-10 items-center">
             <ScrollReveal>
               <CloudinaryImage
                 imageKey="visionMision"
@@ -91,10 +123,19 @@ const AboutPage: React.FC = () => {
             <div className="flex flex-col items-start gap-12">
               <ScrollReveal delay={0.2}>
                 <div className="flex flex-col gap-4">
-                  <h2 className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4">
-                    <SpiralIcon size={28} className="text-skyblue" />
+                  <motion.h2
+                    whileHover={{ scale: 1.02 }}
+                    transition={springTransition}
+                    className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4"
+                  >
+                    <motion.span
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      <SpiralIcon size={28} className="text-skyblue" />
+                    </motion.span>
                     Our Vision
-                  </h2>
+                  </motion.h2>
                   <p className="text-gray-2">
                     A world where technology serves people, not the other way
                     around. We envision communities thriving because the tools
@@ -104,10 +145,19 @@ const AboutPage: React.FC = () => {
               </ScrollReveal>
               <ScrollReveal delay={0.4}>
                 <div className="flex flex-col gap-4">
-                  <h2 className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4">
-                    <SparklesIcon size={28} className="text-orange" />
+                  <motion.h2
+                    whileHover={{ scale: 1.02 }}
+                    transition={springTransition}
+                    className="text-2xl md:text-3xl font-bold text-oxford flex justify-start items-start gap-4"
+                  >
+                    <motion.span
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      <SparklesIcon size={28} className="text-orange" />
+                    </motion.span>
                     Our Mission
-                  </h2>
+                  </motion.h2>
                   <p className="text-gray-2">
                     To equip individuals and organizations with beautifully
                     designed, expertly engineered solutions. We train talent,
@@ -117,27 +167,46 @@ const AboutPage: React.FC = () => {
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.6}>
-                <div className="bg-iceblue p-4 md:p-6 rounded-2xl">
+                <motion.div
+                  whileHover={{
+                    y: -6,
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={springTransition}
+                  className="bg-iceblue p-4 md:p-6 rounded-2xl"
+                >
                   <p className="text-base font-bold italic text-oxford">
                     "Good design is good business. Great design changes lives."
                   </p>
-                </div>
+                </motion.div>
               </ScrollReveal>
             </div>
           </Container>
         </div>
 
-        <div className="py-16 md:py-24 lg:py-32 bg-iceblue">
-          <Container className="flex flex-col gap-8">
+        <div className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-iceblue">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col gap-8">
             <ScrollReveal>
               <div className="flex flex-col gap-6">
-                <div className="bg-light w-fit m-auto py-2 px-4 rounded-full">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={springTransition}
+                  className="bg-light w-fit m-auto py-2 px-4 rounded-full"
+                >
                   <p className="text-sm text-skyblue">What Drives Us</p>
-                </div>
+                </motion.div>
                 <div className="flex-col flex gap-2 w-full">
-                  <h2 className="text-2xl md:text-3xl font-bold text-oxford text-center">
+                  <motion.h2
+                    whileHover={{ scale: 1.02 }}
+                    transition={springTransition}
+                    className="text-2xl md:text-3xl font-bold text-oxford text-center"
+                  >
                     Our Core Values
-                  </h2>
+                  </motion.h2>
                   <p className="text-base text-dark text-center md:text-sm lg:text-base ">
                     The principles behind every pixel, every line of code, and
                     every decision we make.
@@ -188,18 +257,25 @@ const AboutPage: React.FC = () => {
                 <ScrollReveal key={index} delay={index * 0.1} width="100%">
                   <motion.div
                     whileHover={{
-                      y: -8,
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                      y: -6,
+                      scale: 1.02,
+                      boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
                     }}
-                    transition={{ duration: 0.3 }}
-                    className="h-full"
+                    whileTap={{ scale: 0.97 }}
+                    transition={springTransition}
+                    className="h-full group"
                   >
                     <Card className="border border-skyblue bg-light rounded-xl gap-3 px-4 py-8 md:px-5 md:py-8 lg:px-8 lg:py-10 flex flex-col items-start drop-shadow-2xs h-full">
-                      <div className={`rounded-lg p-2 ${item.bg}`}>
+                      <motion.div
+                        whileHover={{ rotate: 15, scale: 1.2 }}
+                        whileTap={{ rotate: -10, scale: 0.9 }}
+                        className={`rounded-lg p-2 ${item.bg}`}
+                      >
                         {item.icon}
-                      </div>
-                      <p className="text-oxford font-bold">{item.title}</p>
+                      </motion.div>
+                      <p className="text-oxford font-bold group-hover:text-skyblue transition-colors duration-300">
+                        {item.title}
+                      </p>
                       <p className="text-gray-3">{item.desc}</p>
                     </Card>
                   </motion.div>
@@ -209,20 +285,36 @@ const AboutPage: React.FC = () => {
           </Container>
         </div>
 
-        <div className="py-16 md:py-24 lg:py-32 bg-light">
-          <Container className="flex flex-col items-center gap-6 text-center">
+        <div className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-light">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col items-center gap-6 text-center">
             <ScrollReveal>
-              <h3 className="text-xl md:text-2xl font-bold text-oxford">
+              <motion.h3
+                whileHover={{ scale: 1.02 }}
+                transition={springTransition}
+                className="text-xl md:text-2xl font-bold text-oxford"
+              >
                 Ready to work with a team that cares as much as you do?
-              </h3>
+              </motion.h3>
               <p className="text-gray-2 max-w-3xl mb-6">
                 We bring design thinking, engineering rigor, and a genuine
                 passion for craft to every project. If you're building something
                 that matters, we want to be part of it.
               </p>
-              <Button to="/contact" variant="pry">
-                Let's talk
-              </Button>
+              <motion.div
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={springTransition}
+                className="inline-block"
+              >
+                <Button to="/contact" variant="pry">
+                  Let's talk
+                </Button>
+              </motion.div>
             </ScrollReveal>
           </Container>
         </div>

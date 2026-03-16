@@ -7,6 +7,7 @@ import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
+import Scene3D from "../components/animations/Scene3D";
 
 interface PortfolioItem {
   id: string;
@@ -67,8 +68,9 @@ const PortfolioPage = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-12 md:py-20 lg:py-24 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="text-center">
+        <div className="relative overflow-hidden py-12 md:py-20 lg:py-24 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="text-center relative z-10">
             <ScrollReveal>
               <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto mb-4">
                 <p className="text-sm text-oxford">Our Work</p>
@@ -157,13 +159,15 @@ const PortfolioPage = () => {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
                       className="bg-white rounded-lg overflow-hidden shadow-md group h-full flex flex-col"
                       whileHover={{
-                        y: -8,
+                        y: -6,
+                        scale: 1.02,
                         boxShadow:
-                          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                          "0 20px 40px rgba(0,152,218,0.1)",
                       }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       <div className="relative h-64 overflow-hidden shrink-0">
                         <motion.img
@@ -175,7 +179,13 @@ const PortfolioPage = () => {
                         />
                         {item.featured && (
                           <div className="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full text-sm flex items-center gap-2 shadow-lg z-10">
-                            <Star className="w-3 h-3 fill-current" /> Featured
+                            <motion.div
+                              whileHover={{ rotate: 15, scale: 1.2 }}
+                              whileTap={{ rotate: -10 }}
+                            >
+                              <Star className="w-3 h-3 fill-current" />
+                            </motion.div>
+                            Featured
                           </div>
                         )}
                         <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent p-4 z-10">
@@ -185,7 +195,7 @@ const PortfolioPage = () => {
                         </div>
                       </div>
                       <div className="p-6 flex flex-col grow">
-                        <h3 className="text-xl font-bold text-oxford mb-2">
+                        <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
                           {item.title}
                         </h3>
                         <p className="text-gray-600 mb-4 line-clamp-3 grow">

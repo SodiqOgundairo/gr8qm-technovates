@@ -6,6 +6,8 @@ import CourseApplicationForm from "../components/services/CourseApplicationForm"
 import Modal from "../components/layout/Modal";
 import CourseCardSkeleton from "../components/common/CourseCardSkeleton";
 import { supabase } from "../utils/supabase";
+import { motion } from "framer-motion";
+import Scene3D from "../components/animations/Scene3D";
 
 interface Course {
   id: string;
@@ -96,8 +98,9 @@ const TrainingsPage: React.FC = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="text-center">
+        <div className="relative overflow-hidden py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="text-center relative z-10">
             <div className="bg-iceblue/40 border border-skyblue rounded-full px-6 py-2 w-fit mx-auto mb-6">
               <p className="text-sm text-oxford font-medium">
                 SPONSORED TECH TRAINING
@@ -122,7 +125,7 @@ const TrainingsPage: React.FC = () => {
             {categories.length > 1 && (
               <div className="flex flex-wrap gap-3 justify-center mb-12">
                 {categories.map((category) => (
-                  <button
+                  <motion.button
                     key={category}
                     onClick={() => setFilterCategory(category)}
                     className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
@@ -130,11 +133,13 @@ const TrainingsPage: React.FC = () => {
                         ? "bg-skyblue text-white shadow-lg"
                         : "bg-light text-oxford hover:bg-iceblue"
                     }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {category === "all"
                       ? "All Courses"
                       : category.charAt(0).toUpperCase() + category.slice(1)}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
@@ -181,11 +186,21 @@ const TrainingsPage: React.FC = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredCourses.map((course) => (
-                    <CourseCard
+                    <motion.div
                       key={course.id}
-                      course={course}
-                      onClick={() => handleCourseClick(course)}
-                    />
+                      whileHover={{
+                        y: -6,
+                        scale: 1.02,
+                        boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    >
+                      <CourseCard
+                        course={course}
+                        onClick={() => handleCourseClick(course)}
+                      />
+                    </motion.div>
                   ))}
                 </div>
 
@@ -231,16 +246,29 @@ const TrainingsPage: React.FC = () => {
                   desc: "Earn recognized certificates upon completion",
                 },
               ].map((feature, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-xl transition-shadow duration-300"
+                  className="bg-white rounded-xl p-6 text-center shadow-md group"
+                  whileHover={{
+                    y: -6,
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 >
-                  <div className="text-5xl mb-4">{feature.icon}</div>
-                  <h3 className="text-lg font-bold text-oxford mb-2">
+                  <motion.div
+                    className="text-5xl mb-4"
+                    whileHover={{ rotate: 15, scale: 1.2 }}
+                    whileTap={{ rotate: -10 }}
+                  >
+                    {feature.icon}
+                  </motion.div>
+                  <h3 className="text-lg font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600 text-sm">{feature.desc}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </Container>

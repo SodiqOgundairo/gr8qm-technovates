@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, Search } from "lucide-react";
 import { BriefcaseIcon } from "../components/icons";
 import JobDetailModal from "../components/careers/JobDetailModal";
+import Scene3D from "../components/animations/Scene3D";
 
 interface JobPosting {
   id: string;
@@ -28,6 +29,7 @@ const Careers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [departments, setDepartments] = useState<string[]>([]);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
     fetchJobs();
@@ -117,6 +119,7 @@ const Careers: React.FC = () => {
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-oxford/5 to-skyblue/5" />
+        <Scene3D variant="minimal" className="opacity-30" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -132,16 +135,33 @@ const Careers: React.FC = () => {
 
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <motion.div
+              className="relative"
+              animate={{
+                scale: searchFocused ? 1.02 : 1,
+                boxShadow: searchFocused
+                  ? "0 8px 30px rgba(0,152,218,0.15)"
+                  : "0 0px 0px rgba(0,0,0,0)",
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <motion.div
+                whileHover={{ rotate: 15, scale: 1.2 }}
+                whileTap={{ rotate: -10 }}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2"
+              >
+                <Search className="text-gray-400 w-5 h-5" />
+              </motion.div>
               <input
                 type="text"
                 placeholder="Search jobs by title, department, or keyword..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 focus:border-skyblue focus:outline-none text-lg"
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 focus:border-skyblue focus:outline-none text-lg transition-colors duration-300"
               />
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </section>
@@ -149,18 +169,20 @@ const Careers: React.FC = () => {
       {/* Filters */}
       <section className="max-w-6xl mx-auto px-4 pb-8">
         <div className="flex flex-wrap gap-3">
-          <button
+          <motion.button
             onClick={() => setDepartmentFilter("all")}
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               departmentFilter === "all"
                 ? "bg-skyblue text-white shadow-lg"
                 : "bg-white text-gray-600 hover:bg-gray-50"
             }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             All Departments
-          </button>
+          </motion.button>
           {departments.map((dept) => (
-            <button
+            <motion.button
               key={dept}
               onClick={() => setDepartmentFilter(dept)}
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
@@ -168,9 +190,11 @@ const Careers: React.FC = () => {
                   ? "bg-skyblue text-white shadow-lg"
                   : "bg-white text-gray-600 hover:bg-gray-50"
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {dept}
-            </button>
+            </motion.button>
           ))}
         </div>
       </section>
@@ -197,12 +221,18 @@ const Careers: React.FC = () => {
                 transition={{ delay: index * 0.1 }}
                 onClick={() => setSelectedJob(job)}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden group"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
               >
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-oxford group-hover:text-skyblue transition-colors mb-2">
+                      <h3 className="text-2xl font-bold text-oxford group-hover:text-skyblue transition-colors duration-300 mb-2">
                         {job.title}
                       </h3>
                       {job.department && (
@@ -218,13 +248,23 @@ const Careers: React.FC = () => {
                   <div className="space-y-2 mb-4">
                     {job.location && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <MapPin className="text-skyblue w-4 h-4" />
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.2 }}
+                          whileTap={{ rotate: -10 }}
+                        >
+                          <MapPin className="text-skyblue w-4 h-4" />
+                        </motion.div>
                         <span>{job.location}</span>
                       </div>
                     )}
                     {job.posted_date && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <Clock className="text-skyblue w-4 h-4" />
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.2 }}
+                          whileTap={{ rotate: -10 }}
+                        >
+                          <Clock className="text-skyblue w-4 h-4" />
+                        </motion.div>
                         <span>
                           Posted{" "}
                           {new Date(job.posted_date).toLocaleDateString()}
@@ -233,7 +273,12 @@ const Careers: React.FC = () => {
                     )}
                     {job.salary_range && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <BriefcaseIcon size={16} className="text-skyblue" />
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.2 }}
+                          whileTap={{ rotate: -10 }}
+                        >
+                          <BriefcaseIcon size={16} className="text-skyblue" />
+                        </motion.div>
                         <span>{job.salary_range}</span>
                       </div>
                     )}

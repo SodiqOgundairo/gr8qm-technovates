@@ -7,8 +7,9 @@ import {
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import DarkLayout from "./components/layout/DarkLayout";
 
-/* Public pages */
+/* Public pages (original) */
 import Home from "./pages/Home";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
@@ -24,6 +25,20 @@ import FormSuccess from "./pages/FormSuccess";
 import Cohort4 from "./pages/Cohort4";
 import BlogIndex from "./pages/Blog/BlogIndex";
 import BlogPost from "./pages/Blog/BlogPost";
+
+/* New design pages */
+import HomeNew from "./pages/HomeNew";
+import AboutNew from "./pages/AboutNew";
+import ContactNew from "./pages/ContactNew";
+import ServicesNew from "./pages/ServicesNew";
+import TrainingsNew from "./pages/TrainingsNew";
+import PortfolioNew from "./pages/PortfolioNew";
+import CareersNew from "./pages/CareersNew";
+import DesignBuildNew from "./pages/services/DesignBuildNew";
+import PrintShopNew from "./pages/services/PrintShopNew";
+import TechTrainingNew from "./pages/services/TechTrainingNew";
+import BlogIndexNew from "./pages/Blog/BlogIndexNew";
+import BlogPostNew from "./pages/Blog/BlogPostNew";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
@@ -59,7 +74,30 @@ function App() {
       <DarkModeToggle />
       <ChatWidget />
       <Routes>
-        {/* Public routes – keep Header/Footer */}
+        {/* ═══ NEW DESIGN ROUTES (permanent dark) ═══ */}
+        <Route
+          path="/new/*"
+          element={
+            <DarkLayout>
+              <Routes>
+                <Route path="/" element={<HomeNew />} />
+                <Route path="/about" element={<AboutNew />} />
+                <Route path="/services" element={<ServicesNew />} />
+                <Route path="/services/design-build" element={<DesignBuildNew />} />
+                <Route path="/services/print-shop" element={<PrintShopNew />} />
+                <Route path="/services/tech-training" element={<TechTrainingNew />} />
+                <Route path="/trainings" element={<TrainingsNew />} />
+                <Route path="/portfolio" element={<PortfolioNew />} />
+                <Route path="/careers" element={<CareersNew />} />
+                <Route path="/contact" element={<ContactNew />} />
+                <Route path="/blog" element={<BlogIndexNew />} />
+                <Route path="/blog/:slug" element={<BlogPostNew />} />
+              </Routes>
+            </DarkLayout>
+          }
+        />
+
+        {/* ═══ ORIGINAL DESIGN ROUTES ═══ */}
         <Route
           path="/*"
           element={

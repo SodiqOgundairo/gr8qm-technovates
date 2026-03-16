@@ -5,10 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { TargetIcon, ZapIcon, HandshakeIcon } from "../components/icons";
 import Button from "../components/common/Button";
+import Scene3D from "../components/animations/Scene3D";
 
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
+
+const cardSpring = {
+  type: "spring" as const,
+  stiffness: 300,
+  damping: 15,
+};
+
+const iconHover = { rotate: 15, scale: 1.2 };
+const iconTap = { rotate: -10, scale: 0.9 };
 
 const ServicesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -72,12 +82,22 @@ const ServicesPage: React.FC = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-16 md:py-24 lg:py-32 bg-linear-to-br from-skyblue/10 via-iceblue/10 to-orange/10">
+        <div className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-linear-to-br from-skyblue/10 via-iceblue/10 to-orange/10">
+          <Scene3D variant="minimal" className="opacity-30" />
           <Container className="text-center">
             <ScrollReveal>
-              <div className="bg-iceblue/40 border border-skyblue rounded-full px-6 py-2 w-fit mx-auto mb-6">
+              <motion.div
+                className="bg-iceblue/40 border border-skyblue rounded-full px-6 py-2 w-fit mx-auto mb-6"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={cardSpring}
+              >
                 <p className="text-sm text-oxford font-medium">WHAT WE DO</p>
-              </div>
+              </motion.div>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6">
@@ -96,19 +116,31 @@ const ServicesPage: React.FC = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="py-16 md:py-24 lg:py-32 bg-light">
+        <div className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-light">
+          <Scene3D variant="minimal" className="opacity-30" />
           <Container>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.map((service, index) => (
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
-                  <ServiceCard
-                    title={service.title}
-                    description={service.description}
-                    icon={service.icon}
-                    features={service.features}
-                    onContactClick={service.onContactClick}
-                    portfolioCategory={service.portfolioCategory}
-                  />
+                  <motion.div
+                    whileHover={{
+                      y: -6,
+                      scale: 1.02,
+                      boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                    }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={cardSpring}
+                    className="h-full"
+                  >
+                    <ServiceCard
+                      title={service.title}
+                      description={service.description}
+                      icon={service.icon}
+                      features={service.features}
+                      onContactClick={service.onContactClick}
+                      portfolioCategory={service.portfolioCategory}
+                    />
+                  </motion.div>
                 </ScrollReveal>
               ))}
             </div>
@@ -116,7 +148,8 @@ const ServicesPage: React.FC = () => {
         </div>
 
         {/* Why Choose Us Section */}
-        <div className="py-16 md:py-24 lg:py-32 bg-oxford text-white">
+        <div className="relative overflow-hidden py-16 md:py-24 lg:py-32 bg-oxford text-white">
+          <Scene3D variant="minimal" className="opacity-30" />
           <Container>
             <ScrollReveal>
               <div className="text-center mb-16">
@@ -150,15 +183,25 @@ const ServicesPage: React.FC = () => {
               ].map((item, index) => (
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
                   <motion.div
-                    className="text-center p-8 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                    className="text-center p-8 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm group"
                     whileHover={{
-                      y: -10,
+                      y: -6,
+                      scale: 1.02,
+                      boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
                       backgroundColor: "rgba(255, 255, 255, 0.1)",
                     }}
-                    transition={{ duration: 0.3 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={cardSpring}
                   >
-                    <div className="flex justify-center mb-4">{item.icon}</div>
-                    <h3 className="text-xl font-bold mb-3 text-iceblue">
+                    <motion.div
+                      className="flex justify-center mb-4"
+                      whileHover={iconHover}
+                      whileTap={iconTap}
+                      transition={cardSpring}
+                    >
+                      {item.icon}
+                    </motion.div>
+                    <h3 className="text-xl font-bold mb-3 text-iceblue group-hover:text-skyblue transition-colors duration-300">
                       {item.title}
                     </h3>
                     <p className="text-gray-300">{item.desc}</p>
@@ -170,7 +213,8 @@ const ServicesPage: React.FC = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="py-16 md:py-24 bg-linear-to-r from-skyblue to-iceblue">
+        <div className="relative overflow-hidden py-16 md:py-24 bg-linear-to-r from-skyblue to-iceblue">
+          <Scene3D variant="minimal" className="opacity-30" />
           <Container className="text-center">
             <ScrollReveal>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -179,9 +223,20 @@ const ServicesPage: React.FC = () => {
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
                 Tell us what you're building. We'll tell you how we can help.
               </p>
-              <Button to="/contact" variant="inverted">
-                Start a Conversation
-              </Button>
+              <motion.div
+                className="inline-block"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0, 152, 218, 0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={cardSpring}
+              >
+                <Button to="/contact" variant="inverted">
+                  Start a Conversation
+                </Button>
+              </motion.div>
             </ScrollReveal>
           </Container>
         </div>

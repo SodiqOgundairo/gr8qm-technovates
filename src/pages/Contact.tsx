@@ -10,6 +10,9 @@ import { MailIcon, PhoneIcon, SendIcon } from "../components/icons";
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
+import Scene3D from "../components/animations/Scene3D";
+
+const springTransition = { type: "spring", stiffness: 300, damping: 20 };
 
 const ContactPage: React.FC = () => {
   const [name, setName] = useState("");
@@ -88,13 +91,19 @@ const ContactPage: React.FC = () => {
         description="Get in touch with Gr8QM Technovates. We'd love to hear from you. Whether it's partnerships, services, or questions—send us a message."
       />
       <main className="flex flex-col">
-        <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="relative py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex flex-col gap-4 text-center md:text-left w-full md:w-1/2">
               <ScrollReveal>
-                <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0">
+                <motion.div
+                  className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit mx-auto md:mx-0"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={springTransition}
+                >
                   <p className="text-sm text-oxford">Say hello</p>
-                </div>
+                </motion.div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight">
@@ -156,21 +165,25 @@ const ContactPage: React.FC = () => {
                     aria-hidden="true"
                     tabIndex={-1}
                   />
-                  <Input
-                    showLabel
-                    labelText="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                  <Input
-                    showLabel
-                    labelText="Email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <motion.div whileFocus={{ scale: 1.01 }} transition={springTransition}>
+                    <Input
+                      showLabel
+                      labelText="Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </motion.div>
+                  <motion.div whileFocus={{ scale: 1.01 }} transition={springTransition}>
+                    <Input
+                      showLabel
+                      labelText="Email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </motion.div>
                   <div className="flex flex-col gap-2 w-full">
                     <label className="text-sm font-medium text-gray-700">
                       Message
@@ -181,11 +194,25 @@ const ContactPage: React.FC = () => {
                       onChange={(e) => setMessage(e.target.value)}
                       required
                       whileFocus={{ scale: 1.01 }}
+                      transition={springTransition}
                     />
                   </div>
-                  <Button variant="pry" type="submit" loading={loading}>
-                    <SendIcon size={18} /> Send Message
-                  </Button>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={springTransition}
+                  >
+                    <Button variant="pry" type="submit" loading={loading}>
+                      <motion.span
+                        className="inline-flex"
+                        whileHover={{ rotate: 15, scale: 1.2 }}
+                        transition={springTransition}
+                      >
+                        <SendIcon size={18} />
+                      </motion.span>{" "}
+                      Send Message
+                    </Button>
+                  </motion.div>
                 </form>
               </div>
             </ScrollReveal>
@@ -194,36 +221,52 @@ const ContactPage: React.FC = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-oxford">
                   Contact details
                 </h2>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-iceblue/50 rounded-lg">
+                <motion.div
+                  className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4"
+                  whileHover={{ y: -2, boxShadow: "0 8px 30px rgba(0,0,0,0.08)" }}
+                  transition={springTransition}
+                >
+                  <motion.a
+                    href="mailto:hello@gr8qm.com"
+                    className="flex items-center gap-3 group"
+                    whileHover={{ x: 5 }}
+                    transition={springTransition}
+                  >
+                    <motion.div
+                      className="p-2 bg-iceblue/50 rounded-lg"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      transition={springTransition}
+                    >
                       <MailIcon size={20} className="text-skyblue" />
-                    </div>
+                    </motion.div>
                     <div>
                       <p className="text-xs text-gray-2 font-medium">Email</p>
-                      <a
-                        href="mailto:hello@gr8qm.com"
-                        className="text-oxford font-semibold hover:text-skyblue transition-colors"
-                      >
+                      <span className="text-oxford font-semibold group-hover:text-skyblue transition-colors">
                         hello@gr8qm.com
-                      </a>
+                      </span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-iceblue/50 rounded-lg">
+                  </motion.a>
+                  <motion.a
+                    href="tel:+2349013294248"
+                    className="flex items-center gap-3 group"
+                    whileHover={{ x: 5 }}
+                    transition={springTransition}
+                  >
+                    <motion.div
+                      className="p-2 bg-iceblue/50 rounded-lg"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      transition={springTransition}
+                    >
                       <PhoneIcon size={20} className="text-skyblue" />
-                    </div>
+                    </motion.div>
                     <div>
                       <p className="text-xs text-gray-2 font-medium">Phone</p>
-                      <a
-                        href="tel:+2349013294248"
-                        className="text-oxford font-semibold hover:text-skyblue transition-colors"
-                      >
+                      <span className="text-oxford font-semibold group-hover:text-skyblue transition-colors">
                         +234 901 329 4248
-                      </a>
+                      </span>
                     </div>
-                  </div>
-                </div>
+                  </motion.a>
+                </motion.div>
               </div>
             </ScrollReveal>
           </Container>

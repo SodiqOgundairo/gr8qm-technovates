@@ -16,6 +16,7 @@ import {
   generateServiceSchema,
   generateBreadcrumbSchema,
 } from "../../utils/structured-data";
+import Scene3D from "../../components/animations/Scene3D";
 
 const DesignBuildPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -109,15 +110,20 @@ const DesignBuildPage: React.FC = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="flex flex-col md:flex-row items-center gap-12">
+        <div className="relative overflow-hidden py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1 flex flex-col gap-6">
               <ScrollReveal>
-                <div className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit">
+                <motion.div
+                  className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <p className="text-sm text-oxford font-medium">
                     DESIGN & BUILD
                   </p>
-                </div>
+                </motion.div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
@@ -154,11 +160,18 @@ const DesignBuildPage: React.FC = () => {
             </div>
             <div className="flex-1">
               <ScrollReveal delay={0.8}>
-                <CloudinaryImage
-                  imageKey="ResearchDesignImage"
-                  className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
-                  alt="Design & Build"
-                />
+                <div className="overflow-hidden rounded-2xl">
+                  <motion.div
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <CloudinaryImage
+                      imageKey="ResearchDesignImage"
+                      className="rounded-2xl shadow-2xl"
+                      alt="Design & Build"
+                    />
+                  </motion.div>
+                </div>
               </ScrollReveal>
             </div>
           </Container>
@@ -181,17 +194,24 @@ const DesignBuildPage: React.FC = () => {
               {services.map((service, index) => (
                 <ScrollReveal key={index} delay={index * 0.1} width="100%">
                   <motion.div
-                    className="bg-light border border-gray-200 rounded-xl p-6 h-full"
+                    className="group bg-light border border-gray-200 rounded-xl p-6 h-full cursor-default"
                     whileHover={{
-                      y: -8,
+                      y: -6,
+                      scale: 1.02,
                       borderColor: "var(--color-skyblue)",
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                      boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                     }}
-                    transition={{ duration: 0.3 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   >
-                    <div className="text-4xl mb-4">{service.icon}</div>
-                    <h3 className="text-xl font-bold text-oxford mb-2">
+                    <motion.div
+                      className="text-4xl mb-4"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      {service.icon}
+                    </motion.div>
+                    <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
                       {service.title}
                     </h3>
                     <p className="text-gray-600">{service.description}</p>
@@ -220,17 +240,19 @@ const DesignBuildPage: React.FC = () => {
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
                   <div className="relative h-full">
                     <motion.div
-                      className="bg-white rounded-xl p-6 shadow-md h-full"
+                      className="group bg-white rounded-xl p-6 shadow-md h-full cursor-default"
                       whileHover={{
-                        y: -5,
-                        boxShadow:
-                          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                        y: -6,
+                        scale: 1.02,
+                        boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                       }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     >
                       <div className="text-5xl font-black text-skyblue/20 mb-4">
                         {item.step}
                       </div>
-                      <h3 className="text-xl font-bold text-oxford mb-3">
+                      <h3 className="text-xl font-bold text-oxford mb-3 group-hover:text-skyblue transition-colors duration-300">
                         {item.title}
                       </h3>
                       <p className="text-gray-600">{item.description}</p>
@@ -248,8 +270,9 @@ const DesignBuildPage: React.FC = () => {
         </div>
 
         {/* Why Choose Us Section */}
-        <div className="py-16 md:py-24 bg-oxford text-white">
-          <Container>
+        <div className="relative overflow-hidden py-16 md:py-24 bg-oxford text-white">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <ScrollReveal>
                 <div>
@@ -265,16 +288,32 @@ const DesignBuildPage: React.FC = () => {
                       "Post-launch support and maintenance",
                       "Competitive pricing with no hidden costs",
                     ].map((item, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <CheckCircle className="text-iceblue w-5 h-5 mt-1 shrink-0" />
+                      <motion.div
+                        key={index}
+                        className="flex items-start gap-3"
+                        whileHover={{ x: 6 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.2 }}
+                          whileTap={{ rotate: -10, scale: 0.9 }}
+                        >
+                          <CheckCircle className="text-iceblue w-5 h-5 mt-1 shrink-0" />
+                        </motion.div>
                         <p className="text-lg text-gray-200">{item}</p>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+                <motion.div
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+                  whileHover={{
+                    boxShadow: "0 20px 40px rgba(0,152,218,0.15)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                >
                   <h3 className="text-2xl font-bold mb-4 text-iceblue">
                     Technologies We Use
                   </h3>
@@ -296,12 +335,14 @@ const DesignBuildPage: React.FC = () => {
                           scale: 1.05,
                           backgroundColor: "rgba(255, 255, 255, 0.2)",
                         }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
                       >
                         {tech}
                       </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               </ScrollReveal>
             </div>
           </Container>

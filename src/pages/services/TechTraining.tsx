@@ -15,6 +15,7 @@ import {
   generateEducationalOrganizationSchema,
   generateBreadcrumbSchema,
 } from "../../utils/structured-data";
+import Scene3D from "../../components/animations/Scene3D";
 
 const TechTrainingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -137,15 +138,20 @@ const TechTrainingPage: React.FC = () => {
       />
       <main className="flex flex-col">
         {/* Hero Section */}
-        <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
-          <Container className="flex flex-col md:flex-row items-center gap-12">
+        <div className="relative overflow-hidden py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1 flex flex-col gap-6">
               <ScrollReveal>
-                <div className="bg-skyblue/20 border border-skyblue rounded-full px-4 py-2 w-fit">
+                <motion.div
+                  className="bg-skyblue/20 border border-skyblue rounded-full px-4 py-2 w-fit"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <p className="text-sm text-oxford font-medium">
                     TECH TRAINING
                   </p>
-                </div>
+                </motion.div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
@@ -183,11 +189,18 @@ const TechTrainingPage: React.FC = () => {
             </div>
             <div className="flex-1">
               <ScrollReveal delay={0.8}>
-                <CloudinaryImage
-                  imageKey="TrainingImage"
-                  className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
-                  alt="Tech Training"
-                />
+                <div className="overflow-hidden rounded-2xl">
+                  <motion.div
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <CloudinaryImage
+                      imageKey="TrainingImage"
+                      className="rounded-2xl shadow-2xl"
+                      alt="Tech Training"
+                    />
+                  </motion.div>
+                </div>
               </ScrollReveal>
             </div>
           </Container>
@@ -210,9 +223,24 @@ const TechTrainingPage: React.FC = () => {
               </div>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
-              <div className="bg-iceblue/30 border-2 border-skyblue rounded-2xl p-8 max-w-2xl mx-auto">
+              <motion.div
+                className="bg-iceblue/30 border-2 border-skyblue rounded-2xl p-8 max-w-2xl mx-auto"
+                whileHover={{
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="text-5xl">💡</div>
+                  <motion.div
+                    className="text-5xl"
+                    whileHover={{ rotate: 15, scale: 1.2 }}
+                    whileTap={{ rotate: -10, scale: 0.9 }}
+                  >
+                    💡
+                  </motion.div>
                   <div>
                     <h3 className="text-xl font-bold text-oxford mb-2">
                       Commitment Fee Policy
@@ -224,7 +252,7 @@ const TechTrainingPage: React.FC = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </ScrollReveal>
           </Container>
         </div>
@@ -246,24 +274,35 @@ const TechTrainingPage: React.FC = () => {
               {courses.map((course, index) => (
                 <ScrollReveal key={index} delay={index * 0.1} width="100%">
                   <motion.div
-                    className="bg-white border border-gray-200 rounded-xl p-6 h-full"
+                    className="group bg-white border border-gray-200 rounded-xl p-6 h-full cursor-default"
                     whileHover={{
-                      y: -8,
+                      y: -6,
+                      scale: 1.02,
                       borderColor: "var(--color-skyblue)",
-                      boxShadow:
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                      boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                     }}
-                    transition={{ duration: 0.3 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   >
-                    <div className="text-5xl mb-4">{course.icon}</div>
-                    <h3 className="text-xl font-bold text-oxford mb-2">
+                    <motion.div
+                      className="text-5xl mb-4"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      {course.icon}
+                    </motion.div>
+                    <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
                       {course.title}
                     </h3>
                     <p className="text-gray-600 mb-4">{course.description}</p>
                     <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span className="flex items-center gap-1">
+                      <motion.span
+                        className="flex items-center gap-1"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
                         ⏱️ {course.duration}
-                      </span>
+                      </motion.span>
                       {/* <span className="font-semibold text-skyblue">
                         {course.commitment}
                       </span> */}
@@ -284,8 +323,9 @@ const TechTrainingPage: React.FC = () => {
         </div>
 
         {/* Benefits Section */}
-        <div className="py-16 md:py-24 bg-oxford text-white">
-          <Container>
+        <div className="relative overflow-hidden py-16 md:py-24 bg-oxford text-white">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10">
             <ScrollReveal>
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -301,15 +341,24 @@ const TechTrainingPage: React.FC = () => {
               {benefits.map((benefit, index) => (
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
                   <motion.div
-                    className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center h-full"
+                    className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center h-full cursor-default"
                     whileHover={{
+                      y: -6,
                       scale: 1.05,
                       backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                     }}
-                    transition={{ duration: 0.3 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   >
-                    <div className="text-5xl mb-4">{benefit.icon}</div>
-                    <h3 className="text-lg font-bold mb-3 text-iceblue">
+                    <motion.div
+                      className="text-5xl mb-4"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      {benefit.icon}
+                    </motion.div>
+                    <h3 className="text-lg font-bold mb-3 text-iceblue group-hover:text-orange transition-colors duration-300">
                       {benefit.title}
                     </h3>
                     <p className="text-gray-300 text-sm">
@@ -356,11 +405,20 @@ const TechTrainingPage: React.FC = () => {
                 },
               ].map((item, index) => (
                 <ScrollReveal key={index} delay={index * 0.2} width="100%">
-                  <div className="text-center relative h-full">
-                    <div className="bg-skyblue text-white text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <motion.div
+                    className="group text-center relative h-full cursor-default"
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <motion.div
+                      className="bg-skyblue text-white text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
                       {item.step}
-                    </div>
-                    <h3 className="text-xl font-bold mb-2 text-oxford">
+                    </motion.div>
+                    <h3 className="text-xl font-bold mb-2 text-oxford group-hover:text-skyblue transition-colors duration-300">
                       {item.title}
                     </h3>
                     <p className="text-gray-600">{item.desc}</p>
@@ -369,7 +427,7 @@ const TechTrainingPage: React.FC = () => {
                         <ArrowRightIcon size={32} className="text-skyblue" />
                       </div>
                     )}
-                  </div>
+                  </motion.div>
                 </ScrollReveal>
               ))}
             </div>
@@ -390,16 +448,22 @@ const TechTrainingPage: React.FC = () => {
               {faqs.map((faq, index) => (
                 <ScrollReveal key={index} delay={index * 0.1} width="100%">
                   <motion.div
-                    className="bg-white rounded-xl p-6 shadow-md"
+                    className="group bg-white rounded-xl p-6 shadow-md cursor-default"
                     whileHover={{
+                      y: -6,
                       scale: 1.02,
-                      boxShadow:
-                        "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                      boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
                     }}
-                    transition={{ duration: 0.2 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   >
-                    <h3 className="text-lg font-bold text-oxford mb-3 flex items-start gap-2">
-                      <GraduationCapIcon size={18} className="text-skyblue mt-1 shrink-0" />
+                    <h3 className="text-lg font-bold text-oxford mb-3 flex items-start gap-2 group-hover:text-skyblue transition-colors duration-300">
+                      <motion.div
+                        whileHover={{ rotate: 15, scale: 1.2 }}
+                        whileTap={{ rotate: -10, scale: 0.9 }}
+                      >
+                        <GraduationCapIcon size={18} className="text-skyblue mt-1 shrink-0" />
+                      </motion.div>
                       {faq.question}
                     </h3>
                     <p className="text-gray-600 pl-7">{faq.answer}</p>
