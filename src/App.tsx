@@ -62,6 +62,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
 import NotFound from "./pages/PageNotFound";
+import NotFoundNew from "./pages/NotFoundNew";
 import CursorTrail from "./components/animations/CursorTrail";
 import DarkModeToggle from "./components/common/DarkModeToggle";
 import ChatWidget from "./components/common/ChatWidget";
@@ -92,6 +93,7 @@ function App() {
                 <Route path="/contact" element={<ContactNew />} />
                 <Route path="/blog" element={<BlogIndexNew />} />
                 <Route path="/blog/:slug" element={<BlogPostNew />} />
+                <Route path="*" element={<NotFoundNew />} />
               </Routes>
             </DarkLayout>
           }
