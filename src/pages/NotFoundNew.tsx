@@ -20,7 +20,7 @@ const stagger = {
 
 const NotFoundNew: React.FC = () => {
   return (
-    <div className="fixed inset-0 bg-oxford-deep overflow-hidden flex items-center justify-center">
+    <div className="fixed inset-0 bg-oxford-deep overflow-hidden flex items-center justify-center z-[200]">
       {/* Orbital glow background */}
       <OrbitalBackground variant="hero" />
 
