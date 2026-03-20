@@ -12,7 +12,6 @@ import {
   TiktokIcon,
   FacebookIcon,
   ArrowRightIcon,
-  SendIcon,
 } from "../icons";
 import Button from "../common/Button";
 import Container from "./Container";

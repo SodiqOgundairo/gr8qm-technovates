@@ -275,9 +275,9 @@ const Home: React.FC = () => {
           <div className="py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-iceblue">
             <Container className="flex flex-col justify-between items-center gap-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-8 w-full">
-                {[
+                {([
                   {
-                    imageKey: "ResearchDesignImage",
+                    imageKey: "ResearchDesignImage" as const,
                     alt: "Design & Build",
                     title: "Design & Build",
                     desc: "We don't just make things pretty. We architect digital products that solve real problems, from first wireframe to final deploy.",
@@ -285,7 +285,7 @@ const Home: React.FC = () => {
                     delay: 0.2,
                   },
                   {
-                    imageKey: "TrainingImage",
+                    imageKey: "TrainingImage" as const,
                     alt: "Tech Training",
                     title: "Tech Training",
                     desc: "Zero to hired. Our sponsored cohorts teach product design, development, and QA with real projects and mentorship from working professionals.",
@@ -293,14 +293,14 @@ const Home: React.FC = () => {
                     delay: 0.4,
                   },
                   {
-                    imageKey: "PintShop",
+                    imageKey: "PintShop" as const,
                     alt: "Print Shop",
                     title: "Print Shop",
                     desc: "Your brand, tangible. Business cards, flyers, banners, branded merch, and custom packaging. Quality print, fast delivery.",
                     link: "/services/print-shop",
                     delay: 0.6,
                   },
-                ].map((card, i) => (
+                ]).map((card, i) => (
                   <ScrollReveal key={i} delay={card.delay} width="100%">
                     <Card3D className="h-full">
                       <motion.div
@@ -315,7 +315,7 @@ const Home: React.FC = () => {
                           <motion.div
                             whileHover={{ scale: 1.08, rotate: -2 }}
                             whileTap={{ scale: 1.02, rotate: 1 }}
-                            transition={{ type: "spring", stiffness: 200 }}
+                            transition={{ type: "spring" as const, stiffness: 200 }}
                           >
                             <CloudinaryImage
                               imageKey={card.imageKey}

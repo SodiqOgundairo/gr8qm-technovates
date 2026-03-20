@@ -407,8 +407,8 @@ const JobPostingForm: React.FC = () => {
             <Button
               type="button"
               variant="pry"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                handleSubmit(e as any, true)
+              onClick={() =>
+                handleSubmit(new Event("submit") as any, true)
               }
               disabled={saving}
               className="flex items-center gap-2"

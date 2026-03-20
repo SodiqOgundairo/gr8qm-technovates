@@ -9,12 +9,11 @@ import {
   TiktokIcon,
   FacebookIcon,
   ArrowRightIcon,
-  SendIcon,
 } from "../icons";
 import Button from "../common/Button";
 import Container from "./Container";
 import Input from "../common/Input";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import RevealOnScroll from "../animations/RevealOnScroll";
 import MarqueeText from "../animations/MarqueeText";
 import MagneticButton from "../animations/MagneticButton";

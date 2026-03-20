@@ -58,7 +58,7 @@ const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
   threshold = "0px 0px -60px 0px",
 }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: threshold });
+  const isInView = useInView(ref, { once, margin: threshold as any });
 
   const initial = getInitial(direction);
   const animate = isInView ? getAnimate(direction) : initial;

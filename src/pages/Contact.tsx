@@ -12,7 +12,7 @@ import PageTransition from "../components/layout/PageTransition";
 import ScrollReveal from "../components/common/ScrollReveal";
 import Scene3D from "../components/animations/Scene3D";
 
-const springTransition = { type: "spring", stiffness: 300, damping: 20 };
+const springTransition = { type: "spring" as const, stiffness: 300, damping: 20 };
 
 const ContactPage: React.FC = () => {
   const [name, setName] = useState("");
