@@ -89,10 +89,6 @@ function drawSparkle(ctx: CanvasRenderingContext2D, s: Sparkle) {
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
       ctx.fill();
-      ctx.globalAlpha = s.opacity * s.life * 0.3;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.size * 2, 0, Math.PI * 2);
-      ctx.stroke();
       break;
   }
 
@@ -114,7 +110,7 @@ const CursorTrail: React.FC = () => {
       return {
         x: x + (Math.random() - 0.5) * 30,
         y: y + (Math.random() - 0.5) * 30,
-        size: Math.random() * 3 + 1.5,
+        size: Math.random() * 6 + 0.5,
         opacity: Math.random() * 0.6 + 0.4,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         vx: Math.cos(angle) * speed,
@@ -132,7 +128,7 @@ const CursorTrail: React.FC = () => {
 
   const createExplosion = useCallback(
     (x: number, y: number) => {
-      const count = 25 + Math.floor(Math.random() * 15);
+      const count = 40 + Math.floor(Math.random() * 25);
       for (let i = 0; i < count; i++) {
         const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
         const speed = Math.random() * 6 + 2;
@@ -142,7 +138,7 @@ const CursorTrail: React.FC = () => {
             y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
-            size: Math.random() * 5 + 2,
+            size: Math.random() * 8 + 1,
             opacity: 1,
             decay: Math.random() * 0.02 + 0.015,
           }),
@@ -169,8 +165,8 @@ const CursorTrail: React.FC = () => {
 
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
-      if (sparklesRef.current.length < 150) {
-        for (let i = 0; i < 2; i++) {
+      if (sparklesRef.current.length < 400) {
+        for (let i = 0; i < 5; i++) {
           sparklesRef.current.push(createSparkle(e.clientX, e.clientY));
         }
       }
@@ -187,26 +183,24 @@ const CursorTrail: React.FC = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       timerRef.current++;
 
-      if (
-        mouseRef.current.x > 0 &&
-        timerRef.current % 3 === 0 &&
-        sparklesRef.current.length < 200
-      ) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 40 + 10;
-        sparklesRef.current.push(
-          createSparkle(
-            mouseRef.current.x + Math.cos(angle) * radius,
-            mouseRef.current.y + Math.sin(angle) * radius,
-            {
-              size: Math.random() * 2 + 1,
-              opacity: Math.random() * 0.5 + 0.2,
-              decay: Math.random() * 0.01 + 0.005,
-              vx: Math.cos(angle) * 0.4,
-              vy: Math.sin(angle) * 0.4 - 0.2,
-            },
-          ),
-        );
+      if (mouseRef.current.x > 0 && sparklesRef.current.length < 500) {
+        for (let j = 0; j < 2; j++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * 50 + 8;
+          sparklesRef.current.push(
+            createSparkle(
+              mouseRef.current.x + Math.cos(angle) * radius,
+              mouseRef.current.y + Math.sin(angle) * radius,
+              {
+                size: Math.random() * 4 + 0.5,
+                opacity: Math.random() * 0.5 + 0.2,
+                decay: Math.random() * 0.01 + 0.005,
+                vx: Math.cos(angle) * 0.5,
+                vy: Math.sin(angle) * 0.5 - 0.2,
+              },
+            ),
+          );
+        }
       }
 
       sparklesRef.current = sparklesRef.current.filter((s) => {
