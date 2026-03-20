@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Clock, Search, Sparkles, ArrowRight } from "lucide-react";
+import { MapPin, Clock, Search, ArrowRight } from "lucide-react";
 import { BriefcaseIcon } from "../components/icons";
 import JobDetailModal from "../components/careers/JobDetailModal";
 import PageTransition from "../components/layout/PageTransition";
 import { SEO } from "../components/common/SEO";
 import Container from "../components/layout/Container";
-import RevealOnScroll from "../components/animations/RevealOnScroll";
-import SplitText from "../components/animations/SplitText";
-import Scene3D from "../components/animations/Scene3D";
-import MarqueeText from "../components/animations/MarqueeText";
-import MagneticButton from "../components/animations/MagneticButton";
-import GlowCard from "../components/animations/GlowCard";
+import OrbitalBackground from "../components/animations/OrbitalBackground";
+import {
+  Reveal,
+  DotGrid,
+  DiagonalLines,
+  CrossMark,
+  AccentLine,
+  FloatingRule,
+  SectionConnector,
+} from "../components/animations/DesignElements";
 
 interface JobPosting {
   id: string;
@@ -147,115 +151,77 @@ const Careers: React.FC = () => {
         ]}
       />
 
-      <div className="min-h-screen bg-dark text-white overflow-hidden">
-        {/* ========== HERO SECTION ========== */}
-        <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-          {/* Scene3D Background */}
-          <Scene3D variant="hero" />
+      <main className="flex flex-col bg-oxford-deep">
+        {/* ═══════════════ HERO SECTION ═══════════════ */}
+        <section className="relative min-h-[85vh] flex items-center overflow-hidden z-10 sticky top-0">
+          <OrbitalBackground variant="hero" />
 
-          {/* Floating gradient orbs */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
-            <motion.div
-              className="absolute top-20 left-[10%] w-[500px] h-[500px] rounded-full bg-skyblue/8 blur-[120px]"
-              animate={{
-                x: [0, 40, -20, 0],
-                y: [0, -30, 20, 0],
-                scale: [1, 1.1, 0.95, 1],
-              }}
-              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute bottom-20 right-[10%] w-[400px] h-[400px] rounded-full bg-orange/6 blur-[100px]"
-              animate={{
-                x: [0, -30, 20, 0],
-                y: [0, 40, -20, 0],
-                scale: [1, 0.9, 1.1, 1],
-              }}
-              transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-oxford/10 blur-[150px]"
-              animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
+          {/* Geometric decorations */}
+          <DotGrid className="top-8 left-8 text-skyblue/20" />
+          <DiagonalLines className="bottom-0 right-0 text-orange/10" thick />
+          <CrossMark className="absolute top-[12%] right-[18%] text-skyblue/15" size={20} />
+          <CrossMark className="absolute bottom-[18%] left-[12%] text-orange/15" size={14} />
 
-          {/* Noise overlay */}
-          <div className="noise-overlay absolute inset-0 z-[2] pointer-events-none opacity-30" />
+          <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
+          <FloatingRule className="bottom-0 left-0 w-full" color="orange" />
 
-          {/* Hero Content */}
-          <Container className="relative z-10 text-center py-32">
-            <RevealOnScroll direction="scale" delay={0.1}>
+          <Container className="relative z-10 text-center py-12 md:py-28 lg:py-36">
+            <Reveal delay={0}>
               <motion.div
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card border border-white/10 mb-8"
+                className="inline-flex items-center gap-2 bg-skyblue/10 border border-oxford-border rounded-full px-5 py-2.5 mb-8"
                 whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Sparkles className="w-4 h-4 text-orange" />
-                <span className="text-sm font-medium text-white/80 tracking-wide">
+                <span className="text-sm text-iceblue/70 font-medium tracking-widest uppercase">
                   We're Hiring
                 </span>
               </motion.div>
-            </RevealOnScroll>
+            </Reveal>
 
-            <div className="mb-6">
-              <SplitText
-                as="h1"
-                className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white"
-                type="words"
-                stagger={0.08}
-                delay={0.2}
-              >
-                Build The
-              </SplitText>
-            </div>
-            <div className="mb-8">
-              <SplitText
-                as="h1"
-                className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight gradient-text"
-                type="words"
-                stagger={0.08}
-                delay={0.5}
-              >
-                Future With Us
-              </SplitText>
-            </div>
+            <Reveal delay={0.1}>
+              <AccentLine color="skyblue" thickness="medium" width="w-16" className="mx-auto mb-6" />
+            </Reveal>
 
-            <RevealOnScroll direction="up" delay={0.8}>
-              <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed">
+            <Reveal delay={0.2}>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6">
+                <span className="text-white">Build The Future</span>{" "}
+                <span className="text-skyblue">With Us</span>
+              </h1>
+            </Reveal>
+
+            <Reveal delay={0.4}>
+              <p className="text-lg md:text-xl text-iceblue/70 max-w-2xl mx-auto mb-12 leading-relaxed">
                 Explore exciting opportunities and grow your career at GR8QM
                 Technovates. We're looking for passionate creators, builders,
                 and innovators.
               </p>
-            </RevealOnScroll>
+            </Reveal>
 
-            {/* Animated Search Bar */}
-            <RevealOnScroll direction="up" delay={1}>
+            {/* Search Bar */}
+            <Reveal delay={0.6}>
               <motion.div
                 className="max-w-2xl mx-auto"
                 animate={{
                   boxShadow: searchFocused
-                    ? "0 0 60px rgba(0, 152, 218, 0.2)"
+                    ? "0 0 60px rgba(0, 152, 218, 0.15)"
                     : "0 0 0px rgba(0, 152, 218, 0)",
                 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.4, ease: [0.22, 0.6, 0.36, 1] as const }}
               >
                 <div className="relative group">
                   <motion.div
-                    className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-skyblue via-oxford to-orange opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"
+                    className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-skyblue via-oxford to-orange opacity-0 blur-sm transition-opacity duration-500"
                     animate={{
-                      opacity: searchFocused ? 0.6 : 0,
+                      opacity: searchFocused ? 0.4 : 0,
                     }}
                   />
-                  <div className="relative flex items-center glass-card rounded-2xl border border-white/10 overflow-hidden">
+                  <div className="relative flex items-center bg-white/5 backdrop-blur-sm rounded-2xl border border-oxford-border overflow-hidden">
                     <motion.div
                       animate={{ rotate: searchFocused ? 90 : 0 }}
-                      transition={{ type: "spring", stiffness: 200 }}
+                      transition={{ type: "spring" as const, stiffness: 200, damping: 15 }}
                       className="pl-5"
                     >
-                      <Search className="text-white/40 w-5 h-5" />
+                      <Search className="text-iceblue/40 w-5 h-5" />
                     </motion.div>
                     <input
                       type="text"
@@ -264,7 +230,7 @@ const Careers: React.FC = () => {
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onFocus={() => setSearchFocused(true)}
                       onBlur={() => setSearchFocused(false)}
-                      className="w-full pl-4 pr-6 py-5 bg-transparent text-white placeholder-white/30 focus:outline-none text-lg"
+                      className="w-full pl-4 pr-6 py-5 bg-transparent text-white placeholder-iceblue/30 focus:outline-none text-lg"
                     />
                     <AnimatePresence>
                       {searchTerm && (
@@ -273,7 +239,7 @@ const Careers: React.FC = () => {
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.5 }}
                           onClick={() => setSearchTerm("")}
-                          className="pr-5 text-white/40 hover:text-white transition-colors"
+                          className="pr-5 text-iceblue/40 hover:text-white transition-colors"
                         >
                           &times;
                         </motion.button>
@@ -282,94 +248,87 @@ const Careers: React.FC = () => {
                   </div>
                 </div>
               </motion.div>
-            </RevealOnScroll>
+            </Reveal>
 
             {/* Job count */}
-            <RevealOnScroll direction="up" delay={1.2}>
+            <Reveal delay={0.8}>
               <motion.p
-                className="mt-6 text-white/30 text-sm tracking-widest uppercase"
+                className="mt-6 text-iceblue/30 text-sm tracking-widest uppercase"
                 animate={{ opacity: loading ? 0.3 : 0.5 }}
               >
                 {loading
                   ? "Loading positions..."
                   : `${filteredJobs.length} open position${filteredJobs.length !== 1 ? "s" : ""}`}
               </motion.p>
-            </RevealOnScroll>
+            </Reveal>
           </Container>
 
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark to-transparent z-[3]" />
+          <SectionConnector color="skyblue" side="right" />
         </section>
 
-        {/* ========== MARQUEE DIVIDER ========== */}
-        <div className="relative py-4 border-y border-white/5">
-          <MarqueeText
-            text="DESIGN  ///  TECHNOLOGY  ///  INNOVATION  ///  CAREERS  ///  GROWTH"
-            speed={30}
-            className="text-sm font-bold tracking-[0.3em] text-white/10 uppercase"
-          />
-        </div>
+        {/* ═══════════════ FILTERS SECTION ═══════════════ */}
+        <section className="relative py-16 bg-oxford-deep overflow-hidden z-20 sticky top-0">
+          <OrbitalBackground variant="section" />
 
-        {/* ========== FILTERS SECTION ========== */}
-        <section className="relative py-16">
-          <Container>
-            <RevealOnScroll direction="left" delay={0.1}>
+          {/* Geometric decorations */}
+          <CrossMark className="absolute top-[10%] left-[8%] text-skyblue/10" size={18} />
+          <FloatingRule className="top-0 left-0 w-full" color="iceblue" dashed />
+
+          <Container className="relative z-10">
+            <Reveal direction="left" delay={0.1}>
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <span className="text-xs font-semibold text-white/30 uppercase tracking-widest mr-2">
+                <span className="text-xs font-semibold text-iceblue/30 uppercase tracking-widest mr-2">
                   Filter by:
                 </span>
-                <MagneticButton strength={15}>
-                  <motion.button
-                    onClick={() => setDepartmentFilter("all")}
-                    className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border ${
-                      departmentFilter === "all"
-                        ? "bg-skyblue text-white border-skyblue shadow-lg shadow-skyblue/25"
-                        : "glass-card text-white/60 border-white/10 hover:border-white/30 hover:text-white"
-                    }`}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    All Departments
-                  </motion.button>
-                </MagneticButton>
+                <motion.button
+                  onClick={() => setDepartmentFilter("all")}
+                  className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border ${
+                    departmentFilter === "all"
+                      ? "bg-skyblue text-white border-skyblue shadow-lg shadow-skyblue/25"
+                      : "bg-white/5 backdrop-blur-sm text-iceblue/60 border-oxford-border hover:border-skyblue/30 hover:text-white"
+                  }`}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
+                >
+                  All Departments
+                </motion.button>
 
                 {departments.map((dept, i) => (
-                  <MagneticButton key={dept} strength={15}>
-                    <motion.button
-                      onClick={() => setDepartmentFilter(dept)}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 + i * 0.05 }}
-                      className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border ${
-                        departmentFilter === dept
-                          ? "bg-skyblue text-white border-skyblue shadow-lg shadow-skyblue/25"
-                          : "glass-card text-white/60 border-white/10 hover:border-white/30 hover:text-white"
-                      }`}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {dept}
-                    </motion.button>
-                  </MagneticButton>
+                  <motion.button
+                    key={dept}
+                    onClick={() => setDepartmentFilter(dept)}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05, ease: [0.22, 0.6, 0.36, 1] as const }}
+                    className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border ${
+                      departmentFilter === dept
+                        ? "bg-skyblue text-white border-skyblue shadow-lg shadow-skyblue/25"
+                        : "bg-white/5 backdrop-blur-sm text-iceblue/60 border-oxford-border hover:border-skyblue/30 hover:text-white"
+                    }`}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {dept}
+                  </motion.button>
                 ))}
               </div>
-            </RevealOnScroll>
+            </Reveal>
           </Container>
+
+          <SectionConnector color="orange" side="left" />
         </section>
 
-        {/* ========== JOB LISTINGS ========== */}
-        <section className="relative pb-32">
-          {/* Background orbs */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <motion.div
-              className="absolute top-[20%] right-[5%] w-[350px] h-[350px] rounded-full bg-skyblue/4 blur-[100px]"
-              animate={{ y: [0, -30, 0], opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 10, repeat: Infinity }}
-            />
-            <motion.div
-              className="absolute bottom-[30%] left-[5%] w-[300px] h-[300px] rounded-full bg-orange/4 blur-[80px]"
-              animate={{ y: [0, 20, 0], opacity: [0.2, 0.5, 0.2] }}
-              transition={{ duration: 12, repeat: Infinity }}
-            />
-          </div>
+        {/* ═══════════════ JOB LISTINGS ═══════════════ */}
+        <section className="relative py-24 md:py-32 bg-oxford-deep overflow-hidden z-30 sticky top-0">
+          <OrbitalBackground variant="section" />
+
+          {/* Geometric decorations */}
+          <DotGrid className="bottom-12 right-12 text-orange/15" />
+          <DiagonalLines className="top-0 left-0 text-skyblue/8" />
+          <CrossMark className="absolute top-[8%] right-[12%] text-skyblue/10" size={18} />
+          <CrossMark className="absolute bottom-[12%] left-[6%] text-orange/12" size={14} />
+          <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
 
           <Container className="relative z-10">
             {/* Loading State */}
@@ -389,7 +348,7 @@ const Careers: React.FC = () => {
                       ease: "linear",
                     }}
                   />
-                  <p className="text-white/40 text-lg tracking-wide">
+                  <p className="text-iceblue/40 text-lg tracking-wide">
                     Loading opportunities...
                   </p>
                 </motion.div>
@@ -398,20 +357,21 @@ const Careers: React.FC = () => {
 
             {/* Empty State */}
             {!loading && filteredJobs.length === 0 && (
-              <RevealOnScroll direction="scale">
+              <Reveal>
                 <div className="text-center py-32">
                   <motion.div
-                    className="inline-flex flex-col items-center gap-6 glass-card rounded-3xl p-16 border border-white/5"
+                    className="inline-flex flex-col items-center gap-6 bg-white/5 backdrop-blur-sm rounded-3xl p-16 border border-oxford-border"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: "spring" as const, stiffness: 200, damping: 20 }}
                   >
                     <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center">
-                      <Search className="w-8 h-8 text-white/20" />
+                      <Search className="w-8 h-8 text-iceblue/20" />
                     </div>
-                    <p className="text-white/40 text-xl font-medium">
+                    <p className="text-iceblue/40 text-xl font-medium">
                       No job openings found matching your criteria.
                     </p>
-                    <p className="text-white/20 text-sm">
+                    <p className="text-iceblue/20 text-sm">
                       Try adjusting your search or filter settings.
                     </p>
                     {(searchTerm || departmentFilter !== "all") && (
@@ -429,33 +389,42 @@ const Careers: React.FC = () => {
                     )}
                   </motion.div>
                 </div>
-              </RevealOnScroll>
+              </Reveal>
             )}
 
             {/* Job Grid */}
             {!loading && filteredJobs.length > 0 && (
-              <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                <AnimatePresence mode="popLayout">
-                  {filteredJobs.map((job, index) => (
-                    <RevealOnScroll
-                      key={job.id}
-                      direction={index % 2 === 0 ? "left" : "right"}
-                      delay={index * 0.08}
-                    >
-                      <GlowCard
-                        className="group cursor-pointer rounded-2xl"
-                        glowColor="rgba(0, 152, 218, 0.12)"
+              <>
+                <Reveal>
+                  <div className="text-center mb-16">
+                    <AccentLine color="skyblue" thickness="medium" width="w-12" className="mx-auto mb-6" />
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                      Open Positions
+                    </h2>
+                    <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+                      Find a role that matches your skills and ambitions
+                    </p>
+                  </div>
+                </Reveal>
+
+                <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+                  <AnimatePresence mode="popLayout">
+                    {filteredJobs.map((job, index) => (
+                      <Reveal
+                        key={job.id}
+                        direction={index % 2 === 0 ? "left" : "right"}
+                        delay={index * 0.08}
                       >
                         <motion.div
-                          layoutId={`job-card-${job.id}`}
                           onClick={() => setSelectedJob(job)}
-                          className="relative glass-card rounded-2xl border border-white/5 hover:border-white/15 transition-all duration-500 overflow-hidden"
-                          whileHover={{ y: -4 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 25,
+                          className="group cursor-pointer relative bg-white/5 backdrop-blur-sm rounded-2xl border border-oxford-border hover:border-skyblue/30 transition-all duration-500 overflow-hidden"
+                          whileHover={{
+                            y: -6,
+                            scale: 1.01,
+                            boxShadow: "0 20px 40px rgba(0,152,218,0.08)",
                           }}
+                          whileTap={{ scale: 0.98 }}
+                          transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                         >
                           {/* Top gradient line */}
                           <div className="h-[2px] bg-gradient-to-r from-transparent via-skyblue/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
@@ -464,13 +433,11 @@ const Careers: React.FC = () => {
                             {/* Header */}
                             <div className="flex justify-between items-start mb-5 gap-4">
                               <div className="flex-1 min-w-0">
-                                <motion.h3
-                                  className="text-2xl font-bold text-white group-hover:text-skyblue transition-colors duration-300 mb-2 truncate"
-                                >
+                                <motion.h3 className="text-2xl font-bold text-white group-hover:text-skyblue transition-colors duration-300 mb-2 truncate">
                                   {job.title}
                                 </motion.h3>
                                 {job.department && (
-                                  <p className="text-white/40 font-medium text-sm tracking-wide uppercase">
+                                  <p className="text-iceblue/40 font-medium text-sm tracking-wide uppercase">
                                     {job.department}
                                   </p>
                                 )}
@@ -482,9 +449,9 @@ const Careers: React.FC = () => {
                             <div className="space-y-3 mb-5">
                               {job.location && (
                                 <motion.div
-                                  className="flex items-center gap-3 text-white/50"
+                                  className="flex items-center gap-3 text-iceblue/50"
                                   whileHover={{ x: 4 }}
-                                  transition={{ type: "spring", stiffness: 300 }}
+                                  transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                                 >
                                   <MapPin className="w-4 h-4 text-skyblue/70 flex-shrink-0" />
                                   <span className="text-sm">{job.location}</span>
@@ -492,9 +459,9 @@ const Careers: React.FC = () => {
                               )}
                               {job.posted_date && (
                                 <motion.div
-                                  className="flex items-center gap-3 text-white/50"
+                                  className="flex items-center gap-3 text-iceblue/50"
                                   whileHover={{ x: 4 }}
-                                  transition={{ type: "spring", stiffness: 300 }}
+                                  transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                                 >
                                   <Clock className="w-4 h-4 text-skyblue/70 flex-shrink-0" />
                                   <span className="text-sm">
@@ -504,9 +471,9 @@ const Careers: React.FC = () => {
                               )}
                               {job.salary_range && (
                                 <motion.div
-                                  className="flex items-center gap-3 text-white/50"
+                                  className="flex items-center gap-3 text-iceblue/50"
                                   whileHover={{ x: 4 }}
-                                  transition={{ type: "spring", stiffness: 300 }}
+                                  transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                                 >
                                   <BriefcaseIcon
                                     size={16}
@@ -520,82 +487,75 @@ const Careers: React.FC = () => {
                             </div>
 
                             {/* Description Preview */}
-                            <p className="text-white/30 text-sm leading-relaxed line-clamp-3 mb-6">
+                            <p className="text-iceblue/30 text-sm leading-relaxed line-clamp-3 mb-6">
                               {job.description}
                             </p>
 
                             {/* CTA */}
-                            <motion.div
-                              className="flex items-center justify-between pt-5 border-t border-white/5"
-                              whileHover={{ gap: "1rem" }}
-                            >
-                              <span className="text-sm font-semibold text-skyblue group-hover:text-white transition-colors duration-300 hover-line">
+                            <div className="flex items-center justify-between pt-5 border-t border-oxford-border">
+                              <span className="text-sm font-semibold text-skyblue group-hover:text-white transition-colors duration-300">
                                 View Details & Apply
                               </span>
                               <motion.div
                                 className="w-10 h-10 rounded-full bg-skyblue/10 flex items-center justify-center group-hover:bg-skyblue/20 transition-colors duration-300"
                                 whileHover={{ scale: 1.1, rotate: -45 }}
+                                transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                               >
                                 <ArrowRight className="w-4 h-4 text-skyblue" />
                               </motion.div>
-                            </motion.div>
+                            </div>
                           </div>
 
                           {/* Bottom glow on hover */}
                           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-skyblue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                         </motion.div>
-                      </GlowCard>
-                    </RevealOnScroll>
-                  ))}
-                </AnimatePresence>
-              </div>
+                      </Reveal>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </>
             )}
+          </Container>
+
+          <SectionConnector color="skyblue" side="right" />
+        </section>
+
+        {/* ═══════════════ CTA SECTION ═══════════════ */}
+        <section className="relative py-24 md:py-32 bg-oxford-deep overflow-hidden z-40 sticky top-0">
+          <OrbitalBackground variant="cta" />
+
+          {/* Geometric decorations */}
+          <DotGrid className="top-12 left-12 text-skyblue/15" />
+          <DiagonalLines className="bottom-0 right-0 text-orange/10" />
+          <CrossMark className="absolute top-[18%] left-[22%] text-orange/12" size={16} />
+          <CrossMark className="absolute bottom-[20%] right-[18%] text-skyblue/10" size={14} />
+          <FloatingRule className="top-0 left-0 w-full" color="orange" dashed />
+
+          <Container className="relative z-10 text-center">
+            <Reveal>
+              <AccentLine color="orange" thickness="thick" width="w-16" className="mx-auto mb-8" />
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Don't See a Fit?
+              </h2>
+              <p className="text-iceblue/70 text-lg mb-8 max-w-2xl mx-auto">
+                We're always looking for exceptional talent. Reach out and tell
+                us about yourself -- the right role might be just around the corner.
+              </p>
+              <motion.a
+                href="mailto:careers@gr8qm.com"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-skyblue to-oxford text-white font-bold text-lg shadow-lg shadow-skyblue/20 hover:shadow-skyblue/40 transition-shadow duration-500 border border-oxford-border"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
+              >
+                Get in Touch
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
+            </Reveal>
           </Container>
         </section>
 
-        {/* ========== BOTTOM CTA / MARQUEE ========== */}
-        <section className="relative py-20 border-t border-white/5">
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-skyblue/5 blur-[120px]"
-              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 6, repeat: Infinity }}
-            />
-          </div>
-
-          <div className="relative z-10">
-            <MarqueeText
-              text="JOIN US  ///  INNOVATE  ///  CREATE  ///  BUILD  ///  GROW"
-              speed={25}
-              className="text-7xl md:text-8xl lg:text-9xl font-black text-white/[0.03] uppercase mb-12"
-              reverse
-            />
-
-            <Container className="text-center">
-              <RevealOnScroll direction="up" delay={0.2}>
-                <p className="text-white/40 text-lg max-w-xl mx-auto mb-8">
-                  Don't see a role that fits? We're always looking for
-                  exceptional talent. Reach out and tell us about yourself.
-                </p>
-              </RevealOnScroll>
-              <RevealOnScroll direction="up" delay={0.4}>
-                <MagneticButton strength={20}>
-                  <motion.a
-                    href="mailto:careers@gr8qm.com"
-                    className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-skyblue to-oxford text-white font-bold text-lg shadow-lg shadow-skyblue/20 hover:shadow-skyblue/40 transition-shadow duration-500"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Get in Touch
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.a>
-                </MagneticButton>
-              </RevealOnScroll>
-            </Container>
-          </div>
-        </section>
-
-        {/* ========== JOB DETAIL MODAL ========== */}
+        {/* ═══════════════ JOB DETAIL MODAL ═══════════════ */}
         {selectedJob && (
           <JobDetailModal
             job={selectedJob}
@@ -603,7 +563,7 @@ const Careers: React.FC = () => {
             onClose={() => setSelectedJob(null)}
           />
         )}
-      </div>
+      </main>
     </PageTransition>
   );
 };

@@ -1,260 +1,172 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import Modal from "./Modal";
-import ApplicationForm from "../ApplicationForm";
-import CloudinaryImage from "../../utils/cloudinaryImage";
 import Container from "./Container";
-import MagneticButton from "../animations/MagneticButton";
+import CloudinaryImage from "../../utils/cloudinaryImage";
 
-interface NavItem {
-  label: string;
-  path?: string;
-  dropdownLinks?: NavItem[];
-  onClick?: () => void;
-}
-
-interface HeaderProps {
-  navLinks?: NavItem[];
-  logo?: {
-    imageKey: string;
-    alt: string;
-    className?: string;
-  };
-  ctaButton?: {
-    label: string;
-    onClick?: () => void;
-  };
-  stickyHeader?: boolean;
-  showModal?: boolean;
-  modalContent?: React.ReactNode;
-}
-
-const defaultNavLinks: NavItem[] = [
-  { label: "About", path: "/about" },
+const navLinks = [
+  { label: "About", path: "/new/about" },
   {
     label: "Services",
-    dropdownLinks: [
-      { label: "Design & Build", path: "/services/design-build" },
-      { label: "Print Shop", path: "/services/print-shop" },
-      { label: "Tech Training", path: "/services/tech-training" },
+    children: [
+      { label: "Design & Build", path: "/new/services/design-build" },
+      { label: "Print Shop", path: "/new/services/print-shop" },
+      { label: "Tech Training", path: "/new/services/tech-training" },
     ],
   },
-  { label: "Portfolio", path: "/portfolio" },
-  { label: "Blog", path: "/blog" },
-  { label: "Careers", path: "/careers" },
+  { label: "Portfolio", path: "/new/portfolio" },
+  { label: "Blog", path: "/new/blog" },
+  { label: "Careers", path: "/new/careers" },
 ];
 
-const defaultLogo = {
-  imageKey: "verticalLogo",
-  alt: "Gr8QM Logo",
-  className: "w-20 lg:w-24",
-};
-
-const defaultCtaButton: HeaderProps["ctaButton"] = {
-  label: "Let's Talk",
-};
-
-const Header: React.FC<HeaderProps> = ({
-  navLinks = defaultNavLinks,
-  logo = defaultLogo,
-  ctaButton = defaultCtaButton,
-  stickyHeader = true,
-  showModal = true,
-  modalContent,
-}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<number | null>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-  const dropdownButtonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+const Header: React.FC = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
   const location = useLocation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { scrollY } = useScroll();
-  const lastScrollY = useRef(0);
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const diff = latest - lastScrollY.current;
-    if (diff > 10 && latest > 100) {
-      setIsHidden(true);
-    } else if (diff < -5) {
-      setIsHidden(false);
-    }
-    setIsScrolled(latest > 50);
-    lastScrollY.current = latest;
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const diff = y - lastY.current;
+    if (diff > 10 && y > 100) setHidden(true);
+    else if (diff < -5) setHidden(false);
+    setScrolled(y > 50);
+    lastY.current = y;
   });
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsDropdownOpen(null);
+    setMobileOpen(false);
+    setDropdownOpen(null);
   }, [location.pathname]);
 
-  // Close on Escape
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMobileMenuOpen(false);
-        setIsDropdownOpen(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        setDropdownOpen(null);
       }
     };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isDropdownOpen !== null) {
-        const dropdownRef = dropdownRefs.current.get(isDropdownOpen);
-        const buttonRef = dropdownButtonRefs.current.get(isDropdownOpen);
-        if (
-          dropdownRef &&
-          !dropdownRef.contains(event.target as Node) &&
-          buttonRef &&
-          !buttonRef.contains(event.target as Node)
-        ) {
-          setIsDropdownOpen(null);
-        }
+    const onClick = (e: MouseEvent) => {
+      if (dropdownOpen !== null && dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(null);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isDropdownOpen]);
-
-  const toggleDropdown = (index: number) => {
-    setIsDropdownOpen(isDropdownOpen === index ? null : index);
-  };
-
-  const setDropdownRef = (index: number, element: HTMLDivElement | null) => {
-    if (element) dropdownRefs.current.set(index, element);
-    else dropdownRefs.current.delete(index);
-  };
-
-  const setDropdownButtonRef = (index: number, element: HTMLButtonElement | null) => {
-    if (element) dropdownButtonRefs.current.set(index, element);
-    else dropdownButtonRefs.current.delete(index);
-  };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [dropdownOpen]);
 
   const isActive = (path?: string) => {
     if (!path) return false;
-    if (path === "/") return location.pathname === "/";
-    return location.pathname.startsWith(path);
+    return location.pathname === path || location.pathname.startsWith(path + "/");
   };
 
   return (
     <>
       <motion.nav
         initial={{ y: -100 }}
-        animate={{
-          y: isHidden && !isMobileMenuOpen ? -100 : 0,
-        }}
-        transition={{ duration: 0.4, ease: [0.22, 0.6, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "py-2 bg-light/80 dark:bg-dark/80 backdrop-blur-xl shadow-[0_1px_0_rgba(0,152,218,0.1)]"
-            : "py-4 bg-transparent"
+        animate={{ y: hidden && !mobileOpen ? -100 : 0 }}
+        transition={{ duration: 0.4, ease: [0.22, 0.6, 0.36, 1] as [number, number, number, number] }}
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+          scrolled
+            ? "py-3 backdrop-blur-xl bg-oxford-deep/90 shadow-[0_1px_0_rgba(0,152,218,0.08)]"
+            : "py-5 bg-transparent"
         }`}
+        role="navigation"
+        aria-label="Main navigation"
       >
         <Container className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/" aria-label="Homepage" className="relative z-10">
+          <Link to="/new" aria-label="Gr8QM homepage" className="relative z-10">
             <motion.div
               whileHover={{ scale: 1.05, rotate: -2 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
             >
               <CloudinaryImage
-                imageKey="verticalLogo"
-                className={logo.className}
-                alt={logo.alt}
+                imageKey="verticalLogoInvert"
+                className="w-20 lg:w-24"
+                alt="Gr8QM Technovates"
               />
             </motion.div>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
-            {navLinks.map((item, index) =>
+          {/* Desktop Nav — minimal, spaced */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((item, i) =>
               item.path ? (
-                <MagneticButton key={item.label} strength={0.15}>
-                  <Link
-                    to={item.path}
-                    className="relative px-4 py-2 group"
+                <Link
+                  key={item.label}
+                  to={item.path}
+                  className="relative px-4 py-2 group"
+                >
+                  <span
+                    className={`text-[13px] font-medium tracking-wide uppercase transition-colors duration-300 ${
+                      isActive(item.path) ? "text-skyblue" : "text-iceblue/70 hover:text-white"
+                    }`}
                   >
-                    <span
-                      className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                        isActive(item.path)
-                          ? "text-skyblue"
-                          : "text-oxford hover:text-skyblue"
-                      }`}
-                    >
-                      {item.label}
-                    </span>
+                    {item.label}
+                  </span>
+                  {isActive(item.path) && (
                     <motion.span
-                      className="absolute bottom-0 left-1/2 h-[2px] bg-skyblue rounded-full"
-                      initial={false}
-                      animate={{
-                        width: isActive(item.path) ? "60%" : "0%",
-                        x: "-50%",
-                      }}
-                      whileHover={{ width: "60%", x: "-50%" }}
-                      transition={{ duration: 0.3, ease: [0.22, 0.6, 0.36, 1] }}
+                      layoutId="nav-active"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-skyblue"
+                      transition={{ type: "spring" as const, stiffness: 400, damping: 30 }}
                     />
-                  </Link>
-                </MagneticButton>
+                  )}
+                </Link>
               ) : (
-                <div key={item.label} className="relative">
-                  <MagneticButton strength={0.15}>
-                    <button
-                      ref={(el) => setDropdownButtonRef(index, el)}
-                      onClick={() => toggleDropdown(index)}
-                      className="flex items-center gap-1 px-4 py-2 text-sm font-medium tracking-wide text-oxford hover:text-skyblue transition-colors duration-300"
-                      aria-expanded={isDropdownOpen === index}
-                      aria-haspopup="true"
+                <div key={item.label} className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setDropdownOpen(dropdownOpen === i ? null : i)}
+                    className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium tracking-wide uppercase text-iceblue/70 hover:text-white transition-colors duration-300"
+                    aria-expanded={dropdownOpen === i}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <motion.svg
+                      animate={{ rotate: dropdownOpen === i ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="w-3 h-3 opacity-50"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                     >
-                      {item.label}
-                      <motion.svg
-                        animate={{ rotate: isDropdownOpen === index ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="w-3.5 h-3.5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </motion.svg>
-                    </button>
-                  </MagneticButton>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </motion.svg>
+                  </button>
 
                   <AnimatePresence>
-                    {isDropdownOpen === index && item.dropdownLinks && (
+                    {dropdownOpen === i && item.children && (
                       <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: [0.22, 0.6, 0.36, 1] }}
-                        ref={(el) => setDropdownRef(index, el)}
-                        className="absolute left-0 mt-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-gray-100/50 dark:border-gray-800/50 py-2 overflow-hidden"
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.2, ease: [0.22, 0.6, 0.36, 1] as [number, number, number, number] }}
+                        className="absolute left-0 mt-2 w-52 rounded-xl overflow-hidden border border-oxford-border bg-oxford-card/95 backdrop-blur-xl shadow-2xl"
                         role="menu"
                       >
-                        {item.dropdownLinks.map((dropdownItem, di) => (
+                        {item.children.map((child, ci) => (
                           <motion.div
-                            key={dropdownItem.label}
-                            initial={{ opacity: 0, x: -10 }}
+                            key={child.label}
+                            initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: di * 0.05 }}
+                            transition={{ delay: ci * 0.04 }}
                           >
                             <Link
-                              to={dropdownItem.path || "#"}
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-oxford hover:bg-skyblue/5 hover:text-skyblue transition-all duration-200 group"
-                              onClick={() => setIsDropdownOpen(null)}
+                              to={child.path}
+                              onClick={() => setDropdownOpen(null)}
+                              className="flex items-center gap-3 px-4 py-3 text-sm text-iceblue/70 hover:text-white hover:bg-skyblue/5 transition-all duration-200 group"
                               role="menuitem"
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-skyblue/30 group-hover:bg-skyblue group-hover:scale-150 transition-all duration-200" />
-                              {dropdownItem.label}
+                              <span className="w-1 h-1 rounded-full bg-skyblue/30 group-hover:bg-skyblue group-hover:scale-150 transition-all duration-200" />
+                              {child.label}
                             </Link>
                           </motion.div>
                         ))}
@@ -266,178 +178,143 @@ const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <MagneticButton strength={0.2}>
-              <Link
-                to="/contact"
-                className="group relative inline-flex items-center gap-2 px-6 py-2.5 bg-oxford text-white text-sm font-medium rounded-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-skyblue/20"
-                data-cursor="view"
+          {/* CTA */}
+          <div className="hidden lg:block">
+            <Link
+              to="/new/contact"
+              className="group relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
+            >
+              <span className="relative z-10">Let's Talk</span>
+              <motion.span
+                className="relative z-10 text-skyblue"
+                animate={{ x: [0, 3, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden="true"
               >
-                <span className="relative z-10">{ctaButton.label}</span>
-                <motion.span
-                  className="relative z-10"
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  →
-                </motion.span>
-                <span className="absolute inset-0 bg-skyblue transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
-              </Link>
-            </MagneticButton>
+                →
+              </motion.span>
+              <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+            </Link>
           </div>
 
-          {/* Mobile Hamburger */}
+          {/* Mobile burger */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMobileMenuOpen}
-            className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            className="lg:hidden relative z-[110] w-10 h-10 flex flex-col items-center justify-center gap-1.5"
           >
             <motion.span
-              animate={{
-                rotate: isMobileMenuOpen ? 45 : 0,
-                y: isMobileMenuOpen ? 6 : 0,
-              }}
-              className="block w-6 h-0.5 bg-oxford origin-center"
+              animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 6 : 0, backgroundColor: mobileOpen ? "#0098da" : "#c9ebfb" }}
+              className="block w-6 h-0.5 origin-center"
             />
             <motion.span
-              animate={{
-                opacity: isMobileMenuOpen ? 0 : 1,
-                scaleX: isMobileMenuOpen ? 0 : 1,
-              }}
-              className="block w-6 h-0.5 bg-oxford"
+              animate={{ opacity: mobileOpen ? 0 : 1, scaleX: mobileOpen ? 0 : 1 }}
+              className="block w-6 h-0.5 bg-iceblue"
             />
             <motion.span
-              animate={{
-                rotate: isMobileMenuOpen ? -45 : 0,
-                y: isMobileMenuOpen ? -6 : 0,
-              }}
-              className="block w-6 h-0.5 bg-oxford origin-center"
+              animate={{ rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -6 : 0, backgroundColor: mobileOpen ? "#0098da" : "#c9ebfb" }}
+              className="block w-6 h-0.5 origin-center"
             />
           </button>
         </Container>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              ref={mobileMenuRef}
-              initial={{ opacity: 0, clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
-              animate={{ opacity: 1, clipPath: "circle(150% at calc(100% - 40px) 40px)" }}
-              exit={{ opacity: 0, clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
-              transition={{ duration: 0.5, ease: [0.22, 0.6, 0.36, 1] }}
-              className="md:hidden fixed inset-0 bg-light/98 dark:bg-dark/98 backdrop-blur-2xl z-40 flex flex-col justify-center px-8"
-              role="menu"
-              aria-label="Mobile navigation"
-              id="mobile-menu"
-            >
-              <div className="space-y-2">
-                {navLinks.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + index * 0.08, ease: [0.22, 0.6, 0.36, 1] }}
-                  >
-                    {item.path ? (
-                      <Link
-                        to={item.path}
-                        className={`block text-3xl font-bold py-3 transition-colors hover:text-skyblue ${
-                          isActive(item.path) ? "text-skyblue" : "text-oxford"
-                        }`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        role="menuitem"
-                      >
-                        <span className="text-skyblue/30 text-sm font-mono mr-3">
-                          0{index + 1}
-                        </span>
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <div>
-                        <button
-                          onClick={() => toggleDropdown(index)}
-                          className="flex items-center gap-3 text-3xl font-bold py-3 text-oxford hover:text-skyblue transition-colors w-full"
-                          aria-expanded={isDropdownOpen === index}
-                        >
-                          <span className="text-skyblue/30 text-sm font-mono mr-1">
-                            0{index + 1}
-                          </span>
-                          {item.label}
-                          <motion.svg
-                            animate={{ rotate: isDropdownOpen === index ? 180 : 0 }}
-                            className="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </motion.svg>
-                        </button>
-                        <AnimatePresence>
-                          {isDropdownOpen === index && item.dropdownLinks && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden ml-12"
-                            >
-                              <div className="space-y-1 border-l-2 border-skyblue/30 pl-4 py-2">
-                                {item.dropdownLinks.map((dropdownItem) => (
-                                  <Link
-                                    key={dropdownItem.label}
-                                    to={dropdownItem.path || "#"}
-                                    className="block text-lg text-gray-2 hover:text-skyblue transition-colors py-2"
-                                    onClick={() => {
-                                      setIsMobileMenuOpen(false);
-                                      setIsDropdownOpen(null);
-                                    }}
-                                    role="menuitem"
-                                  >
-                                    {dropdownItem.label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="mt-12"
-              >
-                <Link
-                  to="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-oxford text-white text-lg font-medium rounded-full"
-                >
-                  {ctaButton.label} →
-                </Link>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
 
-      {/* Spacer for fixed nav */}
-      <div className={stickyHeader ? "h-20" : ""} />
+      {/* Mobile fullscreen menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[99] bg-oxford-deep/98 backdrop-blur-2xl flex flex-col justify-center px-8 lg:hidden"
+            role="menu"
+            aria-label="Mobile navigation"
+          >
+            {/* Geometric decoration */}
+            <div className="absolute top-20 right-8 w-32 h-32 border border-skyblue/10 rounded-full" aria-hidden="true" />
+            <div className="absolute bottom-20 left-8 w-20 h-20 border border-orange/10 rotate-45" aria-hidden="true" />
 
-      {/* Modal */}
-      {showModal && (
-        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {modalContent || (
-            <ApplicationForm onClose={() => setIsModalOpen(false)} />
-          )}
-        </Modal>
-      )}
+            <div className="space-y-1">
+              {navLinks.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 + i * 0.06, ease: [0.22, 0.6, 0.36, 1] as [number, number, number, number] }}
+                >
+                  {item.path ? (
+                    <Link
+                      to={item.path}
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-baseline gap-4 py-3 transition-colors ${
+                        isActive(item.path) ? "text-skyblue" : "text-white hover:text-skyblue"
+                      }`}
+                      role="menuitem"
+                    >
+                      <span className="text-skyblue/30 text-xs font-mono w-6">0{i + 1}</span>
+                      <span className="text-3xl font-black tracking-tight">{item.label}</span>
+                    </Link>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => setDropdownOpen(dropdownOpen === i ? null : i)}
+                        className="flex items-baseline gap-4 py-3 text-white hover:text-skyblue transition-colors w-full"
+                        aria-expanded={dropdownOpen === i}
+                      >
+                        <span className="text-skyblue/30 text-xs font-mono w-6">0{i + 1}</span>
+                        <span className="text-3xl font-black tracking-tight">{item.label}</span>
+                        <motion.svg animate={{ rotate: dropdownOpen === i ? 180 : 0 }} className="w-4 h-4 ml-auto opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </motion.svg>
+                      </button>
+                      <AnimatePresence>
+                        {dropdownOpen === i && item.children && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden pl-10"
+                          >
+                            {item.children.map((child) => (
+                              <Link
+                                key={child.label}
+                                to={child.path}
+                                onClick={() => setMobileOpen(false)}
+                                className="block py-2 text-lg text-iceblue/60 hover:text-skyblue transition-colors"
+                                role="menuitem"
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mobile CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-12"
+            >
+              <Link
+                to="/new/contact"
+                onClick={() => setMobileOpen(false)}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-skyblue text-white font-medium rounded-full text-lg"
+              >
+                Let's Talk →
+              </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

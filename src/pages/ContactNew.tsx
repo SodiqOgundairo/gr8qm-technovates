@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { supabase } from "../utils/supabase";
 import Container from "../components/layout/Container";
 import Button from "../components/common/Button";
-import Input from "../components/common/Input";
 import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
-import RevealOnScroll from "../components/animations/RevealOnScroll";
-import SplitText from "../components/animations/SplitText";
-import Scene3D from "../components/animations/Scene3D";
-import MagneticButton from "../components/animations/MagneticButton";
 import MarqueeText from "../components/animations/MarqueeText";
+import MagneticButton from "../components/animations/MagneticButton";
+import OrbitalBackground from "../components/animations/OrbitalBackground";
+import {
+  Reveal,
+  DotGrid,
+  DiagonalLines,
+  CrossMark,
+  AccentLine,
+  FloatingRule,
+  SectionConnector,
+} from "../components/animations/DesignElements";
 import {
   SendIcon,
   MailIcon,
@@ -21,36 +27,10 @@ import {
   SparklesIcon,
 } from "../components/icons";
 
-/* ───────── floating orb component ───────── */
-const FloatingOrb = ({
-  size,
-  color,
-  top,
-  left,
-  delay = 0,
-}: {
-  size: string;
-  color: string;
-  top: string;
-  left: string;
-  delay?: number;
-}) => (
-  <motion.div
-    className={`absolute rounded-full blur-3xl pointer-events-none ${size} ${color}`}
-    style={{ top, left }}
-    animate={{
-      y: [0, -30, 0, 20, 0],
-      x: [0, 15, -10, 5, 0],
-      scale: [1, 1.1, 0.95, 1.05, 1],
-    }}
-    transition={{
-      duration: 12,
-      repeat: Infinity,
-      ease: "easeInOut",
-      delay,
-    }}
-  />
-);
+/* ───────── spring + ease constants ───────── */
+const SPRING_SNAPPY = { type: "spring" as const, stiffness: 300, damping: 22 };
+const SPRING_SOFT = { type: "spring" as const, stiffness: 200, damping: 24 };
+const EASE_SMOOTH: [number, number, number, number] = [0.22, 0.6, 0.36, 1];
 
 /* ───────── animated form field wrapper ───────── */
 const AnimatedField = ({
@@ -67,12 +47,36 @@ const AnimatedField = ({
     transition={{
       duration: 0.5,
       delay: 0.1 + index * 0.1,
-      ease: [0.22, 0.6, 0.36, 1],
+      ease: EASE_SMOOTH,
     }}
     whileHover={{ scale: 1.01 }}
   >
     {children}
   </motion.div>
+);
+
+/* ───────── dark input component ───────── */
+const DarkInput: React.FC<{
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  required?: boolean;
+}> = ({ label, type = "text", value, onChange, placeholder, required }) => (
+  <div className="flex flex-col gap-2 w-full">
+    <label className="text-sm font-medium text-iceblue/70">{label}</label>
+    <motion.input
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      required={required}
+      className="w-full rounded-xl border bg-oxford-card border-oxford-border text-white placeholder:text-iceblue/30 focus:border-skyblue focus:shadow-[0_0_20px_rgba(0,152,218,0.15)] outline-none transition-all duration-300 px-5 py-4 text-lg"
+      whileFocus={{ scale: 1.01 }}
+      transition={SPRING_SNAPPY}
+    />
+  </div>
 );
 
 const ContactPage: React.FC = () => {
@@ -83,10 +87,6 @@ const ContactPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [hp, setHp] = useState("");
-
-  const { scrollYProgress } = useScroll();
-  const heroParallax = useTransform(scrollYProgress, [0, 0.3], [0, -80]);
-  const orbParallax = useTransform(scrollYProgress, [0, 0.5], [0, -120]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,173 +155,139 @@ const ContactPage: React.FC = () => {
         title="Contact Us"
         description="Get in touch with Gr8QM Technovates. We'd love to hear from you. Whether it's partnerships, services, or questions—send us a message."
       />
-      <main className="flex flex-col overflow-hidden">
+      <main className="flex flex-col">
         {/* ════════════════════ HERO SECTION ════════════════════ */}
-        <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden">
-          {/* Scene3D background */}
-          <Scene3D variant="hero" />
+        <section className="relative min-h-[80vh] md:min-h-[90vh] flex items-center justify-center bg-oxford-deep sticky top-0 z-[10] overflow-hidden">
+          <OrbitalBackground variant="hero" />
 
-          {/* Noise overlay */}
-          <div className="noise-overlay" />
-
-          {/* Floating gradient orbs */}
-          <motion.div style={{ y: orbParallax }} className="absolute inset-0">
-            <FloatingOrb
-              size="w-72 h-72"
-              color="bg-skyblue/20"
-              top="10%"
-              left="5%"
-              delay={0}
-            />
-            <FloatingOrb
-              size="w-96 h-96"
-              color="bg-orange/15"
-              top="40%"
-              left="70%"
-              delay={2}
-            />
-            <FloatingOrb
-              size="w-64 h-64"
-              color="bg-iceblue/25"
-              top="60%"
-              left="20%"
-              delay={4}
-            />
-          </motion.div>
+          {/* Geometric decorations */}
+          <DotGrid className="top-12 left-8 text-iceblue/20 w-40 h-40" />
+          <DiagonalLines className="bottom-16 right-0 text-skyblue/10 w-72 h-72" />
+          <CrossMark className="absolute top-[18%] right-[12%] text-orange/20" size={14} />
+          <CrossMark className="absolute bottom-[22%] left-[8%] text-skyblue/20" size={10} />
+          <FloatingRule className="top-1/3 left-0 w-full" color="skyblue" dashed />
 
           {/* Hero content */}
-          <motion.div
-            style={{ y: heroParallax }}
-            className="relative z-10 text-center px-4"
-          >
-            <RevealOnScroll direction="scale" delay={0.1}>
+          <div className="relative z-10 text-center px-4">
+            <Reveal direction="down" delay={0.1}>
               <motion.div
-                className="glass-card inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8 bg-oxford-card/60 border border-oxford-border backdrop-blur-sm"
                 whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={SPRING_SNAPPY}
               >
                 <SparklesIcon size={16} className="text-orange" />
-                <span className="text-sm font-medium text-oxford">
+                <span className="text-sm font-medium text-iceblue/70">
                   We're ready when you are
                 </span>
               </motion.div>
-            </RevealOnScroll>
+            </Reveal>
 
-            <SplitText
-              as="h1"
-              className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight"
-              type="words"
-              stagger={0.08}
-              delay={0.2}
-            >
-              Let's build
-            </SplitText>
+            <Reveal delay={0.2}>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white">
+                Let's build
+              </h1>
+            </Reveal>
 
-            <div className="mt-2 md:mt-4">
-              <SplitText
-                as="h1"
-                className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight gradient-text"
-                type="words"
-                stagger={0.08}
-                delay={0.5}
-              >
+            <Reveal delay={0.35}>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight gradient-text mt-2 md:mt-4">
                 something great.
-              </SplitText>
-            </div>
+              </h1>
+            </Reveal>
 
-            <RevealOnScroll direction="up" delay={0.8}>
-              <p className="text-dark/70 text-lg md:text-xl max-w-[600px] mx-auto mt-6 md:mt-8">
+            <Reveal delay={0.5}>
+              <p className="text-iceblue/70 text-lg md:text-xl max-w-[600px] mx-auto mt-6 md:mt-8">
                 Have a project in mind? Need a quote? Just want to say hi? Drop
                 us a line and we'll get back to you within 24 hours.
               </p>
-            </RevealOnScroll>
+            </Reveal>
 
-            <RevealOnScroll direction="up" delay={1}>
-              <MagneticButton strength={20} className="inline-block mt-8">
+            <Reveal delay={0.65}>
+              <AccentLine color="skyblue" thickness="medium" width="w-16" className="mx-auto mt-8 mb-8" />
+            </Reveal>
+
+            <Reveal delay={0.7}>
+              <MagneticButton strength={20} className="inline-block">
                 <motion.a
                   href="#contact-form"
-                  className="inline-flex items-center gap-2 bg-oxford text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-skyblue transition-colors duration-300"
+                  className="inline-flex items-center gap-2 bg-skyblue text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-skyblue/90 transition-colors duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  transition={SPRING_SNAPPY}
                 >
                   <SendIcon size={20} />
                   Start a Conversation
                 </motion.a>
               </MagneticButton>
-            </RevealOnScroll>
-          </motion.div>
+            </Reveal>
+          </div>
+
+          {/* Section connector */}
+          <SectionConnector color="skyblue" side="center" />
 
           {/* Bottom gradient fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-light to-transparent z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-oxford-deep to-transparent z-10 pointer-events-none" />
         </section>
 
         {/* ════════════════════ MARQUEE DIVIDER ════════════════════ */}
-        <div className="bg-light py-6 border-y border-gray-100">
+        <section className="bg-oxford-deep py-6 border-y border-oxford-border sticky top-0 z-[20] overflow-hidden">
           <MarqueeText
             text="LET'S CONNECT — GET IN TOUCH — WE'D LOVE TO HEAR FROM YOU — YOUR VISION, OUR EXPERTISE"
             speed={30}
-            className="text-3xl md:text-4xl font-black text-oxford/8 uppercase tracking-widest"
+            className="text-3xl md:text-4xl font-black text-iceblue/8 uppercase tracking-widest"
           />
-        </div>
+        </section>
 
         {/* ════════════════════ CONTACT FORM + DETAILS ════════════════════ */}
         <section
           id="contact-form"
-          className="relative py-20 md:py-32 bg-light"
+          className="relative py-20 md:py-32 bg-oxford-deep sticky top-0 z-[30] overflow-hidden"
         >
-          {/* Background orbs */}
-          <FloatingOrb
-            size="w-80 h-80"
-            color="bg-skyblue/10"
-            top="20%"
-            left="-10%"
-            delay={1}
-          />
-          <FloatingOrb
-            size="w-60 h-60"
-            color="bg-orange/10"
-            top="60%"
-            left="85%"
-            delay={3}
-          />
+          {/* Geometric decorations */}
+          <DotGrid className="top-20 right-12 text-iceblue/10 w-48 h-48" />
+          <DiagonalLines className="bottom-0 left-0 text-orange/6 w-64 h-64" thick />
+          <CrossMark className="absolute top-[10%] left-[5%] text-skyblue/15" size={12} />
+          <CrossMark className="absolute bottom-[15%] right-[8%] text-orange/15" size={16} />
+          <FloatingRule className="top-0 left-0 w-full" color="orange" dashed />
 
           <Container className="relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
               {/* ── LEFT: Contact Form (3 cols) ── */}
               <div className="lg:col-span-3">
-                <RevealOnScroll direction="left" delay={0.1}>
+                <Reveal direction="left" delay={0.1}>
                   <div className="mb-2">
                     <span className="text-skyblue font-semibold text-sm uppercase tracking-widest">
                       Send a Message
                     </span>
                   </div>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="left" delay={0.2}>
-                  <h2 className="text-3xl md:text-5xl font-black text-oxford mb-3">
+                <Reveal direction="left" delay={0.2}>
+                  <h2 className="text-3xl md:text-5xl font-black text-white mb-3">
                     Tell us about{" "}
                     <span className="gradient-text">your project</span>
                   </h2>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="up" delay={0.3}>
-                  <p className="text-dark/60 mb-8 max-w-lg">
+                <Reveal direction="up" delay={0.3}>
+                  <p className="text-iceblue/70 mb-4 max-w-lg">
                     Fill out the form below and our team will get back to you
                     within 24 hours. Every message matters to us.
                   </p>
-                </RevealOnScroll>
+                  <AccentLine color="skyblue" thickness="thin" width="w-24" className="mb-8" />
+                </Reveal>
 
                 {/* Status messages */}
                 {success && (
                   <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="glass-card bg-green-50/80 border border-green-200 p-4 rounded-xl mb-6 flex items-center gap-3"
+                    transition={{ ease: EASE_SMOOTH, duration: 0.5 }}
+                    className="bg-green-900/30 border border-green-500/30 p-4 rounded-xl mb-6 flex items-center gap-3 backdrop-blur-sm"
                   >
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                      <ShieldCheckIcon size={18} className="text-green-600" />
+                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                      <ShieldCheckIcon size={18} className="text-green-400" />
                     </div>
-                    <p className="text-green-700 font-medium">
+                    <p className="text-green-300 font-medium">
                       Message sent successfully! We'll be in touch soon.
                     </p>
                   </motion.div>
@@ -330,20 +296,21 @@ const ContactPage: React.FC = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="glass-card bg-red-50/80 border border-red-200 p-4 rounded-xl mb-6"
+                    transition={{ ease: EASE_SMOOTH, duration: 0.5 }}
+                    className="bg-red-900/30 border border-red-500/30 p-4 rounded-xl mb-6 backdrop-blur-sm"
                   >
-                    <p className="text-red-600 font-medium">{error}</p>
+                    <p className="text-red-300 font-medium">{error}</p>
                   </motion.div>
                 )}
 
                 {/* Form */}
                 <motion.form
                   onSubmit={handleSubmit}
-                  className="glass-card rounded-2xl p-6 md:p-8 space-y-5 border border-white/40"
+                  className="rounded-2xl p-6 md:p-8 space-y-5 bg-oxford-card/50 border border-oxford-border backdrop-blur-sm"
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: 0.3 }}
+                  transition={{ duration: 0.7, delay: 0.3, ease: EASE_SMOOTH }}
                 >
                   {/* Honeypot */}
                   <input
@@ -357,48 +324,40 @@ const ContactPage: React.FC = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <AnimatedField index={0}>
-                      <Input
-                        showLabel
-                        labelText="Full Name"
+                      <DarkInput
+                        label="Full Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
                         placeholder="John Doe"
-                        inputSize="lg"
                       />
                     </AnimatedField>
 
                     <AnimatedField index={1}>
-                      <Input
-                        showLabel
-                        labelText="Email Address"
+                      <DarkInput
+                        label="Email Address"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder="john@example.com"
-                        inputSize="lg"
                       />
                     </AnimatedField>
                   </div>
 
                   <AnimatedField index={2}>
                     <div className="flex flex-col gap-2 w-full">
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className="text-sm font-medium text-iceblue/70">
                         Message
                       </label>
                       <motion.textarea
-                        className="w-full rounded-xl border outline-none transition-all duration-300 text-start border-[var(--color-gray-1)] text-[var(--color-dark)] placeholder:text-[var(--color-gray-1)] focus:bg-[var(--color-iceblue)] focus:text-[var(--color-oxford)] focus:border-[var(--color-skyblue)] focus:shadow-[0_0_20px_rgba(0,152,218,0.15)] px-5 py-4 h-40 resize-none text-lg"
+                        className="w-full rounded-xl border bg-oxford-card border-oxford-border text-white placeholder:text-iceblue/30 focus:border-skyblue focus:shadow-[0_0_20px_rgba(0,152,218,0.15)] outline-none transition-all duration-300 px-5 py-4 h-40 resize-none text-lg"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         required
                         placeholder="Tell us about your project, goals, and timeline..."
                         whileFocus={{ scale: 1.01 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 20,
-                        }}
+                        transition={SPRING_SNAPPY}
                       />
                     </div>
                   </AnimatedField>
@@ -422,102 +381,97 @@ const ContactPage: React.FC = () => {
 
               {/* ── RIGHT: Contact Details (2 cols) ── */}
               <div className="lg:col-span-2 space-y-6">
-                <RevealOnScroll direction="right" delay={0.2}>
+                <Reveal direction="right" delay={0.2}>
                   <div className="mb-2">
                     <span className="text-orange font-semibold text-sm uppercase tracking-widest">
                       Contact Info
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-oxford mb-6">
+                  <h2 className="text-3xl md:text-4xl font-black text-white mb-6">
                     Get in touch<span className="text-skyblue">.</span>
                   </h2>
-                </RevealOnScroll>
+                </Reveal>
 
                 {/* Contact cards */}
-                <RevealOnScroll direction="right" delay={0.3}>
+                <Reveal direction="right" delay={0.3}>
                   <motion.a
                     href="mailto:hello@gr8qm.com"
-                    className="glass-card group flex items-center gap-4 p-5 rounded-2xl border border-white/40 hover:border-skyblue/30 transition-all duration-300 block"
-                    whileHover={{
-                      scale: 1.02,
-                      y: -4,
-                    }}
+                    className="group flex items-center gap-4 p-5 rounded-2xl border border-oxford-border bg-oxford-card/40 hover:border-skyblue/30 transition-all duration-300 block backdrop-blur-sm"
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={SPRING_SOFT}
                   >
                     <motion.div
-                      className="w-14 h-14 rounded-xl bg-gradient-to-br from-skyblue/20 to-iceblue flex items-center justify-center"
+                      className="w-14 h-14 rounded-xl bg-skyblue/10 border border-skyblue/20 flex items-center justify-center"
                       whileHover={{ rotate: 10 }}
                     >
                       <MailIcon size={24} className="text-skyblue" />
                     </motion.div>
                     <div>
-                      <p className="text-xs text-dark/50 font-medium uppercase tracking-wider">
+                      <p className="text-xs text-iceblue/40 font-medium uppercase tracking-wider">
                         Email
                       </p>
-                      <p className="text-oxford font-bold text-lg group-hover:text-skyblue transition-colors hover-line">
+                      <p className="text-white font-bold text-lg group-hover:text-skyblue transition-colors">
                         hello@gr8qm.com
                       </p>
                     </div>
                   </motion.a>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="right" delay={0.4}>
+                <Reveal direction="right" delay={0.4}>
                   <motion.a
                     href="tel:+2349013294248"
-                    className="glass-card group flex items-center gap-4 p-5 rounded-2xl border border-white/40 hover:border-orange/30 transition-all duration-300 block"
-                    whileHover={{
-                      scale: 1.02,
-                      y: -4,
-                    }}
+                    className="group flex items-center gap-4 p-5 rounded-2xl border border-oxford-border bg-oxford-card/40 hover:border-orange/30 transition-all duration-300 block backdrop-blur-sm"
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={SPRING_SOFT}
                   >
                     <motion.div
-                      className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange/20 to-orange/5 flex items-center justify-center"
+                      className="w-14 h-14 rounded-xl bg-orange/10 border border-orange/20 flex items-center justify-center"
                       whileHover={{ rotate: -10 }}
                     >
                       <PhoneIcon size={24} className="text-orange" />
                     </motion.div>
                     <div>
-                      <p className="text-xs text-dark/50 font-medium uppercase tracking-wider">
+                      <p className="text-xs text-iceblue/40 font-medium uppercase tracking-wider">
                         Phone
                       </p>
-                      <p className="text-oxford font-bold text-lg group-hover:text-orange transition-colors hover-line">
+                      <p className="text-white font-bold text-lg group-hover:text-orange transition-colors">
                         +234 901 329 4248
                       </p>
                     </div>
                   </motion.a>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="right" delay={0.5}>
+                <Reveal direction="right" delay={0.5}>
                   <motion.div
-                    className="glass-card flex items-center gap-4 p-5 rounded-2xl border border-white/40"
-                    whileHover={{
-                      scale: 1.02,
-                      y: -4,
-                    }}
+                    className="flex items-center gap-4 p-5 rounded-2xl border border-oxford-border bg-oxford-card/40 backdrop-blur-sm"
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={SPRING_SOFT}
                   >
                     <motion.div
-                      className="w-14 h-14 rounded-xl bg-gradient-to-br from-oxford/15 to-oxford/5 flex items-center justify-center"
+                      className="w-14 h-14 rounded-xl bg-iceblue/10 border border-iceblue/15 flex items-center justify-center"
                       whileHover={{ rotate: 10 }}
                     >
-                      <MapPinIcon size={24} className="text-oxford" />
+                      <MapPinIcon size={24} className="text-iceblue" />
                     </motion.div>
                     <div>
-                      <p className="text-xs text-dark/50 font-medium uppercase tracking-wider">
+                      <p className="text-xs text-iceblue/40 font-medium uppercase tracking-wider">
                         Location
                       </p>
-                      <p className="text-oxford font-bold text-lg">
+                      <p className="text-white font-bold text-lg">
                         Lagos, Nigeria
                       </p>
                     </div>
                   </motion.div>
-                </RevealOnScroll>
+                </Reveal>
 
                 {/* Trust indicators */}
-                <RevealOnScroll direction="up" delay={0.6}>
-                  <div className="glass-card rounded-2xl p-6 border border-white/40 mt-8 space-y-4">
-                    <h3 className="text-oxford font-bold text-lg flex items-center gap-2">
+                <Reveal direction="up" delay={0.6}>
+                  <div className="rounded-2xl p-6 border border-oxford-border bg-oxford-card/40 mt-8 space-y-4 backdrop-blur-sm">
+                    <h3 className="text-white font-bold text-lg flex items-center gap-2">
                       <ZapIcon size={20} className="text-orange" />
                       Why work with us
                     </h3>
+                    <AccentLine color="orange" thickness="thin" width="w-12" className="mb-2" />
                     {[
                       "24-hour response time guaranteed",
                       "50+ projects delivered successfully",
@@ -530,64 +484,61 @@ const ContactPage: React.FC = () => {
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.7 + i * 0.1 }}
+                        transition={{ delay: 0.7 + i * 0.1, ease: EASE_SMOOTH }}
                       >
                         <div className="w-2 h-2 rounded-full bg-skyblue shrink-0" />
-                        <span className="text-dark/70 text-sm">{item}</span>
+                        <span className="text-iceblue/70 text-sm">{item}</span>
                       </motion.div>
                     ))}
                   </div>
-                </RevealOnScroll>
+                </Reveal>
               </div>
             </div>
           </Container>
+
+          {/* Section connector */}
+          <SectionConnector color="orange" side="right" />
         </section>
 
-        {/* ════════════════════ LOCATION SECTION ════════════════════ */}
-        <section className="relative py-20 md:py-32 bg-oxford overflow-hidden">
-          {/* Background elements */}
-          <div className="noise-overlay" />
-          <FloatingOrb
-            size="w-96 h-96"
-            color="bg-skyblue/10"
-            top="10%"
-            left="60%"
-            delay={2}
-          />
-          <FloatingOrb
-            size="w-72 h-72"
-            color="bg-orange/8"
-            top="50%"
-            left="10%"
-            delay={0}
-          />
+        {/* ════════════════════ LOCATION SECTION (last — relative) ════════════════════ */}
+        <section className="relative py-20 md:py-32 bg-oxford-deep overflow-hidden">
+          <OrbitalBackground variant="section" />
+
+          {/* Geometric decorations */}
+          <DotGrid className="bottom-16 left-8 text-iceblue/10 w-44 h-44" />
+          <DiagonalLines className="top-8 right-4 text-skyblue/8 w-60 h-60" />
+          <CrossMark className="absolute top-[12%] left-[15%] text-orange/15" size={14} />
+          <CrossMark className="absolute bottom-[10%] right-[12%] text-skyblue/15" size={10} />
+          <FloatingRule className="bottom-1/4 left-0 w-full" color="iceblue" dashed />
+          <ConcentricCircles className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-skyblue/10" />
 
           <Container className="relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left: Location text */}
               <div>
-                <RevealOnScroll direction="left" delay={0.1}>
+                <Reveal direction="left" delay={0.1}>
                   <span className="text-skyblue font-semibold text-sm uppercase tracking-widest">
                     Our Base
                   </span>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="left" delay={0.2}>
+                <Reveal direction="left" delay={0.2}>
                   <h2 className="text-4xl md:text-6xl font-black text-white mt-3 mb-6">
                     Based in{" "}
                     <span className="gradient-text">Lagos, Nigeria</span>
                   </h2>
-                </RevealOnScroll>
+                </Reveal>
 
-                <RevealOnScroll direction="up" delay={0.3}>
-                  <p className="text-white/60 text-lg leading-relaxed mb-8 max-w-lg">
+                <Reveal direction="up" delay={0.3}>
+                  <p className="text-iceblue/70 text-lg leading-relaxed mb-4 max-w-lg">
                     Operating from the heart of Africa's largest tech ecosystem.
                     We serve clients globally while staying rooted in Nigeria's
                     vibrant innovation hub.
                   </p>
-                </RevealOnScroll>
+                  <AccentLine color="iceblue" thickness="medium" width="w-16" className="mb-8" />
+                </Reveal>
 
-                <RevealOnScroll direction="up" delay={0.4}>
+                <Reveal direction="up" delay={0.4}>
                   <div className="flex flex-wrap gap-3">
                     {[
                       "Remote-Friendly",
@@ -596,26 +547,26 @@ const ContactPage: React.FC = () => {
                     ].map((tag, i) => (
                       <motion.span
                         key={tag}
-                        className="glass-card px-4 py-2 rounded-full text-sm font-medium text-white/80 border border-white/10"
+                        className="px-4 py-2 rounded-full text-sm font-medium text-iceblue/70 border border-oxford-border bg-oxford-card/40 backdrop-blur-sm"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.5 + i * 0.1 }}
+                        transition={{ delay: 0.5 + i * 0.1, ease: EASE_SMOOTH }}
                         whileHover={{ scale: 1.05, borderColor: "rgba(0,152,218,0.4)" }}
                       >
                         {tag}
                       </motion.span>
                     ))}
                   </div>
-                </RevealOnScroll>
+                </Reveal>
               </div>
 
               {/* Right: Stylized map visual */}
-              <RevealOnScroll direction="right" delay={0.3}>
+              <Reveal direction="right" delay={0.3}>
                 <motion.div
-                  className="glass-card rounded-3xl p-8 md:p-10 border border-white/10 relative overflow-hidden"
+                  className="rounded-3xl p-8 md:p-10 border border-oxford-border bg-oxford-card/40 relative overflow-hidden backdrop-blur-sm"
                   whileHover={{ scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 200 }}
+                  transition={SPRING_SOFT}
                 >
                   {/* Decorative grid lines */}
                   <div className="absolute inset-0 opacity-10">
@@ -627,7 +578,7 @@ const ContactPage: React.FC = () => {
                         initial={{ scaleX: 0 }}
                         whileInView={{ scaleX: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.5 + i * 0.05, duration: 0.8 }}
+                        transition={{ delay: 0.5 + i * 0.05, duration: 0.8, ease: EASE_SMOOTH }}
                       />
                     ))}
                     {Array.from({ length: 8 }).map((_, i) => (
@@ -638,7 +589,7 @@ const ContactPage: React.FC = () => {
                         initial={{ scaleY: 0 }}
                         whileInView={{ scaleY: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.5 + i * 0.05, duration: 0.8 }}
+                        transition={{ delay: 0.5 + i * 0.05, duration: 0.8, ease: EASE_SMOOTH }}
                       />
                     ))}
                   </div>
@@ -658,7 +609,7 @@ const ContactPage: React.FC = () => {
                       transition={{
                         duration: 2.5,
                         repeat: Infinity,
-                        ease: "easeInOut",
+                        ease: [0.45, 0.05, 0.55, 0.95],
                       }}
                     >
                       <MapPinIcon size={36} className="text-white" />
@@ -668,12 +619,12 @@ const ContactPage: React.FC = () => {
                       <h3 className="text-white text-2xl font-bold mb-1">
                         Lagos, Nigeria
                       </h3>
-                      <p className="text-white/50">
+                      <p className="text-iceblue/40">
                         West Africa's Tech Capital
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-6 w-full pt-4 border-t border-white/10">
+                    <div className="grid grid-cols-3 gap-6 w-full pt-4 border-t border-oxford-border">
                       {[
                         { label: "Timezone", value: "WAT (GMT+1)" },
                         { label: "Languages", value: "EN" },
@@ -685,9 +636,9 @@ const ContactPage: React.FC = () => {
                           initial={{ opacity: 0, y: 10 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ delay: 0.8 + i * 0.1 }}
+                          transition={{ delay: 0.8 + i * 0.1, ease: EASE_SMOOTH }}
                         >
-                          <p className="text-white/40 text-xs uppercase tracking-wider">
+                          <p className="text-iceblue/30 text-xs uppercase tracking-wider">
                             {item.label}
                           </p>
                           <p className="text-white font-semibold mt-1">
@@ -698,18 +649,18 @@ const ContactPage: React.FC = () => {
                     </div>
                   </div>
                 </motion.div>
-              </RevealOnScroll>
+              </Reveal>
             </div>
           </Container>
         </section>
 
         {/* ════════════════════ BOTTOM CTA MARQUEE ════════════════════ */}
-        <div className="bg-light py-8">
+        <div className="bg-oxford-deep py-8 border-t border-oxford-border">
           <MarqueeText
             text="READY TO START? — DROP US A MESSAGE — LET'S CREATE TOGETHER — INNOVATION AWAITS"
             speed={25}
             reverse
-            className="text-4xl md:text-5xl font-black text-oxford/6 uppercase tracking-widest"
+            className="text-4xl md:text-5xl font-black text-iceblue/6 uppercase tracking-widest"
           />
         </div>
       </main>

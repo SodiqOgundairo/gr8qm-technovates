@@ -11,7 +11,6 @@ import {
   BadgeIcon,
   ShieldCheckIcon,
   ArrowRightIcon,
-  RocketIcon,
   TargetIcon,
   HandshakeIcon,
 } from "../components/icons";
@@ -22,56 +21,55 @@ import PageTransition from "../components/layout/PageTransition";
 import { getPageSEO } from "../utils/seo-config";
 import { generateBreadcrumbSchema } from "../utils/structured-data";
 
-import RevealOnScroll from "../components/animations/RevealOnScroll";
 import SplitText from "../components/animations/SplitText";
 import MarqueeText from "../components/animations/MarqueeText";
-import { ParallaxLayer } from "../components/animations/ParallaxSection";
-import Scene3D from "../components/animations/Scene3D";
 import AnimatedCounter from "../components/animations/AnimatedCounter";
-import MagneticButton from "../components/animations/MagneticButton";
-import GlowCard from "../components/animations/GlowCard";
+import OrbitalBackground from "../components/animations/OrbitalBackground";
+import {
+  Reveal,
+  DotGrid,
+  DiagonalLines,
+  CrossMark,
+  AccentLine,
+  FloatingRule,
+  SectionConnector,
+} from "../components/animations/DesignElements";
 
 const coreValues = [
   {
     icon: <HeartIcon size={28} className="text-skyblue" />,
     title: "Purpose First",
     desc: "We start with why. Every project begins with understanding the real problem before reaching for solutions.",
-    glowColor: "rgba(0, 152, 218, 0.2)",
     number: "01",
   },
   {
     icon: <BulbIcon size={28} className="text-orange" />,
     title: "Relentless Craft",
     desc: "We obsess over the details. The spacing, the transitions, the edge cases. Because good enough isn't.",
-    glowColor: "rgba(245, 134, 52, 0.2)",
     number: "02",
   },
   {
     icon: <UserIcon size={28} className="text-skyblue" />,
     title: "Inclusive Growth",
     desc: "We build systems that leave no one behind. Our training programs are designed for people from every background.",
-    glowColor: "rgba(0, 152, 218, 0.2)",
     number: "03",
   },
   {
     icon: <BadgeIcon size={28} className="text-oxford" />,
     title: "Excellence as Standard",
     desc: "We don't have a 'premium tier.' The standard is premium. Every client gets our best work.",
-    glowColor: "rgba(5, 35, 90, 0.2)",
     number: "04",
   },
   {
     icon: <TrendingUpIcon size={28} className="text-orange" />,
     title: "Measurable Impact",
     desc: "Pretty isn't enough. We track outcomes, iterate on feedback, and make sure our work actually moves metrics.",
-    glowColor: "rgba(245, 134, 52, 0.2)",
     number: "05",
   },
   {
-    icon: <ShieldCheckIcon size={28} className="text-oxford" />,
+    icon: <ShieldCheckIcon size={28} className="text-skyblue" />,
     title: "Integrity Always",
     desc: "Honest timelines, transparent pricing, and straight talk. We'd rather lose a deal than overpromise.",
-    glowColor: "rgba(5, 35, 90, 0.2)",
     number: "06",
   },
 ];
@@ -109,42 +107,20 @@ const AboutPage: React.FC = () => {
         url="/about"
         structuredData={[breadcrumbSchema]}
       />
-      <main className="flex flex-col overflow-hidden">
+      <main className="flex flex-col bg-oxford-deep">
         {/* ==================== SECTION 01: HERO ==================== */}
         <section
           ref={heroRef}
-          className="relative min-h-screen flex items-center justify-center bg-oxford overflow-hidden"
+          className="relative min-h-screen flex items-center justify-center bg-oxford-deep overflow-hidden sticky top-0 z-10"
         >
-          {/* 3D Scene Background */}
-          <Scene3D variant="hero" />
+          {/* Orbital Background */}
+          <OrbitalBackground variant="hero" />
 
-          {/* Floating gradient orbs */}
-          <motion.div
-            className="absolute top-20 left-10 w-72 h-72 rounded-full bg-skyblue/20 blur-3xl"
-            animate={{
-              x: [0, 40, -20, 0],
-              y: [0, -30, 20, 0],
-              scale: [1, 1.2, 0.9, 1],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-orange/15 blur-3xl"
-            animate={{
-              x: [0, -50, 30, 0],
-              y: [0, 40, -20, 0],
-              scale: [1, 0.8, 1.1, 1],
-            }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-iceblue/10 blur-2xl"
-            animate={{
-              x: [0, 30, -40, 0],
-              y: [0, -50, 10, 0],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
+          {/* Geometric decorations */}
+          <DotGrid className="top-20 left-8 text-iceblue/30" />
+          <DiagonalLines className="bottom-10 right-0 text-skyblue/20" thick />
+          <CrossMark className="absolute top-32 right-[20%] text-skyblue/20" size={14} />
+          <CrossMark className="absolute bottom-40 left-[15%] text-orange/20" size={12} />
 
           {/* Noise overlay */}
           <div className="noise-overlay absolute inset-0 z-[1]" />
@@ -155,20 +131,20 @@ const AboutPage: React.FC = () => {
             className="relative z-10 text-center px-4 max-w-6xl mx-auto"
           >
             {/* Decorative section number */}
-            <RevealOnScroll direction="scale" delay={0.1}>
-              <span className="text-skyblue/30 text-[8rem] md:text-[12rem] font-black absolute -top-16 md:-top-24 left-1/2 -translate-x-1/2 select-none leading-none tracking-tighter">
+            <Reveal delay={0.1}>
+              <span className="text-skyblue/10 text-[8rem] md:text-[12rem] font-black absolute -top-16 md:-top-24 left-1/2 -translate-x-1/2 select-none leading-none tracking-tighter">
                 01
               </span>
-            </RevealOnScroll>
+            </Reveal>
 
-            <RevealOnScroll direction="up" delay={0.2}>
-              <div className="inline-flex items-center gap-2 glass-card px-5 py-2.5 rounded-full mb-8">
+            <Reveal delay={0.2}>
+              <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-oxford-border px-5 py-2.5 rounded-full mb-8">
                 <SparklesIcon size={16} className="text-skyblue" />
-                <span className="text-sm text-iceblue tracking-wide uppercase">
+                <span className="text-sm text-iceblue/70 tracking-wide uppercase">
                   The Gr8QM Story
                 </span>
               </div>
-            </RevealOnScroll>
+            </Reveal>
 
             <div className="mb-6">
               <SplitText
@@ -193,37 +169,37 @@ const AboutPage: React.FC = () => {
               </SplitText>
             </div>
 
-            <RevealOnScroll direction="up" delay={1.0}>
-              <p className="text-iceblue/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            <Reveal delay={1.0}>
+              <p className="text-iceblue/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
                 We're a design and technology studio that believes great work
                 comes from clarity of purpose. Every product we ship, every
                 student we train, every print we deliver reflects our
                 commitment to craft and impact.
               </p>
-            </RevealOnScroll>
+            </Reveal>
 
-            <RevealOnScroll direction="up" delay={1.2}>
+            <Reveal delay={1.2}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <MagneticButton strength={20}>
-                  <Button to="/contact" variant="pry" size="lg">
-                    Start a project
-                    <ArrowRightIcon size={18} className="ml-2" />
-                  </Button>
-                </MagneticButton>
-                <MagneticButton strength={20}>
-                  <Button to="/services" variant="sec" size="lg">
-                    Our services
-                  </Button>
-                </MagneticButton>
+                <Button to="/contact" variant="pry" size="lg">
+                  Start a project
+                  <ArrowRightIcon size={18} className="ml-2" />
+                </Button>
+                <Button to="/services" variant="sec" size="lg">
+                  Our services
+                </Button>
               </div>
-            </RevealOnScroll>
+            </Reveal>
           </motion.div>
 
           {/* Scroll indicator */}
           <motion.div
             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
             animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: [0.42, 0, 0.58, 1] as [number, number, number, number],
+            }}
           >
             <div className="w-6 h-10 rounded-full border-2 border-iceblue/30 flex justify-center pt-2">
               <motion.div
@@ -232,176 +208,174 @@ const AboutPage: React.FC = () => {
                 transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: [0.42, 0, 0.58, 1] as [number, number, number, number],
                 }}
               />
             </div>
           </motion.div>
+
+          {/* Marquee absorbed into hero bottom */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 py-4 bg-skyblue/10 border-t border-oxford-border">
+            <MarqueeText
+              text="Purpose-driven design  ·  Expert engineering  ·  Real impact  ·  Faith-led innovation"
+              speed={25}
+              className="text-lg md:text-xl font-bold text-iceblue/40 tracking-wide"
+            />
+          </div>
+
+          {/* Section connector */}
+          <SectionConnector color="skyblue" side="right" />
         </section>
 
-        {/* ==================== MARQUEE DIVIDER ==================== */}
-        <div className="bg-skyblue py-4 relative overflow-hidden">
-          <MarqueeText
-            text="Purpose-driven design  ·  Expert engineering  ·  Real impact  ·  Faith-led innovation"
-            speed={25}
-            className="text-lg md:text-xl font-bold text-white/90 tracking-wide"
-          />
-        </div>
+        <AccentLine className="mx-auto my-0" color="skyblue" thickness="medium" width="w-full" />
 
         {/* ==================== SECTION 02: VISION & MISSION ==================== */}
-        <section className="relative py-24 md:py-32 lg:py-44 bg-light overflow-hidden">
-          {/* Floating orbs */}
-          <motion.div
-            className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-skyblue/10 blur-3xl"
-            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-0 -left-20 w-64 h-64 rounded-full bg-orange/10 blur-3xl"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <section className="relative py-24 md:py-32 lg:py-44 bg-oxford-deep overflow-hidden sticky top-0 z-20">
+          {/* Orbital background */}
+          <OrbitalBackground variant="section" />
 
-          <Container>
+          {/* Geometric decorations */}
+          <DotGrid className="top-16 right-12 text-iceblue/20" />
+          <DiagonalLines className="-bottom-10 -left-10 text-orange/20" />
+          <CrossMark className="absolute top-24 left-[10%] text-skyblue/20" size={14} />
+          <CrossMark className="absolute bottom-32 right-[25%] text-orange/15" size={10} />
+
+          <FloatingRule className="top-0 left-0" color="skyblue" dashed />
+
+          <Container className="relative z-10">
             {/* Section number decoration */}
-            <RevealOnScroll direction="left">
-              <span className="text-oxford/5 text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none">
+            <Reveal direction="left">
+              <span className="text-white/[0.03] text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none">
                 02
               </span>
-            </RevealOnScroll>
+            </Reveal>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start -mt-12 md:-mt-20">
               {/* Vision */}
-              <ParallaxLayer speed={0.2} className="relative">
-                <RevealOnScroll direction="left" delay={0.1}>
-                  <div className="relative">
-                    <div className="absolute -top-4 -left-4 w-16 h-16 rounded-2xl bg-skyblue/10 -z-10" />
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 rounded-xl bg-skyblue/10">
-                        <SpiralIcon size={28} className="text-skyblue" />
-                      </div>
-                      <span className="text-sm font-bold text-skyblue uppercase tracking-widest">
-                        Vision
-                      </span>
+              <Reveal direction="left" delay={0.1}>
+                <div className="relative">
+                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-2xl bg-skyblue/5 -z-10" />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-skyblue/10 border border-oxford-border">
+                      <SpiralIcon size={28} className="text-skyblue" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-oxford tracking-tight mb-6 leading-[1.15]">
-                      Technology that{" "}
-                      <span className="gradient-text">serves people</span>
-                    </h2>
-                    <p className="text-dark/70 text-lg leading-relaxed">
-                      A world where technology serves people, not the other way
-                      around. We envision communities thriving because the tools
-                      they use were built with intention, empathy, and excellence.
-                    </p>
+                    <span className="text-sm font-bold text-skyblue uppercase tracking-widest">
+                      Vision
+                    </span>
                   </div>
-                </RevealOnScroll>
-              </ParallaxLayer>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight mb-6 leading-[1.15]">
+                    Technology that{" "}
+                    <span className="gradient-text">serves people</span>
+                  </h2>
+                  <p className="text-iceblue/70 text-lg leading-relaxed">
+                    A world where technology serves people, not the other way
+                    around. We envision communities thriving because the tools
+                    they use were built with intention, empathy, and excellence.
+                  </p>
+                </div>
+              </Reveal>
 
               {/* Mission */}
-              <ParallaxLayer speed={0.35} className="relative lg:mt-20">
-                <RevealOnScroll direction="right" delay={0.3}>
-                  <div className="relative">
-                    <div className="absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-orange/10 -z-10" />
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 rounded-xl bg-orange/10">
-                        <SparklesIcon size={28} className="text-orange" />
-                      </div>
-                      <span className="text-sm font-bold text-orange uppercase tracking-widest">
-                        Mission
-                      </span>
+              <Reveal direction="right" delay={0.3}>
+                <div className="relative lg:mt-20">
+                  <div className="absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-orange/5 -z-10" />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-orange/10 border border-oxford-border">
+                      <SparklesIcon size={28} className="text-orange" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-oxford tracking-tight mb-6 leading-[1.15]">
-                      Equipping with{" "}
-                      <span className="gradient-text">beautiful solutions</span>
-                    </h2>
-                    <p className="text-dark/70 text-lg leading-relaxed">
-                      To equip individuals and organizations with beautifully
-                      designed, expertly engineered solutions. We train talent,
-                      build products, and deliver print that makes people stop and
-                      look twice.
-                    </p>
+                    <span className="text-sm font-bold text-orange uppercase tracking-widest">
+                      Mission
+                    </span>
                   </div>
-                </RevealOnScroll>
-              </ParallaxLayer>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight mb-6 leading-[1.15]">
+                    Equipping with{" "}
+                    <span className="gradient-text">beautiful solutions</span>
+                  </h2>
+                  <p className="text-iceblue/70 text-lg leading-relaxed">
+                    To equip individuals and organizations with beautifully
+                    designed, expertly engineered solutions. We train talent,
+                    build products, and deliver print that makes people stop and
+                    look twice.
+                  </p>
+                </div>
+              </Reveal>
             </div>
 
             {/* Quote */}
-            <RevealOnScroll direction="scale" delay={0.5} className="mt-16 md:mt-24">
-              <div className="glass-card rounded-2xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-skyblue/5 to-orange/5"
-                  animate={{ opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <p className="text-xl md:text-2xl font-bold italic text-oxford relative z-10">
+            <Reveal delay={0.5} className="mt-16 md:mt-24">
+              <div className="bg-white/5 backdrop-blur-sm border border-oxford-border rounded-2xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-skyblue/5 to-orange/5 opacity-40" />
+                <p className="text-xl md:text-2xl font-bold italic text-white relative z-10">
                   "Good design is good business.{" "}
                   <span className="gradient-text">Great design changes lives.</span>"
                 </p>
               </div>
-            </RevealOnScroll>
+            </Reveal>
           </Container>
+
+          {/* Section connector */}
+          <SectionConnector color="orange" side="left" />
         </section>
 
+        <FloatingRule className="relative z-[25]" color="orange" thick />
+
         {/* ==================== SECTION 03: CORE VALUES ==================== */}
-        <section className="relative py-24 md:py-32 lg:py-44 bg-oxford overflow-hidden">
-          {/* Background orbs */}
-          <motion.div
-            className="absolute top-40 right-0 w-96 h-96 rounded-full bg-skyblue/5 blur-3xl"
-            animate={{ x: [0, -30, 0], scale: [1, 1.2, 1] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-20 left-0 w-72 h-72 rounded-full bg-orange/5 blur-3xl"
-            animate={{ x: [0, 40, 0], scale: [1, 1.3, 1] }}
-            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <section className="relative py-24 md:py-32 lg:py-44 bg-oxford-deep overflow-hidden sticky top-0 z-30">
+          {/* Orbital background */}
+          <OrbitalBackground variant="section" />
+
+          {/* Geometric decorations */}
+          <DiagonalLines className="top-0 right-0 text-skyblue/20" thick />
+          <DotGrid className="bottom-20 left-8 text-orange/20" />
+          <CrossMark className="absolute top-40 right-[12%] text-iceblue/15" size={16} />
+          <CrossMark className="absolute bottom-24 left-[30%] text-skyblue/20" size={12} />
+          <CrossMark className="absolute top-[60%] left-[8%] text-orange/15" size={10} />
+
           <div className="noise-overlay absolute inset-0" />
 
           <Container className="relative z-10">
             {/* Section header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-16 md:mb-20">
               <div>
-                <RevealOnScroll direction="left">
-                  <span className="text-skyblue/10 text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-8 md:-mb-16">
+                <Reveal direction="left">
+                  <span className="text-white/[0.03] text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-8 md:-mb-16">
                     03
                   </span>
-                </RevealOnScroll>
-                <RevealOnScroll direction="left" delay={0.1}>
-                  <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-4">
+                </Reveal>
+                <Reveal direction="left" delay={0.1}>
+                  <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-oxford-border px-4 py-2 rounded-full mb-4">
                     <TargetIcon size={14} className="text-skyblue" />
-                    <span className="text-sm text-iceblue/80 tracking-wide uppercase">
+                    <span className="text-sm text-iceblue/70 tracking-wide uppercase">
                       What Drives Us
                     </span>
                   </div>
-                </RevealOnScroll>
-                <RevealOnScroll direction="left" delay={0.2}>
+                </Reveal>
+                <Reveal direction="left" delay={0.2}>
                   <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
                     Our Core{" "}
                     <span className="gradient-text">Values</span>
                   </h2>
-                </RevealOnScroll>
+                </Reveal>
               </div>
-              <RevealOnScroll direction="right" delay={0.3}>
-                <p className="text-iceblue/60 text-lg max-w-md leading-relaxed">
+              <Reveal direction="right" delay={0.3}>
+                <p className="text-iceblue/70 text-lg max-w-md leading-relaxed">
                   The principles behind every pixel, every line of code, and
                   every decision we make.
                 </p>
-              </RevealOnScroll>
+              </Reveal>
             </div>
+
+            <AccentLine className="mb-12" color="skyblue" thickness="thin" width="w-32" />
 
             {/* Values Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {coreValues.map((item, index) => (
-                <RevealOnScroll
+                <Reveal
                   key={index}
-                  direction={index % 2 === 0 ? "up" : "scale"}
+                  direction={index % 2 === 0 ? "up" : "left"}
                   delay={index * 0.1}
-                  width="100%"
                 >
-                  <GlowCard
-                    glowColor={item.glowColor}
-                    className="group glass-card rounded-2xl p-6 md:p-8 h-full border border-white/5 hover:border-skyblue/20 transition-colors duration-500"
-                  >
+                  <div className="group bg-white/5 backdrop-blur-sm border border-oxford-border rounded-2xl p-6 md:p-8 h-full hover:border-skyblue/20 transition-colors duration-500">
                     <div className="flex items-start justify-between mb-6">
                       <div className="p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-colors duration-300">
                         {item.icon}
@@ -416,113 +390,114 @@ const AboutPage: React.FC = () => {
                     <p className="text-iceblue/50 leading-relaxed group-hover:text-iceblue/70 transition-colors duration-300">
                       {item.desc}
                     </p>
-                  </GlowCard>
-                </RevealOnScroll>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </Container>
+
+          {/* Section connector */}
+          <SectionConnector color="skyblue" side="center" />
         </section>
 
+        <FloatingRule className="relative z-[35]" color="skyblue" dashed />
+
         {/* ==================== SECTION 04: STATS ==================== */}
-        <section className="relative py-24 md:py-32 bg-light overflow-hidden">
-          {/* Background decorations */}
-          <motion.div
-            className="absolute top-10 left-1/4 w-64 h-64 rounded-full bg-skyblue/5 blur-3xl"
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-10 right-1/4 w-48 h-48 rounded-full bg-orange/8 blur-3xl"
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <section className="relative py-24 md:py-32 bg-oxford-deep overflow-hidden sticky top-0 z-40">
+          {/* Orbital background */}
+          <OrbitalBackground variant="section" />
+
+          {/* Geometric decorations */}
+          <DotGrid className="top-12 left-[5%] text-skyblue/20" />
+          <DiagonalLines className="bottom-0 right-0 text-iceblue/15" />
+          <CrossMark className="absolute top-20 right-[18%] text-orange/20" size={14} />
+          <CrossMark className="absolute bottom-16 left-[40%] text-skyblue/15" size={10} />
 
           <Container className="relative z-10">
-            <RevealOnScroll direction="up">
+            <Reveal>
               <div className="text-center mb-16">
-                <span className="text-oxford/5 text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-6 md:-mb-14">
+                <span className="text-white/[0.03] text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-6 md:-mb-14">
                   04
                 </span>
-                <h2 className="text-3xl md:text-5xl font-black text-oxford tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
                   Impact in{" "}
                   <span className="gradient-text">Numbers</span>
                 </h2>
               </div>
-            </RevealOnScroll>
+            </Reveal>
+
+            <AccentLine className="mx-auto mb-12" color="orange" thickness="medium" width="w-24" />
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {stats.map((stat, index) => (
-                <RevealOnScroll
+                <Reveal
                   key={index}
                   direction="up"
                   delay={index * 0.15}
-                  width="100%"
                 >
-                  <ParallaxLayer speed={0.1 + index * 0.05}>
-                    <div className="glass-card rounded-2xl p-6 md:p-8 text-center border border-oxford/5 hover:border-skyblue/20 transition-colors duration-300 group">
-                      <AnimatedCounter
-                        target={stat.target}
-                        suffix={stat.suffix}
-                        className="text-4xl md:text-5xl lg:text-6xl font-black gradient-text block mb-2"
-                      />
-                      <p className="text-dark/60 text-sm md:text-base font-medium tracking-wide uppercase">
-                        {stat.label}
-                      </p>
-                    </div>
-                  </ParallaxLayer>
-                </RevealOnScroll>
+                  <div className="bg-white/5 backdrop-blur-sm border border-oxford-border rounded-2xl p-6 md:p-8 text-center hover:border-skyblue/20 transition-colors duration-300 group">
+                    <AnimatedCounter
+                      target={stat.target}
+                      suffix={stat.suffix}
+                      className="text-4xl md:text-5xl lg:text-6xl font-black gradient-text block mb-2"
+                    />
+                    <p className="text-iceblue/50 text-sm md:text-base font-medium tracking-wide uppercase">
+                      {stat.label}
+                    </p>
+                  </div>
+                </Reveal>
               ))}
             </div>
+
+            {/* Marquee absorbed into stats section */}
+            <div className="mt-16 -mx-4 md:-mx-8 overflow-hidden border-t border-b border-oxford-border py-4">
+              <MarqueeText
+                text="Craft  ·  Excellence  ·  Purpose  ·  Integrity  ·  Impact  ·  Faith"
+                speed={30}
+                className="text-lg md:text-xl font-bold text-white/10 tracking-widest uppercase"
+                reverse
+              />
+            </div>
           </Container>
+
+          {/* Section connector */}
+          <SectionConnector color="orange" side="right" />
         </section>
 
-        {/* ==================== MARQUEE DIVIDER 2 ==================== */}
-        <div className="bg-oxford py-4 relative overflow-hidden">
-          <MarqueeText
-            text="Craft  ·  Excellence  ·  Purpose  ·  Integrity  ·  Impact  ·  Faith"
-            speed={30}
-            className="text-lg md:text-xl font-bold text-white/20 tracking-widest uppercase"
-            reverse
-          />
-        </div>
+        <AccentLine className="mx-auto relative z-[45]" color="orange" thickness="thick" width="w-full" />
 
         {/* ==================== SECTION 05: FAITH-BASED CTA ==================== */}
-        <section className="relative py-24 md:py-32 lg:py-44 bg-oxford overflow-hidden">
-          {/* Floating orbs */}
-          <motion.div
-            className="absolute top-1/4 left-10 w-80 h-80 rounded-full bg-skyblue/10 blur-3xl"
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full bg-orange/10 blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.15, 0.35, 0.15],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          />
+        <section className="relative py-24 md:py-32 lg:py-44 bg-oxford-deep overflow-hidden">
+          {/* Orbital Background (CTA variant) */}
+          <OrbitalBackground variant="cta" />
+
+          {/* Geometric decorations */}
+          <DotGrid className="bottom-16 right-10 text-iceblue/20" />
+          <DiagonalLines className="top-0 left-0 text-orange/15" thick />
+          <CrossMark className="absolute top-28 left-[22%] text-skyblue/20" size={14} />
+          <CrossMark className="absolute bottom-36 right-[15%] text-orange/15" size={12} />
+          <CrossMark className="absolute top-[45%] right-[35%] text-iceblue/10" size={10} />
+
           <div className="noise-overlay absolute inset-0" />
+
+          <FloatingRule className="top-0 left-0" color="orange" dashed />
 
           <Container className="relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <RevealOnScroll direction="scale">
-                <span className="text-skyblue/10 text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-6 md:-mb-14">
+              <Reveal>
+                <span className="text-white/[0.03] text-[6rem] md:text-[10rem] font-black leading-none tracking-tighter select-none block -mb-6 md:-mb-14">
                   05
                 </span>
-              </RevealOnScroll>
+              </Reveal>
 
-              <RevealOnScroll direction="up" delay={0.1}>
-                <div className="inline-flex items-center gap-2 glass-card px-5 py-2.5 rounded-full mb-8">
+              <Reveal delay={0.1}>
+                <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-oxford-border px-5 py-2.5 rounded-full mb-8">
                   <HandshakeIcon size={16} className="text-orange" />
-                  <span className="text-sm text-iceblue/80 tracking-wide uppercase">
+                  <span className="text-sm text-iceblue/70 tracking-wide uppercase">
                     Built on Faith
                   </span>
                 </div>
-              </RevealOnScroll>
+              </Reveal>
 
               <div className="mb-6">
                 <SplitText
@@ -536,59 +511,34 @@ const AboutPage: React.FC = () => {
                 </SplitText>
               </div>
 
-              <RevealOnScroll direction="up" delay={0.6}>
-                <p className="text-iceblue/60 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed">
+              <Reveal delay={0.6}>
+                <p className="text-iceblue/70 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed">
                   We bring design thinking, engineering rigor, and a genuine
                   passion for craft to every project. If you're building something
                   that matters, we want to be part of it.
                 </p>
-              </RevealOnScroll>
+              </Reveal>
 
-              <RevealOnScroll direction="up" delay={0.7}>
+              <Reveal delay={0.7}>
                 <p className="text-iceblue/40 text-base italic max-w-xl mx-auto mb-10">
                   Our work is rooted in faith -- the belief that what we create
                   should uplift, serve, and reflect something greater than ourselves.
                 </p>
-              </RevealOnScroll>
+              </Reveal>
 
-              <RevealOnScroll direction="up" delay={0.8}>
+              <AccentLine className="mx-auto mb-10" color="orange" thickness="medium" width="w-20" />
+
+              <Reveal delay={0.8}>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <MagneticButton strength={25}>
-                    <Button to="/contact" variant="pry" size="lg">
-                      Let's talk
-                      <ArrowRightIcon size={18} className="ml-2" />
-                    </Button>
-                  </MagneticButton>
-                  <MagneticButton strength={25}>
-                    <Button to="/services" variant="sec" size="lg">
-                      Explore our work
-                    </Button>
-                  </MagneticButton>
+                  <Button to="/contact" variant="pry" size="lg">
+                    Let's talk
+                    <ArrowRightIcon size={18} className="ml-2" />
+                  </Button>
+                  <Button to="/services" variant="sec" size="lg">
+                    Explore our work
+                  </Button>
                 </div>
-              </RevealOnScroll>
-
-              {/* Decorative floating icons */}
-              <motion.div
-                className="absolute top-20 left-10 text-skyblue/10"
-                animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <RocketIcon size={48} />
-              </motion.div>
-              <motion.div
-                className="absolute bottom-20 right-10 text-orange/10"
-                animate={{ y: [0, 15, 0], rotate: [0, -15, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <SparklesIcon size={40} />
-              </motion.div>
-              <motion.div
-                className="absolute top-1/3 right-20 text-iceblue/10"
-                animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <TargetIcon size={36} />
-              </motion.div>
+              </Reveal>
             </div>
           </Container>
         </section>

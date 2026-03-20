@@ -41,6 +41,12 @@
   --color-gray-1: #a1a1a1;
   --color-gray-2: #6f6d66;
   --color-gray-3: #282826;
+
+  /* Oxford deep palette for /new dark pages */
+  --color-oxford-deep: #031842;
+  --color-oxford-card: #0a2558;
+  --color-oxford-elevated: #0d2d66;
+  --color-oxford-border: #143a7a;
 }
 
 html,
@@ -296,4 +302,36 @@ body {
   .ripple-effect {
     animation-duration: 0.01ms !important;
   }
+}
+
+/* ═══ Orbital Background Keyframes ═══ */
+@keyframes orbit1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, -40px) scale(1.05); }
+  50% { transform: translate(-30px, 50px) scale(0.95); }
+  75% { transform: translate(-60px, -20px) scale(1.02); }
+}
+@keyframes orbit2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-50px, 30px) scale(0.97); }
+  50% { transform: translate(40px, -60px) scale(1.04); }
+  75% { transform: translate(20px, 40px) scale(0.98); }
+}
+@keyframes orbit3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(70px, 30px) scale(1.03); }
+  66% { transform: translate(-40px, -50px) scale(0.96); }
+}
+@keyframes orbit4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  20% { transform: translate(-30px, -60px) scale(1.06); }
+  40% { transform: translate(50px, 20px) scale(0.94); }
+  60% { transform: translate(-20px, 40px) scale(1.02); }
+  80% { transform: translate(40px, -30px) scale(0.98); }
+}
+@keyframes orbit5 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, 50px) scale(0.97); }
+  50% { transform: translate(-60px, -20px) scale(1.05); }
+  75% { transform: translate(30px, -40px) scale(1.01); }
 }
