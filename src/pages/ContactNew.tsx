@@ -13,6 +13,7 @@ import {
   DotGrid,
   DiagonalLines,
   CrossMark,
+  ConcentricCircles,
   AccentLine,
   FloatingRule,
   SectionConnector,
