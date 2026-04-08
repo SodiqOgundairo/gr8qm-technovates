@@ -14,7 +14,28 @@
       "Bash(rm:*)",
       "Bash(grep:*)",
       "WebFetch(domain:www.copilotcptl.com)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git stash:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fsck:*)",
+      "Bash(git fetch:*)",
+      "Bash(# Restore components except animations/CursorTrail.tsx git ls-tree -r HEAD -- src/components/)",
+      "Bash(while read f)",
+      "Bash(do)",
+      "Bash(done)",
+      "WebFetch(domain:www.flocksafety.com)",
+      "WebFetch(domain:labs.google.com)",
+      "WebFetch(domain:www.figma.com)",
+      "WebFetch(domain:labs.google)",
+      "WebSearch",
+      "WebFetch(domain:experiments.withgoogle.com)",
+      "WebFetch(domain:web.archive.org)",
+      "WebFetch(domain:nexalgrowth.com)",
+      "Bash(git pull:*)"
     ]
   }
 }

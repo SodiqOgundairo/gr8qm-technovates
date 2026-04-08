@@ -16,6 +16,7 @@ import {
   AccentLine,
   FloatingRule,
   SectionConnector,
+  ConcentricCircles,
 } from "../components/animations/DesignElements";
 import {
   SendIcon,

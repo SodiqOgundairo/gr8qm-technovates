@@ -37,18 +37,18 @@ const SplitText: React.FC<SplitTextProps> = ({
         <motion.span
           key={i}
           className="inline-block"
-          initial={{ opacity: 0, y: 40, rotateX: -40 }}
+          initial={{ opacity: 0, y: 28, rotateX: -20 }}
           animate={
             isInView
               ? { opacity: 1, y: 0, rotateX: 0 }
-              : { opacity: 0, y: 40, rotateX: -40 }
+              : { opacity: 0, y: 28, rotateX: -20 }
           }
           transition={{
-            duration: 0.5,
+            duration: 0.6,
             delay: delay + i * stagger,
-            ease: [0.22, 0.6, 0.36, 1],
+            ease: [0.16, 1, 0.3, 1],
           }}
-          style={{ perspective: "500px" }}
+          style={{ perspective: "600px" }}
         >
           {el === " " ? "\u00A0" : el}
           {type === "words" && i < elements.length - 1 ? "\u00A0" : ""}

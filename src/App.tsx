@@ -64,7 +64,7 @@ import PayInvoice from "./pages/PayInvoice";
 import NotFound from "./pages/PageNotFound";
 import NotFoundNew from "./pages/NotFoundNew";
 import CursorTrail from "./components/animations/CursorTrail";
-import DarkModeToggle from "./components/common/DarkModeToggle";
+
 import ChatWidget from "./components/common/ChatWidget";
 
 function App() {
@@ -72,7 +72,6 @@ function App() {
     <Router>
       <ScrollToTop />
       <CursorTrail />
-      <DarkModeToggle />
       <ChatWidget />
       <Routes>
         {/* ═══ NEW DESIGN ROUTES (permanent dark) ═══ */}

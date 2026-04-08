@@ -165,11 +165,32 @@ const PrintShopNewPage: React.FC = () => {
             </Reveal>
 
             <Reveal delay={0.5}>
-              <div className="flex gap-4 flex-wrap">
-                <Button variant="pry" onClick={() => setModalOpen(true)}>
-                  Request a Quote
-                  <ArrowRightIcon size={20} />
-                </Button>
+              <div className="flex gap-4 flex-wrap items-center">
+                <motion.button
+                  onClick={() => setModalOpen(true)}
+                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-orange text-white font-semibold rounded-full text-lg overflow-hidden"
+                  whileHover={{ width: "auto", paddingLeft: 48, paddingRight: 48 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                >
+                  <motion.span
+                    className="absolute inset-0 bg-skyblue rounded-full"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.4, ease: [0.22, 0.6, 0.36, 1] }}
+                    style={{ transformOrigin: "left" }}
+                  />
+                  <span className="relative z-10 flex items-center gap-3">
+                    Request a Quote
+                    <motion.span
+                      className="inline-block"
+                      initial={{ x: 0 }}
+                      whileHover={{ x: 6 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <ArrowRightIcon size={20} />
+                    </motion.span>
+                  </span>
+                </motion.button>
                 <Button
                   variant="sec"
                   onClick={() => navigate("/portfolio?category=print-shop")}

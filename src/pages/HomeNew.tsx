@@ -1,32 +1,25 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Container from "../components/layout/Container";
-import {
-  SparklesIcon,
-  BrainCircuitIcon,
-  SpiralIcon,
-  TrendingUpIcon,
-  ArrowRightIcon,
-  TargetIcon,
-  ShieldCheckIcon,
-  HandshakeIcon,
-} from "../components/icons";
 import PageTransition from "../components/layout/PageTransition";
 import SplitText from "../components/animations/SplitText";
 import MarqueeText from "../components/animations/MarqueeText";
 import AnimatedCounter from "../components/animations/AnimatedCounter";
-import OrbitalBackground from "../components/animations/OrbitalBackground";
+import MagneticButton from "../components/animations/MagneticButton";
+import ScrollTextReveal from "../components/animations/ScrollTextReveal";
+import HeroVisual from "../components/animations/HeroVisual";
+import { Reveal } from "../components/animations/DesignElements";
 import {
-  Reveal,
-  DotGrid,
-  DiagonalLines,
-  ConcentricCircles,
-  CrossMark,
-  AccentLine,
-  FloatingRule,
-  SectionConnector,
-} from "../components/animations/DesignElements";
+  ArrowRightIcon,
+  CodeIcon,
+  PrinterIcon,
+  GraduationCapIcon,
+  TargetIcon,
+  BulbIcon,
+  RocketIcon,
+  ShieldCheckIcon,
+} from "../components/icons";
 import { SEO } from "../components/common/SEO";
 import { getPageSEO } from "../utils/seo-config";
 import {
@@ -34,69 +27,151 @@ import {
   generateBreadcrumbSchema,
 } from "../utils/structured-data";
 
-const Home: React.FC = () => {
+/* ─── animation constants ─── */
+const EASE = [0.16, 1, 0.3, 1] as const; // Material decelerated
+const EASE_SPRING = { type: "spring" as const, stiffness: 200, damping: 24 };
+
+/* ─── data ─── */
+const SERVICES = [
+  {
+    num: "01",
+    Icon: CodeIcon,
+    title: "Design & Build",
+    desc: "Bespoke digital experiences — websites, mobile apps, and brand identities crafted with intention and precision.",
+    tags: ["Web Dev", "Mobile Apps", "Brand Identity", "UI/UX"],
+    href: "/new/services/design-build",
+  },
+  {
+    num: "02",
+    Icon: PrinterIcon,
+    title: "Print Shop",
+    desc: "Premium print design and production — business cards to large-format displays that make your brand tangible.",
+    tags: ["Business Cards", "Brochures", "Banners", "Packaging"],
+    href: "/new/services/print-shop",
+  },
+  {
+    num: "03",
+    Icon: GraduationCapIcon,
+    title: "Tech Training",
+    desc: "Industry-ready tech education — hands-on cohorts in web development, data science, and digital skills.",
+    tags: ["Web Dev", "Data Science", "Digital Skills", "Mentorship"],
+    href: "/new/services/tech-training",
+  },
+];
+
+const PROCESS = [
+  {
+    num: "01",
+    Icon: TargetIcon,
+    title: "Discover",
+    desc: "Deep research into your business, users, and goals. Strategy workshops and audits set the foundation before we write a single line of code.",
+  },
+  {
+    num: "02",
+    Icon: BulbIcon,
+    title: "Design",
+    desc: "Wireframes, prototypes, and visual design — refined through feedback loops until every interaction is intentional and every pixel purposeful.",
+  },
+  {
+    num: "03",
+    Icon: CodeIcon,
+    title: "Develop",
+    desc: "Clean code, scalable architecture, rigorous testing. Built with the technologies that fit your needs, not the ones that are trendy.",
+  },
+  {
+    num: "04",
+    Icon: RocketIcon,
+    title: "Deploy & Grow",
+    desc: "Launch day is just the beginning. Monitoring, analytics, iteration, and ongoing support to make sure your product keeps winning.",
+  },
+];
+
+const STATS = [
+  { value: 150, suffix: "+", label: "Projects Delivered" },
+  { value: 200, suffix: "+", label: "Students Trained" },
+  { value: 99, suffix: "%", label: "Client Satisfaction" },
+  { value: 5, suffix: "+", label: "Years of Excellence" },
+];
+
+/* ─── style helpers ─── */
+const gridBg = {
+  backgroundImage:
+    "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
+  backgroundSize: "72px 72px",
+};
+
+const radialSpot = (color: string, y = "50%") =>
+  `radial-gradient(ellipse 60% 50% at 50% ${y}, ${color}, transparent)`;
+
+/* ════════════════════════════════════════════════════════════
+   HOME — cinematic scroll-driven landing
+   ════════════════════════════════════════════════════════════ */
+const HomeNew: React.FC = () => {
   const pageSEO = getPageSEO("home");
   const websiteSchema = generateWebSiteSchema();
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "https://gr8qm.com/" },
   ]);
 
-  const heroRef = useRef(null);
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
+  /* ── refs ── */
+  const heroRef = useRef<HTMLDivElement>(null);
+  const textRevealRef = useRef<HTMLDivElement>(null);
+  const processRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  /* ── hero parallax ── */
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef as React.RefObject<HTMLElement>,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], [0, 200]);
-  const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
-  const heroScale = useTransform(heroScroll, [0, 0.6], [1, 0.95]);
+  const heroTextY = useTransform(heroProgress, [0, 1], [0, -180]);
+  const heroOrbY = useTransform(heroProgress, [0, 1], [0, -60]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.65], [1, 0]);
+  // subtle vector rotation on scroll
+  const heroVecRotate = useTransform(heroProgress, [0, 1], [0, 12]);
 
-  const services = [
-    {
-      icon: <BrainCircuitIcon size={28} />,
-      title: "Design & Engineering",
-      desc: "Websites, apps, and digital products built to perform and designed to impress.",
-      color: "skyblue",
-      link: "/services/design-build",
-      stats: "50+",
-      statsLabel: "Projects Delivered",
-    },
-    {
-      icon: <SpiralIcon size={28} />,
-      title: "Tech Training",
-      desc: "Sponsored programs that turn beginners into job-ready developers and designers.",
-      color: "orange",
-      link: "/services/tech-training",
-      stats: "200+",
-      statsLabel: "Students Trained",
-    },
-    {
-      icon: <TrendingUpIcon size={28} />,
-      title: "Print Shop",
-      desc: "Business cards, banners, merch, and packaging. Premium print with fast turnaround.",
-      color: "skyblue",
-      link: "/services/print-shop",
-      stats: "1000+",
-      statsLabel: "Prints Completed",
-    },
+  /* ── process: individual card scroll transforms ── */
+  const { scrollYProgress: processProgress } = useScroll({
+    target: processRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  // title shrinks/lifts as cards arrive
+  const procTitleY = useTransform(processProgress, [0, 0.35], [0, -50]);
+  const procTitleScale = useTransform(processProgress, [0, 0.35], [1, 0.82]);
+  const procTitleOpacity = useTransform(processProgress, [0.25, 0.4], [1, 0.35]);
+  // background vector rotates with scroll
+  const procVecRotate = useTransform(processProgress, [0, 1], [0, 25]);
+
+  // staggered per-card transforms (card i enters at 0.1 + i*0.12)
+  const c0x = useTransform(processProgress, [0.10, 0.38], [600, 0]);
+  const c0y = useTransform(processProgress, [0.10, 0.38], [40, 0]);
+  const c0o = useTransform(processProgress, [0.10, 0.22], [0, 1]);
+
+  const c1x = useTransform(processProgress, [0.20, 0.48], [600, 0]);
+  const c1y = useTransform(processProgress, [0.20, 0.48], [40, 0]);
+  const c1o = useTransform(processProgress, [0.20, 0.32], [0, 1]);
+
+  const c2x = useTransform(processProgress, [0.30, 0.58], [600, 0]);
+  const c2y = useTransform(processProgress, [0.30, 0.58], [40, 0]);
+  const c2o = useTransform(processProgress, [0.30, 0.42], [0, 1]);
+
+  const c3x = useTransform(processProgress, [0.40, 0.68], [600, 0]);
+  const c3y = useTransform(processProgress, [0.40, 0.68], [40, 0]);
+  const c3o = useTransform(processProgress, [0.40, 0.52], [0, 1]);
+
+  const procCardStyles = [
+    { x: c0x, y: c0y, opacity: c0o },
+    { x: c1x, y: c1y, opacity: c1o },
+    { x: c2x, y: c2y, opacity: c2o },
+    { x: c3x, y: c3y, opacity: c3o },
   ];
 
-  const values = [
-    {
-      icon: <TargetIcon size={28} className="text-skyblue" />,
-      title: "Purpose-Driven Design",
-      desc: "Every pixel serves a goal. We design solutions that actually move the needle for your users and your business.",
-    },
-    {
-      icon: <HandshakeIcon size={28} className="text-orange" />,
-      title: "True Partnership",
-      desc: "We don't just hand off deliverables. We embed with your team, understand your context, and build together.",
-    },
-    {
-      icon: <ShieldCheckIcon size={28} className="text-skyblue" />,
-      title: "Built to Last",
-      desc: "Clean code, scalable architecture, and ongoing support. We measure what we create and make sure it endures.",
-    },
-  ];
+  /* ── services parallax ── */
+  const { scrollYProgress: svcProgress } = useScroll({
+    target: servicesRef as React.RefObject<HTMLElement>,
+    offset: ["start end", "end start"],
+  });
+  const svcDecoY = useTransform(svcProgress, [0, 1], [80, -80]);
 
   return (
     <PageTransition>
@@ -108,543 +183,559 @@ const Home: React.FC = () => {
         url="/"
         structuredData={[websiteSchema, breadcrumbSchema]}
       />
-      <main className="flex flex-col">
-        {/* ================================================================
-           HERO — sticky z-10
-           ================================================================ */}
-        <section
-          ref={heroRef}
-          className="sticky top-0 z-10 relative min-h-screen flex items-center justify-center overflow-hidden bg-oxford-deep"
+
+      {/* ══════════════════════════════════════════════════════
+          § 1  HERO
+          Orchestration: label(0.1) → h1-line1(0.2) → h1-line2(0.45)
+          → paragraph(0.75) → buttons(0.95) → visual(0.3) → scroll(1.4)
+          ══════════════════════════════════════════════════════ */}
+      <section
+        ref={heroRef}
+        className="sticky top-0 z-10 h-screen flex items-center overflow-hidden bg-black"
+      >
+        {/* Atmospheric orbs — slowest parallax layer */}
+        <motion.div
+          style={{ y: heroOrbY }}
+          className="absolute inset-0 pointer-events-none"
         >
-          {/* Orbital animated background */}
-          <OrbitalBackground variant="hero" />
+          <div className="absolute top-[15%] -left-40 w-[520px] h-[520px] rounded-full bg-skyblue/[0.05] blur-[130px]" />
+          <div className="absolute bottom-[10%] -right-32 w-[400px] h-[400px] rounded-full bg-orange/[0.03] blur-[110px]" />
+        </motion.div>
 
-          {/* Geometric decorations */}
-          <DotGrid className="top-12 left-8 text-iceblue/30" />
-          <DiagonalLines className="bottom-0 right-0 text-skyblue/20" />
-          <ConcentricCircles className="-bottom-32 -left-32 text-iceblue/20" />
-          <CrossMark className="absolute top-24 right-[18%] text-orange/30" size={20} />
-          <CrossMark className="absolute bottom-32 left-[12%] text-skyblue/30" size={14} />
+        <div className="absolute inset-0 opacity-[0.02]" style={gridBg} />
 
-          {/* Hero Content */}
-          <motion.div
-            style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-            className="relative z-10 text-center px-4"
-          >
-            <Container className="flex flex-col items-center gap-6 md:gap-8">
-              {/* Badge */}
-              <Reveal direction="up" delay={0.2}>
-                <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-oxford-border backdrop-blur-sm"
-                  whileHover={{ scale: 1.05, borderColor: "rgba(0,152,218,0.4)" }}
+        {/* Geometric vector — rotates subtly on scroll */}
+        <motion.svg
+          style={{ rotate: heroVecRotate }}
+          className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/4 w-[700px] h-[700px] pointer-events-none hidden lg:block"
+          viewBox="0 0 700 700"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="350" cy="350" r="320" stroke="#0098da" strokeWidth="0.6" opacity="0.05" />
+          <circle cx="350" cy="350" r="240" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+          <circle cx="350" cy="350" r="160" stroke="#c9ebfb" strokeWidth="0.3" opacity="0.02" />
+        </motion.svg>
+
+        <motion.div
+          style={{ y: heroTextY, opacity: heroOpacity }}
+          className="relative z-10 w-full py-20 md:py-0"
+        >
+          <Container>
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+              {/* ── Left: text ── */}
+              <div className="max-w-xl">
+                {/* Monospace label — first to appear, sets context */}
+                <motion.span
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.6, ease: EASE }}
+                  className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-7 block"
                 >
-                  <SparklesIcon size={14} className="text-skyblue" />
-                  <span className="text-xs md:text-sm font-medium text-iceblue tracking-wide">
-                    Design-led. Purpose-driven.
-                  </span>
-                </motion.div>
-              </Reveal>
+                  Digital Innovation Studio
+                </motion.span>
 
-              {/* Main Heading */}
-              <div className="max-w-4xl">
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95]">
-                  <SplitText
-                    className="text-white"
-                    delay={0.3}
-                    stagger={0.04}
-                    type="words"
-                    as="span"
-                  >
-                    We design
+                {/* Heading — hero moment, word-split for drama */}
+                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold leading-[0.9] tracking-[-0.05em]">
+                  <SplitText as="span" className="text-white" type="words" delay={0.2} stagger={0.08}>
+                    We Build
                   </SplitText>
                   <br />
-                  <SplitText
-                    className="gradient-text"
-                    delay={0.6}
-                    stagger={0.04}
-                    type="words"
-                    as="span"
-                  >
-                    what's next.
-                  </SplitText>
-                  <br className="hidden sm:block" />
-                  <span className="sm:hidden"> </span>
-                  <SplitText
-                    className="text-white"
-                    delay={0.9}
-                    stagger={0.04}
-                    type="words"
-                    as="span"
-                  >
-                    We build
-                  </SplitText>{" "}
-                  <SplitText
-                    className="text-orange"
-                    delay={1.1}
-                    stagger={0.04}
-                    type="words"
-                    as="span"
-                  >
-                    what matters.
+                  <SplitText as="span" className="gradient-text" type="words" delay={0.45} stagger={0.08}>
+                    What's Next.
                   </SplitText>
                 </h1>
+
+                {/* Paragraph — supporting, arrives after heading settles */}
+                <motion.p
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
+                  className="text-lg md:text-xl text-white/45 max-w-md mt-8 leading-relaxed"
+                >
+                  Digital products, creative services &amp; tech training
+                  — from Lagos to the world.
+                </motion.p>
+
+                {/* Buttons — action layer, arrives last in text column */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.95, duration: 0.6, ease: EASE }}
+                  className="flex flex-wrap gap-4 mt-10"
+                >
+                  <MagneticButton>
+                    <Link
+                      to="/new/services"
+                      className="inline-flex items-center gap-2.5 px-8 py-4 bg-skyblue text-white font-semibold rounded-full shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_40px_rgba(0,152,218,0.4)] transition-all duration-300"
+                    >
+                      Explore Services
+                      <ArrowRightIcon size={16} />
+                    </Link>
+                  </MagneticButton>
+                  <Link
+                    to="/new/contact"
+                    className="inline-flex items-center gap-2 px-8 py-4 border border-white/15 text-white/80 font-medium rounded-full hover:bg-white/5 hover:border-white/30 transition-all duration-300"
+                  >
+                    Get in Touch
+                  </Link>
+                </motion.div>
               </div>
 
-              {/* Subtext */}
-              <Reveal delay={1.3} className="max-w-xl">
-                <p className="text-iceblue/70 text-base md:text-lg leading-relaxed">
-                  Strategy, design, and engineering under one roof. We craft
-                  digital products, train the next wave of tech talent, and
-                  deliver print that turns heads.
-                </p>
-              </Reveal>
-
-              {/* CTAs */}
-              <Reveal delay={1.5}>
-                <div className="flex flex-col sm:flex-row items-center gap-4">
-                  <Link
-                    to="/portfolio"
-                    className="group relative inline-flex items-center gap-2 px-8 py-4 bg-skyblue text-white font-medium rounded-full overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-skyblue/20"
-                    data-cursor="view"
-                  >
-                    <span className="relative z-10">See Our Work</span>
-                    <motion.span
-                      className="relative z-10"
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <ArrowRightIcon size={18} />
-                    </motion.span>
-                    <span className="absolute inset-0 bg-oxford scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
-                  </Link>
-
-                  <Link
-                    to="/services/tech-training"
-                    className="group inline-flex items-center gap-2 px-8 py-4 text-white font-medium rounded-full border border-white/20 hover:border-skyblue/50 transition-all duration-300 hover:bg-white/5"
-                  >
-                    Join the Academy
-                    <ArrowRightIcon
-                      size={16}
-                      className="group-hover:translate-x-1 transition-transform"
-                    />
-                  </Link>
-                </div>
-              </Reveal>
-
-              {/* Scroll indicator */}
+              {/* ── Right: interactive visual ── */}
+              {/* Enters independently from text — scale+fade from center */}
               <motion.div
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2 }}
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3, duration: 1.2, ease: EASE }}
+                className="hidden lg:flex justify-center items-center"
               >
-                <span className="text-[10px] uppercase tracking-[0.3em] text-iceblue/40">
-                  Scroll
-                </span>
-                <motion.div
-                  className="w-5 h-8 rounded-full border border-white/20 flex justify-center pt-1.5"
-                  animate={{ opacity: [0.3, 0.8, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <motion.div
-                    className="w-1 h-1.5 bg-skyblue rounded-full"
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </motion.div>
+                <HeroVisual className="max-w-[520px] xl:max-w-[580px]" />
               </motion.div>
+            </div>
+          </Container>
+        </motion.div>
+
+        {/* Scroll indicator — utility, last to appear */}
+        <motion.div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.8, ease: EASE }}
+          style={{ opacity: heroOpacity }}
+        >
+          <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/20">
+            Scroll
+          </span>
+          <motion.div
+            className="w-px h-14 bg-gradient-to-b from-white/20 to-transparent"
+            animate={{ scaleY: [1, 0.4, 1] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+            style={{ transformOrigin: "top" }}
+          />
+        </motion.div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          § 2  SCROLL TEXT REVEAL
+          Words reveal via scroll progress — no entrance anim needed.
+          Only the label gets a subtle fade tied to scroll start.
+          ══════════════════════════════════════════════════════ */}
+      <div ref={textRevealRef} className="relative z-20" style={{ height: "280vh" }}>
+        <section className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.05)") }}
+          />
+          <Container className="relative z-10">
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: EASE }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/35 mb-10 block"
+            >
+              Our Mission
+            </motion.span>
+            <ScrollTextReveal
+              containerRef={textRevealRef}
+              text="We build digital products that matter. We train the next generation of tech talent. We bring creative visions to life — from first spark to final pixel."
+              className="text-[1.7rem] sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3.4rem] font-semibold text-white leading-[1.2] tracking-[-0.02em] max-w-5xl"
+            />
+          </Container>
+        </section>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════
+          § 3  MARQUEE — no entrance animation, always running
+          ══════════════════════════════════════════════════════ */}
+      <div className="sticky top-0 z-[23] bg-black border-y border-white/[0.05] py-4">
+        <MarqueeText
+          text="Design & Build · Print Shop · Tech Training · Innovation · Excellence · "
+          speed={35}
+          className="text-white/[0.12] text-xs font-mono uppercase tracking-[0.2em]"
+        />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════
+          § 4  PROCESS — staggered card entrance
+          Title visible on arrival → scales back as cards cascade
+          in one-by-one from the right with 10% scroll stagger.
+          ══════════════════════════════════════════════════════ */}
+      <div ref={processRef} className="relative z-[26]" style={{ height: "500vh" }}>
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.04)") }}
+          />
+
+          {/* Background vector — rotates with scroll for depth */}
+          <motion.svg
+            style={{ rotate: procVecRotate }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
+            viewBox="0 0 800 800"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="400" cy="400" r="380" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+            <circle cx="400" cy="400" r="280" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+            <line x1="400" y1="0" x2="400" y2="800" stroke="#0098da" strokeWidth="0.3" opacity="0.02" />
+            <line x1="0" y1="400" x2="800" y2="400" stroke="#0098da" strokeWidth="0.3" opacity="0.02" />
+          </motion.svg>
+
+          {/* Title — scales back and fades as cards enter */}
+          <motion.div
+            style={{ y: procTitleY, scale: procTitleScale, opacity: procTitleOpacity }}
+            className="relative z-10 mb-10 md:mb-14"
+          >
+            <Container>
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/40 mb-5 block">
+                Our Process
+              </span>
+              <h2 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-[-0.045em] leading-[0.88]">
+                How We<br />
+                <span className="text-skyblue">Work.</span>
+              </h2>
+              <p className="text-white/40 text-lg md:text-xl max-w-lg mt-6 leading-relaxed">
+                Four phases. Zero guesswork. Every step is intentional,
+                every decision backed by research and craft.
+              </p>
             </Container>
           </motion.div>
 
-          {/* Marquee absorbed inside hero at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 py-6 bg-oxford-deep/80 backdrop-blur-sm border-t border-oxford-border z-20">
-            <MarqueeText
-              text="DESIGN ✦ BUILD ✦ TRAIN ✦ PRINT ✦ INNOVATE ✦ CREATE ✦ LAUNCH"
-              className="text-white/10 text-xl md:text-2xl font-black tracking-widest"
-              speed={25}
-            />
-          </div>
+          {/* Cards — each enters individually, staggered by scroll position */}
+          <div className="relative z-10">
+            <div className="flex gap-5 justify-center px-6 md:px-12">
+              {PROCESS.map((step, i) => (
+                <motion.div
+                  key={step.num}
+                  style={procCardStyles[i]}
+                  className="w-[260px] md:w-[280px] lg:w-[300px] shrink-0"
+                >
+                  <div className="group relative h-full p-7 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-skyblue/20 transition-colors duration-500">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-          {/* Floating rule at bottom edge */}
-          <FloatingRule className="bottom-0 left-0 right-0" color="skyblue" dashed />
-
-          {/* Section connector */}
-          <SectionConnector side="right" color="skyblue" />
-        </section>
-
-        {/* ================================================================
-           WHAT WE DO — sticky z-20
-           ================================================================ */}
-        <section className="sticky top-0 z-20 py-24 md:py-36 lg:py-48 bg-oxford-deep relative overflow-hidden">
-          {/* Geometric decorations */}
-          <DotGrid className="top-16 right-12 text-skyblue/20" />
-          <DiagonalLines thick className="-bottom-20 -left-20 text-iceblue/15" />
-          <ConcentricCircles className="top-1/4 -right-48 text-orange/10" />
-          <CrossMark className="absolute top-32 left-[8%] text-orange/25" size={16} />
-
-          {/* Floating rules */}
-          <FloatingRule className="top-0 left-0 right-0" color="skyblue" />
-          <FloatingRule className="bottom-0 left-0 right-0" color="orange" dashed />
-
-          <Container className="relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-              {/* Left - Section Header */}
-              <div className="lg:sticky lg:top-32">
-                <Reveal direction="left">
-                  <AccentLine color="skyblue" thickness="medium" width="w-16" className="mb-4" />
-                  <span className="text-skyblue text-sm font-mono tracking-wider uppercase">
-                    What we do
-                  </span>
-                </Reveal>
-                <Reveal direction="left" delay={0.1}>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mt-4 tracking-tight leading-[1.1]">
-                    Three things.
-                    <br />
-                    <span className="gradient-text">Done exceptionally</span>
-                    <br />
-                    well.
-                  </h2>
-                </Reveal>
-                <Reveal direction="left" delay={0.2}>
-                  <p className="text-iceblue/70 text-lg mt-6 max-w-md leading-relaxed">
-                    We don't try to do everything. We focus on what we're best at
-                    and deliver work that speaks for itself.
-                  </p>
-                </Reveal>
-
-                {/* Stats */}
-                <div className="flex gap-12 mt-10">
-                  <Reveal direction="up" delay={0.3}>
-                    <div>
-                      <AnimatedCounter
-                        target={50}
-                        suffix="+"
-                        className="text-4xl font-black text-white"
-                      />
-                      <p className="text-sm text-iceblue/70 mt-1">Projects</p>
-                    </div>
-                  </Reveal>
-                  <Reveal direction="up" delay={0.4}>
-                    <div>
-                      <AnimatedCounter
-                        target={200}
-                        suffix="+"
-                        className="text-4xl font-black text-white"
-                      />
-                      <p className="text-sm text-iceblue/70 mt-1">Students</p>
-                    </div>
-                  </Reveal>
-                  <Reveal direction="up" delay={0.5}>
-                    <div>
-                      <AnimatedCounter
-                        target={99}
-                        suffix="%"
-                        className="text-4xl font-black text-white"
-                      />
-                      <p className="text-sm text-iceblue/70 mt-1">Satisfaction</p>
-                    </div>
-                  </Reveal>
-                </div>
-              </div>
-
-              {/* Right - Service Cards */}
-              <div className="flex flex-col gap-8">
-                {services.map((service, i) => (
-                  <Reveal key={i} direction="right" delay={i * 0.15}>
-                    <Link to={service.link} data-cursor="explore">
-                      <div className="group rounded-2xl bg-white/5 backdrop-blur-sm border border-oxford-border p-8 transition-all duration-500 hover:bg-white/[0.08] hover:border-skyblue/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-skyblue/5">
-                        <div className="flex items-start justify-between mb-6">
-                          <div
-                            className={`p-3 rounded-xl ${
-                              service.color === "orange"
-                                ? "bg-orange/10 text-orange"
-                                : "bg-skyblue/10 text-skyblue"
-                            }`}
-                          >
-                            {service.icon}
-                          </div>
-                          <motion.div className="text-iceblue/40 group-hover:text-skyblue group-hover:translate-x-1 transition-all duration-300">
-                            <ArrowRightIcon size={20} />
-                          </motion.div>
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-2">
-                          {service.title}
-                        </h3>
-                        <p className="text-iceblue/70 leading-relaxed mb-6">
-                          {service.desc}
-                        </p>
-                        <div className="flex items-center gap-2 pt-4 border-t border-oxford-border">
-                          <span className="text-2xl font-black text-white">
-                            {service.stats}
-                          </span>
-                          <span className="text-sm text-iceblue/50">
-                            {service.statsLabel}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </Container>
-
-          {/* Section connector */}
-          <SectionConnector side="left" color="orange" />
-        </section>
-
-        {/* ================================================================
-           FROM CONCEPT TO LAUNCH — sticky z-30
-           ================================================================ */}
-        <section className="sticky top-0 z-30 relative overflow-hidden bg-oxford-deep">
-          {/* Dark section header */}
-          <div className="py-24 md:py-36 relative">
-            <OrbitalBackground variant="section" />
-
-            {/* Geometric decorations */}
-            <DiagonalLines className="top-0 left-0 text-skyblue/15" />
-            <CrossMark className="absolute top-16 right-[20%] text-skyblue/30" size={18} />
-            <DotGrid className="bottom-8 right-8 text-orange/15" />
-
-            <FloatingRule className="top-0 left-0 right-0" color="orange" />
-
-            <Container className="relative z-10 text-center">
-              <Reveal direction="up">
-                <AccentLine color="orange" thickness="medium" width="w-12" className="mb-4 mx-auto" />
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-oxford-border text-sm text-iceblue mb-6">
-                  What We Deliver
-                </span>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight">
-                  From <span className="text-skyblue">Concept</span> to{" "}
-                  <span className="text-orange">Launch</span>
-                </h2>
-              </Reveal>
-              <Reveal delay={0.3}>
-                <p className="text-iceblue/70 text-lg mt-4 max-w-xl mx-auto">
-                  Every project gets the full treatment: strategy, design,
-                  development, and ongoing support.
-                </p>
-              </Reveal>
-            </Container>
-          </div>
-
-          {/* Service showcases */}
-          <div className="py-24 md:py-36 relative">
-            <FloatingRule className="top-0 left-0 right-0" color="skyblue" dashed />
-            <ConcentricCircles className="-top-32 left-1/2 -translate-x-1/2 text-skyblue/10" />
-
-            <Container>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    title: "Design & Build",
-                    desc: "We don't just make things pretty. We architect digital products that solve real problems, from first wireframe to final deploy.",
-                    link: "/services/design-build",
-                    number: "01",
-                    accent: "skyblue",
-                  },
-                  {
-                    title: "Tech Training",
-                    desc: "Zero to hired. Our sponsored cohorts teach product design, development, and QA with real projects and mentorship from working professionals.",
-                    link: "/services/tech-training",
-                    number: "02",
-                    accent: "orange",
-                  },
-                  {
-                    title: "Print Shop",
-                    desc: "Your brand, tangible. Business cards, flyers, banners, branded merch, and custom packaging. Quality print, fast delivery.",
-                    link: "/services/print-shop",
-                    number: "03",
-                    accent: "skyblue",
-                  },
-                ].map((item, i) => (
-                  <Reveal key={i} direction="up" delay={i * 0.15}>
-                    <Link to={item.link} data-cursor="view">
-                      <div className="group relative bg-white/5 backdrop-blur-sm border border-oxford-border rounded-3xl p-8 h-full transition-all duration-500 hover:bg-white/[0.08] hover:border-skyblue/30 hover:shadow-2xl hover:shadow-skyblue/5 overflow-hidden">
-                        {/* Large number background */}
-                        <span
-                          className={`absolute -top-6 -right-2 text-[140px] font-black leading-none ${
-                            item.accent === "orange"
-                              ? "text-orange/5"
-                              : "text-skyblue/5"
-                          } group-hover:text-skyblue/10 transition-colors duration-500 select-none`}
-                        >
-                          {item.number}
-                        </span>
-
-                        <div className="relative z-10">
-                          <span
-                            className={`text-sm font-mono ${
-                              item.accent === "orange"
-                                ? "text-orange"
-                                : "text-skyblue"
-                            }`}
-                          >
-                            {item.number}
-                          </span>
-                          <h3 className="text-2xl font-bold text-white mt-4 mb-3">
-                            {item.title}
-                          </h3>
-                          <p className="text-iceblue/70 leading-relaxed mb-8">
-                            {item.desc}
-                          </p>
-
-                          <div className="flex items-center gap-2 text-iceblue/50 group-hover:text-skyblue transition-colors">
-                            <span className="text-sm font-medium">
-                              Explore
-                            </span>
-                            <ArrowRightIcon
-                              size={16}
-                              className="group-hover:translate-x-2 transition-transform duration-300"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </Reveal>
-                ))}
-              </div>
-            </Container>
-          </div>
-
-          <FloatingRule className="bottom-0 left-0 right-0" color="orange" thick />
-
-          {/* Section connector */}
-          <SectionConnector side="right" color="skyblue" />
-        </section>
-
-        {/* ================================================================
-           WHY CHOOSE GR8QM — sticky z-40
-           ================================================================ */}
-        <section className="sticky top-0 z-40 py-24 md:py-36 lg:py-48 bg-oxford-deep relative overflow-hidden">
-          {/* Geometric decorations */}
-          <DiagonalLines thick className="top-0 right-0 text-orange/10" />
-          <DotGrid className="bottom-20 left-10 text-iceblue/15" />
-          <ConcentricCircles className="top-1/3 -left-48 text-skyblue/10" />
-          <CrossMark className="absolute bottom-24 right-[15%] text-orange/25" size={18} />
-          <CrossMark className="absolute top-20 left-[25%] text-skyblue/20" size={12} />
-
-          <FloatingRule className="top-0 left-0 right-0" color="skyblue" />
-
-          <Container className="relative z-10">
-            <div className="text-center mb-16 md:mb-24">
-              <Reveal>
-                <AccentLine color="skyblue" thickness="medium" width="w-16" className="mb-4 mx-auto" />
-                <span className="text-skyblue text-sm font-mono tracking-wider uppercase">
-                  Why teams choose us
-                </span>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mt-4 tracking-tight">
-                  We bring <span className="gradient-text">design thinking</span>,
-                  <br className="hidden md:block" /> technical depth, and a bias
-                  for shipping.
-                </h2>
-              </Reveal>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {values.map((item, index) => (
-                <Reveal key={index} direction="up" delay={index * 0.15}>
-                  <motion.div
-                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                    className="group relative bg-white/5 backdrop-blur-sm border border-oxford-border rounded-2xl p-8 h-full transition-all duration-500 hover:bg-white/[0.08] hover:border-skyblue/30 hover:shadow-xl hover:shadow-skyblue/5"
-                  >
-                    {/* Gradient line on top */}
-                    <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-skyblue/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    <div className="mb-6">{item.icon}</div>
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      {item.title}
+                    <span className="font-mono text-[64px] md:text-[80px] font-bold text-white/[0.04] leading-none block mb-1 relative z-10">
+                      {step.num}
+                    </span>
+                    <step.Icon
+                      size={28}
+                      className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300 mb-4 relative z-10"
+                    />
+                    <h3 className="text-2xl md:text-[1.7rem] font-bold text-white mb-3 tracking-tight relative z-10">
+                      {step.title}
                     </h3>
-                    <p className="text-iceblue/70 leading-relaxed">{item.desc}</p>
-                  </motion.div>
-                </Reveal>
+                    <p className="text-white/40 text-[14px] leading-relaxed relative z-10">
+                      {step.desc}
+                    </p>
+                  </div>
+                </motion.div>
               ))}
             </div>
-          </Container>
-
-          <FloatingRule className="bottom-0 left-0 right-0" color="orange" dashed />
-
-          {/* Section connector */}
-          <SectionConnector side="left" color="orange" />
-        </section>
-
-        {/* ================================================================
-           FAITH CTA — relative (last section, no sticky)
-           ================================================================ */}
-        <section className="relative z-50 py-24 md:py-36 bg-oxford-deep overflow-hidden">
-          <OrbitalBackground variant="cta" />
-
-          {/* Geometric decorations */}
-          <DotGrid className="top-12 left-8 text-orange/20" />
-          <DiagonalLines className="bottom-0 right-0 text-skyblue/15" />
-          <ConcentricCircles className="-bottom-32 -right-32 text-iceblue/10" />
-          <CrossMark className="absolute top-20 right-[12%] text-skyblue/30" size={16} />
-          <CrossMark className="absolute bottom-16 left-[18%] text-orange/25" size={14} />
-
-          <FloatingRule className="top-0 left-0 right-0" color="skyblue" thick />
-
-          <Container className="relative z-10 text-center">
-            <Reveal direction="up">
-              <AccentLine color="orange" thickness="medium" width="w-12" className="mb-6 mx-auto" />
-              <p className="text-orange/80 text-sm font-mono tracking-wider uppercase mb-6">
-                Rooted in faith. Driven by excellence.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight max-w-3xl mx-auto leading-[1.1]">
-                Ready to work with a team that{" "}
-                <span className="text-skyblue">cares</span>?
-              </h2>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <p className="text-iceblue/60 text-lg mt-6 max-w-xl mx-auto">
-                Good design is good business. Great design changes lives. Let's
-                create something extraordinary together.
-              </p>
-            </Reveal>
-            <Reveal delay={0.5}>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-                <Link
-                  to="/contact"
-                  className="group relative inline-flex items-center gap-2 px-8 py-4 bg-skyblue text-white font-medium rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-skyblue/20"
-                >
-                  <span className="relative z-10">Start a Conversation</span>
-                  <motion.span
-                    className="relative z-10"
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ArrowRightIcon size={18} />
-                  </motion.span>
-                  <span className="absolute inset-0 bg-oxford scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
-                </Link>
-                <Link
-                  to="/about"
-                  className="inline-flex items-center gap-2 px-8 py-4 text-white font-medium rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
-                >
-                  Learn More About Us
-                </Link>
-              </div>
-            </Reveal>
-          </Container>
-
-          {/* Bottom marquee absorbed inside CTA section */}
-          <div className="absolute bottom-0 left-0 right-0 py-4 border-t border-oxford-border">
-            <MarqueeText
-              text="GR8QM TECHNOVATES ✦ DESIGN AGENCY ✦ TECH TRAINING ✦ PRINT SHOP ✦ DIGITAL PRODUCTS"
-              className="text-white/5 text-lg font-black tracking-widest"
-              speed={30}
-              reverse
-            />
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════
+          § 5  SERVICES
+          Orchestration: label(0) → heading(0.08) → paragraph(0.14)
+          → cards stagger with whileInView (0.06s apart)
+          Cards use spring hover, not generic Reveal.
+          ══════════════════════════════════════════════════════ */}
+      <section
+        ref={servicesRef}
+        className="sticky top-0 z-30 min-h-screen flex items-center py-28 md:py-40 bg-black overflow-hidden"
+      >
+        <div
+          className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none"
+          style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
+        />
+
+        <motion.svg
+          style={{ y: svcDecoY }}
+          className="absolute -top-20 -right-20 w-[500px] h-[500px] pointer-events-none"
+          viewBox="0 0 500 500"
+          fill="none"
+          aria-hidden="true"
+        >
+          <line x1="0" y1="500" x2="500" y2="0" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+          <circle cx="250" cy="250" r="180" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
+        </motion.svg>
+
+        <Container className="relative z-10">
+          <Reveal>
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block">
+              What We Do
+            </span>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl">
+              Three pillars,{" "}
+              <span className="text-skyblue">one mission.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p className="text-white/40 text-lg md:text-xl max-w-xl mb-16 md:mb-20">
+              We don't try to do everything. We focus on what we're best
+              at and deliver work that speaks for itself.
+            </p>
+          </Reveal>
+
+          <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
+            {SERVICES.map((s, i) => (
+              <motion.div
+                key={s.num}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{
+                  duration: 0.7,
+                  delay: i * 0.1,
+                  ease: EASE,
+                }}
+              >
+                <Link to={s.href} className="block h-full">
+                  <motion.article
+                    whileHover={{ y: -8 }}
+                    transition={EASE_SPRING}
+                    className="group relative flex flex-col h-full p-8 lg:p-10 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500"
+                  >
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                    <span className="font-mono text-[13px] text-white/15 relative z-10">
+                      {s.num}
+                    </span>
+                    <div className="mt-5 mb-5 relative z-10">
+                      <s.Icon
+                        size={32}
+                        className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300"
+                      />
+                    </div>
+                    <h3 className="text-2xl lg:text-[1.8rem] font-bold text-white mb-3 tracking-tight relative z-10">
+                      {s.title}
+                    </h3>
+                    <p className="text-white/40 leading-relaxed mb-6 relative z-10 flex-1">
+                      {s.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-8 relative z-10">
+                      {s.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-[0.1em] text-white/25 bg-white/[0.03] border border-white/[0.04]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="inline-flex items-center gap-2 text-skyblue/70 group-hover:text-skyblue text-sm font-medium relative z-10 transition-all duration-300 group-hover:gap-3">
+                      Explore
+                      <ArrowRightIcon size={14} />
+                    </span>
+                  </motion.article>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          § 6  STATS
+          Numbers ARE the animation — no extra entrance.
+          Stagger counters from left to right (0.15s apart).
+          ══════════════════════════════════════════════════════ */}
+      <section className="sticky top-0 z-40 h-screen flex items-center bg-oxford-deep overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
+        />
+
+        <svg
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          viewBox="0 0 600 600"
+          fill="none"
+          aria-hidden="true"
+        >
+          <line x1="300" y1="50" x2="300" y2="550" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+          <line x1="50" y1="300" x2="550" y2="300" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+        </svg>
+
+        <Container className="relative z-10">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-16 md:mb-20 block text-center"
+          >
+            By The Numbers
+          </motion.span>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {STATS.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.12, ease: EASE }}
+                className={`py-10 md:py-14 lg:py-16 text-center ${
+                  i < 3 ? "lg:border-r border-white/[0.05]" : ""
+                } ${i < 2 ? "border-b lg:border-b-0 border-white/[0.05]" : ""}`}
+              >
+                <span className="block text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-[-0.04em]">
+                  <AnimatedCounter target={stat.value} duration={2} />
+                  <span className="text-skyblue">{stat.suffix}</span>
+                </span>
+                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white/25 mt-4 block">
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          § 7  QUOTE
+          Orchestration: icon(spring scale) → quote(fade up) → attr(fade)
+          Each layer has its own timing, not a single Reveal.
+          ══════════════════════════════════════════════════════ */}
+      <section className="sticky top-0 z-[45] h-screen flex items-center bg-black overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.02]" style={gridBg} />
+
+        <svg
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
+          viewBox="0 0 500 500"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="250" cy="250" r="230" stroke="#0098da" strokeWidth="0.5" opacity="0.05" />
+        </svg>
+
+        <Container className="relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Icon — spring scale from 0 */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ ...EASE_SPRING, delay: 0 }}
+              className="mb-8"
+            >
+              <ShieldCheckIcon size={36} className="text-skyblue/30 mx-auto" />
+            </motion.div>
+
+            {/* Quote — fades up after icon lands */}
+            <motion.blockquote
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-[-0.03em] mb-8"
+            >
+              "Good design is good business.{" "}
+              <span className="text-skyblue">Great design changes lives.</span>"
+            </motion.blockquote>
+
+            {/* Attribution — subtle fade, arrives last */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/20"
+            >
+              The GR8QM philosophy
+            </motion.p>
+          </div>
+        </Container>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          § 8  REVERSE MARQUEE
+          ══════════════════════════════════════════════════════ */}
+      <div className="sticky top-0 z-[47] bg-oxford-deep border-y border-white/[0.05] py-4">
+        <MarqueeText
+          text="Innovation · Excellence · Integrity · Growth · Community · Faith · "
+          speed={30}
+          className="text-white/[0.08] text-xs font-mono uppercase tracking-[0.2em]"
+          reverse
+        />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════
+          § 9  CTA
+          Orchestration: label(0) → heading(0.08) → paragraph(0.16)
+          → button(spring, 0.28) → footer text(0.5)
+          ══════════════════════════════════════════════════════ */}
+      <section className="relative z-50 h-screen flex items-center bg-oxford-deep overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-skyblue/[0.04] blur-[160px]" />
+          <div className="absolute bottom-0 right-1/4 w-[350px] h-[350px] rounded-full bg-orange/[0.03] blur-[120px]" />
+        </div>
+        <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
+
+        <svg
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          viewBox="0 0 600 600"
+          fill="none"
+          aria-hidden="true"
+        >
+          <line x1="100" y1="100" x2="500" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
+          <line x1="500" y1="100" x2="100" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
+        </svg>
+
+        <Container className="relative z-10 text-center">
+          <Reveal>
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block">
+              Ready to Start?
+            </span>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-4xl mx-auto">
+              Let's build something{" "}
+              <span className="text-skyblue">extraordinary.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <p className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-12">
+              Whether you need a digital product, creative services, or
+              tech training — we're ready when you are.
+            </p>
+          </Reveal>
+
+          {/* Button — spring entrance, not fade */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ ...EASE_SPRING, delay: 0.28 }}
+          >
+            <MagneticButton>
+              <Link
+                to="/new/contact"
+                className="inline-flex items-center gap-3 px-10 py-5 bg-skyblue text-white font-semibold rounded-full text-lg shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_50px_rgba(0,152,218,0.4)] transition-all duration-300"
+              >
+                Let's Talk
+                <ArrowRightIcon size={18} />
+              </Link>
+            </MagneticButton>
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
+            className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/15 mt-20"
+          >
+            Rooted in faith · Driven by excellence
+          </motion.p>
+        </Container>
+      </section>
     </PageTransition>
   );
 };
 
-export default Home;
+export default HomeNew;
