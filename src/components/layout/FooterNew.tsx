@@ -198,7 +198,7 @@ const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="relative bg-oxford text-white overflow-hidden">
+    <footer className="relative z-[60] bg-oxford text-white overflow-hidden">
       {/* Decorative orbs */}
       <motion.div
         className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-skyblue/5 blur-[200px]"

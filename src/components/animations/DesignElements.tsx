@@ -2,31 +2,37 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 /* ═══════════════════════════════════════════════════════════
-   REVEAL — bidirectional scroll entrance/exit with blur+scale
+   REVEAL — scroll-triggered entrance animation
+   once: true for clean UX, no blur (GPU-heavy), tight translate
+   ease: Material "decelerated" curve — fast start, gentle land
    ═══════════════════════════════════════════════════════════ */
 export const Reveal: React.FC<{
   children: React.ReactNode;
   className?: string;
   delay?: number;
   direction?: "up" | "left" | "right" | "down";
-}> = ({ children, className = "", delay = 0, direction = "up" }) => {
+  duration?: number;
+}> = ({ children, className = "", delay = 0, direction = "up", duration = 0.7 }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, margin: "0px 0px -100px 0px" as any });
-  const x = direction === "left" ? -80 : direction === "right" ? 80 : 0;
-  const y = direction === "up" ? 70 : direction === "down" ? -70 : 0;
+  const inView = useInView(ref, { once: true, margin: "-60px" as any });
+
+  const offsets = {
+    up: { x: 0, y: 36 },
+    down: { x: 0, y: -36 },
+    left: { x: -44, y: 0 },
+    right: { x: 44, y: 0 },
+  };
+  const { x, y } = offsets[direction];
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x, y, scale: 0.96, filter: "blur(6px)" }}
-      animate={
-        inView
-          ? { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)" }
-          : { opacity: 0, x: x * 0.6, y: y * 0.6, scale: 0.96, filter: "blur(6px)" }
-      }
+      initial={{ opacity: 0, x, y }}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x, y }}
       transition={{
-        duration: inView ? 0.9 : 0.45,
-        delay: inView ? delay : 0,
-        ease: [0.22, 0.6, 0.36, 1],
+        duration,
+        delay,
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
