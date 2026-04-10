@@ -8,7 +8,6 @@ import {
   TwitterXIcon,
   TiktokIcon,
   FacebookIcon,
-  ArrowRightIcon,
 } from "../icons";
 import Container from "./Container";
 import { Input, Textarea } from "devign";

@@ -101,7 +101,6 @@ const TrainingsPage: React.FC = () => {
 
   // staggered hero elements
   const heroBadgeY = useTransform(heroProgress, [0.0, 0.25], [0, -40]);
-  const heroBadgeO = useTransform(heroProgress, [0.0, 0.15], [1, 1]);
   const heroH1aY = useTransform(heroProgress, [0.0, 0.3], [0, -60]);
   const heroH1bY = useTransform(heroProgress, [0.0, 0.35], [0, -80]);
   const heroParaY = useTransform(heroProgress, [0.0, 0.4], [0, -100]);

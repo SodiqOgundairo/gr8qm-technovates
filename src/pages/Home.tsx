@@ -30,8 +30,6 @@ import {
 
 /* ─── animation constants ─── */
 const EASE = [0.16, 1, 0.3, 1] as const; // Material decelerated
-const EASE_SPRING = { type: "spring" as const, stiffness: 200, damping: 24 };
-
 /* ─── data ─── */
 const SERVICES = [
   {
@@ -172,7 +170,6 @@ const HomeNew: React.FC = () => {
     target: servicesRef as React.RefObject<HTMLElement>,
     offset: ["start start", "end end"],
   });
-  const svcDecoY = useTransform(svcProgress, [0, 1], [80, -80]);
   // title stays visible until cards finish entering, then fades out
   const svcTitleY = useTransform(svcProgress, [0.65, 0.82], [0, -60]);
   const svcTitleScale = useTransform(svcProgress, [0.65, 0.82], [1, 0.85]);

@@ -14,27 +14,6 @@ export interface EmailReceipt {
 }
 
 /**
- * Strip HTML tags and decode common entities to produce plain text.
- */
-function generatePlainText(html: string): string {
-  return html
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&#8358;|₦/g, 'NGN ')
-    .replace(/\n\s*\n\s*\n/g, '\n\n')
-    .replace(/[ \t]+/g, ' ')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter((line, i, arr) => !(line === '' && arr[i - 1] === ''))
-    .join('\n')
-    .trim();
-}
-
-/**
  * Send payment receipt email via Supabase Edge Function
  */
 export const sendReceiptEmail = async (receipt: EmailReceipt) => {
