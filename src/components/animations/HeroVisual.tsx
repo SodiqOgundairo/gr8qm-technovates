@@ -12,7 +12,7 @@ import {
    parallax. Inspired by Figma/Linear editorial visuals.
    ═══════════════════════════════════════════════════════════ */
 
-const SP = { stiffness: 40, damping: 28 };
+const SP = { stiffness: 60, damping: 18 };
 
 /* small floating dots data */
 const DOTS = [
@@ -32,17 +32,17 @@ export default function HeroVisual({ className = "" }: { className?: string }) {
   const sx = useSpring(mx, SP);
   const sy = useSpring(my, SP);
 
-  /* depth layers */
-  const l1x = useTransform(sx, (v) => v * 0.015);
-  const l1y = useTransform(sy, (v) => v * 0.015);
-  const l2x = useTransform(sx, (v) => v * 0.04);
-  const l2y = useTransform(sy, (v) => v * 0.04);
-  const l3x = useTransform(sx, (v) => v * 0.07);
-  const l3y = useTransform(sy, (v) => v * 0.07);
+  /* depth layers — aggressive parallax for noticeable response */
+  const l1x = useTransform(sx, (v) => v * 0.06);
+  const l1y = useTransform(sy, (v) => v * 0.06);
+  const l2x = useTransform(sx, (v) => v * 0.14);
+  const l2y = useTransform(sy, (v) => v * 0.14);
+  const l3x = useTransform(sx, (v) => v * 0.22);
+  const l3y = useTransform(sy, (v) => v * 0.22);
 
-  /* subtle 3D tilt */
-  const rotX = useTransform(sy, (v) => v * 0.012);
-  const rotY = useTransform(sx, (v) => v * -0.012);
+  /* stronger 3D tilt */
+  const rotX = useTransform(sy, (v) => v * 0.035);
+  const rotY = useTransform(sx, (v) => v * -0.035);
 
   const onMove = useCallback(
     (e: React.MouseEvent) => {
@@ -213,8 +213,9 @@ export default function HeroVisual({ className = "" }: { className?: string }) {
               backgroundColor: d.color,
             }}
             animate={{
-              y: [0, -10, 0, 8, 0],
-              opacity: [d.opacity, d.opacity * 1.6, d.opacity, d.opacity * 1.3, d.opacity],
+              y: [0, -18, 5, 14, 0],
+              x: [0, 8, -6, 10, 0],
+              opacity: [d.opacity, d.opacity * 1.8, d.opacity * 0.7, d.opacity * 1.5, d.opacity],
             }}
             transition={{
               duration: d.dur,

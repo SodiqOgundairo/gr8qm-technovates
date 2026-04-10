@@ -177,6 +177,7 @@ const Footer: React.FC<FooterProps> = ({
               to: "hello@gr8qm.com",
               subject: emailTemplate.subject,
               html: emailTemplate.html,
+              text: emailTemplate.text,
               replyTo: formData.email,
             }),
           });

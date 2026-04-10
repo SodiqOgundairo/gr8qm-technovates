@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
@@ -7,9 +7,10 @@ import SplitText from "../components/animations/SplitText";
 import MarqueeText from "../components/animations/MarqueeText";
 import AnimatedCounter from "../components/animations/AnimatedCounter";
 import MagneticButton from "../components/animations/MagneticButton";
+import { Button } from "devign";
 import ScrollTextReveal from "../components/animations/ScrollTextReveal";
 import HeroVisual from "../components/animations/HeroVisual";
-import { Reveal } from "../components/animations/DesignElements";
+
 import {
   ArrowRightIcon,
   CodeIcon,
@@ -39,7 +40,7 @@ const SERVICES = [
     title: "Design & Build",
     desc: "Bespoke digital experiences — websites, mobile apps, and brand identities crafted with intention and precision.",
     tags: ["Web Dev", "Mobile Apps", "Brand Identity", "UI/UX"],
-    href: "/new/services/design-build",
+    href: "/services/design-build",
   },
   {
     num: "02",
@@ -47,7 +48,7 @@ const SERVICES = [
     title: "Print Shop",
     desc: "Premium print design and production — business cards to large-format displays that make your brand tangible.",
     tags: ["Business Cards", "Brochures", "Banners", "Packaging"],
-    href: "/new/services/print-shop",
+    href: "/services/print-shop",
   },
   {
     num: "03",
@@ -55,7 +56,7 @@ const SERVICES = [
     title: "Tech Training",
     desc: "Industry-ready tech education — hands-on cohorts in web development, data science, and digital skills.",
     tags: ["Web Dev", "Data Science", "Digital Skills", "Mentorship"],
-    href: "/new/services/tech-training",
+    href: "/services/tech-training",
   },
 ];
 
@@ -107,6 +108,7 @@ const radialSpot = (color: string, y = "50%") =>
    HOME — cinematic scroll-driven landing
    ════════════════════════════════════════════════════════════ */
 const HomeNew: React.FC = () => {
+  const navigate = useNavigate();
   const pageSEO = getPageSEO("home");
   const websiteSchema = generateWebSiteSchema();
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -118,6 +120,9 @@ const HomeNew: React.FC = () => {
   const textRevealRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const quoteRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   /* ── hero parallax ── */
   const { scrollYProgress: heroProgress } = useScroll({
@@ -135,43 +140,111 @@ const HomeNew: React.FC = () => {
     target: processRef as React.RefObject<HTMLElement>,
     offset: ["start start", "end end"],
   });
-  // title shrinks/lifts as cards arrive
-  const procTitleY = useTransform(processProgress, [0, 0.35], [0, -50]);
-  const procTitleScale = useTransform(processProgress, [0, 0.35], [1, 0.82]);
-  const procTitleOpacity = useTransform(processProgress, [0.25, 0.4], [1, 0.35]);
+  // title stays visible until cards finish entering, then fades out
+  const procTitleY = useTransform(processProgress, [0.68, 0.85], [0, -60]);
+  const procTitleScale = useTransform(processProgress, [0.68, 0.85], [1, 0.85]);
+  const procTitleOpacity = useTransform(processProgress, [0.68, 0.85], [1, 0]);
   // background vector rotates with scroll
   const procVecRotate = useTransform(processProgress, [0, 1], [0, 25]);
 
-  // staggered per-card transforms (card i enters at 0.1 + i*0.12)
-  const c0x = useTransform(processProgress, [0.10, 0.38], [600, 0]);
-  const c0y = useTransform(processProgress, [0.10, 0.38], [40, 0]);
-  const c0o = useTransform(processProgress, [0.10, 0.22], [0, 1]);
+  // staggered per-card transforms — slide up with staggered scroll offsets
+  const c0y = useTransform(processProgress, [0.08, 0.30], [120, 0]);
+  const c0o = useTransform(processProgress, [0.08, 0.22], [0, 1]);
 
-  const c1x = useTransform(processProgress, [0.20, 0.48], [600, 0]);
-  const c1y = useTransform(processProgress, [0.20, 0.48], [40, 0]);
-  const c1o = useTransform(processProgress, [0.20, 0.32], [0, 1]);
+  const c1y = useTransform(processProgress, [0.16, 0.38], [120, 0]);
+  const c1o = useTransform(processProgress, [0.16, 0.30], [0, 1]);
 
-  const c2x = useTransform(processProgress, [0.30, 0.58], [600, 0]);
-  const c2y = useTransform(processProgress, [0.30, 0.58], [40, 0]);
-  const c2o = useTransform(processProgress, [0.30, 0.42], [0, 1]);
+  const c2y = useTransform(processProgress, [0.24, 0.46], [120, 0]);
+  const c2o = useTransform(processProgress, [0.24, 0.38], [0, 1]);
 
-  const c3x = useTransform(processProgress, [0.40, 0.68], [600, 0]);
-  const c3y = useTransform(processProgress, [0.40, 0.68], [40, 0]);
-  const c3o = useTransform(processProgress, [0.40, 0.52], [0, 1]);
+  const c3y = useTransform(processProgress, [0.32, 0.54], [120, 0]);
+  const c3o = useTransform(processProgress, [0.32, 0.46], [0, 1]);
 
   const procCardStyles = [
-    { x: c0x, y: c0y, opacity: c0o },
-    { x: c1x, y: c1y, opacity: c1o },
-    { x: c2x, y: c2y, opacity: c2o },
-    { x: c3x, y: c3y, opacity: c3o },
+    { y: c0y, opacity: c0o },
+    { y: c1y, opacity: c1o },
+    { y: c2y, opacity: c2o },
+    { y: c3y, opacity: c3o },
   ];
 
-  /* ── services parallax ── */
+  /* ── services: individual card scroll transforms (same pattern as process) ── */
   const { scrollYProgress: svcProgress } = useScroll({
     target: servicesRef as React.RefObject<HTMLElement>,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
   const svcDecoY = useTransform(svcProgress, [0, 1], [80, -80]);
+  // title stays visible until cards finish entering, then fades out
+  const svcTitleY = useTransform(svcProgress, [0.65, 0.82], [0, -60]);
+  const svcTitleScale = useTransform(svcProgress, [0.65, 0.82], [1, 0.85]);
+  const svcTitleOpacity = useTransform(svcProgress, [0.65, 0.82], [1, 0]);
+  // background vector rotates with scroll
+  const svcVecRotate = useTransform(svcProgress, [0, 1], [0, 20]);
+
+  // staggered per-card transforms — slide up with staggered scroll offsets
+  const s0y = useTransform(svcProgress, [0.08, 0.30], [120, 0]);
+  const s0o = useTransform(svcProgress, [0.08, 0.22], [0, 1]);
+
+  const s1y = useTransform(svcProgress, [0.18, 0.40], [120, 0]);
+  const s1o = useTransform(svcProgress, [0.18, 0.32], [0, 1]);
+
+  const s2y = useTransform(svcProgress, [0.28, 0.50], [120, 0]);
+  const s2o = useTransform(svcProgress, [0.28, 0.42], [0, 1]);
+
+  const svcCardStyles = [
+    { y: s0y, opacity: s0o },
+    { y: s1y, opacity: s1o },
+    { y: s2y, opacity: s2o },
+  ];
+
+  /* ── stats: per-item scroll transforms ── */
+  const { scrollYProgress: statsProgress } = useScroll({
+    target: statsRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const statsTitleOpacity = useTransform(statsProgress, [0.0, 0.15], [0, 1]);
+  const statsTitleY = useTransform(statsProgress, [0.0, 0.15], [40, 0]);
+
+  const st0y = useTransform(statsProgress, [0.12, 0.35], [80, 0]);
+  const st0o = useTransform(statsProgress, [0.12, 0.25], [0, 1]);
+  const st1y = useTransform(statsProgress, [0.20, 0.43], [80, 0]);
+  const st1o = useTransform(statsProgress, [0.20, 0.33], [0, 1]);
+  const st2y = useTransform(statsProgress, [0.28, 0.51], [80, 0]);
+  const st2o = useTransform(statsProgress, [0.28, 0.41], [0, 1]);
+  const st3y = useTransform(statsProgress, [0.36, 0.59], [80, 0]);
+  const st3o = useTransform(statsProgress, [0.36, 0.49], [0, 1]);
+
+  const statCardStyles = [
+    { y: st0y, opacity: st0o },
+    { y: st1y, opacity: st1o },
+    { y: st2y, opacity: st2o },
+    { y: st3y, opacity: st3o },
+  ];
+
+  /* ── quote: staggered element scroll transforms ── */
+  const { scrollYProgress: quoteProgress } = useScroll({
+    target: quoteRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const qIconScale = useTransform(quoteProgress, [0.08, 0.25], [0, 1]);
+  const qIconOpacity = useTransform(quoteProgress, [0.08, 0.20], [0, 1]);
+  const qTextY = useTransform(quoteProgress, [0.18, 0.42], [60, 0]);
+  const qTextOpacity = useTransform(quoteProgress, [0.18, 0.32], [0, 1]);
+  const qAttrOpacity = useTransform(quoteProgress, [0.35, 0.50], [0, 1]);
+
+  /* ── CTA: staggered element scroll transforms ── */
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const ctaLabelY = useTransform(ctaProgress, [0.05, 0.22], [40, 0]);
+  const ctaLabelO = useTransform(ctaProgress, [0.05, 0.18], [0, 1]);
+  const ctaHeadY = useTransform(ctaProgress, [0.12, 0.32], [50, 0]);
+  const ctaHeadO = useTransform(ctaProgress, [0.12, 0.25], [0, 1]);
+  const ctaParaY = useTransform(ctaProgress, [0.20, 0.40], [40, 0]);
+  const ctaParaO = useTransform(ctaProgress, [0.20, 0.33], [0, 1]);
+  const ctaBtnY = useTransform(ctaProgress, [0.30, 0.48], [30, 0]);
+  const ctaBtnO = useTransform(ctaProgress, [0.30, 0.42], [0, 1]);
+  const ctaFootO = useTransform(ctaProgress, [0.45, 0.58], [0, 1]);
 
   return (
     <PageTransition>
@@ -191,15 +264,28 @@ const HomeNew: React.FC = () => {
           ══════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="sticky top-0 z-10 h-screen flex items-center overflow-hidden bg-black"
+        className="sticky top-0 z-10 h-screen flex items-center overflow-hidden bg-oxford-deep"
       >
         {/* Atmospheric orbs — slowest parallax layer */}
         <motion.div
           style={{ y: heroOrbY }}
           className="absolute inset-0 pointer-events-none"
         >
-          <div className="absolute top-[15%] -left-40 w-[520px] h-[520px] rounded-full bg-skyblue/[0.05] blur-[130px]" />
-          <div className="absolute bottom-[10%] -right-32 w-[400px] h-[400px] rounded-full bg-orange/[0.03] blur-[110px]" />
+          <motion.div
+            animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -100, 80, -50, 0], y: [0, 80, -100, 60, 0], scale: [1, 1.2, 0.88, 1.1, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[5%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.1] blur-[120px]"
+          />
+          <motion.div
+            animate={{ x: [0, 70, -90, 40, 0], y: [0, -60, 50, -80, 0], scale: [1, 1.15, 0.9, 1.2, 1] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[40%] left-[30%] w-[350px] h-[350px] rounded-full bg-skyblue/[0.06] blur-[100px]"
+          />
         </motion.div>
 
         <div className="absolute inset-0 opacity-[0.02]" style={gridBg} />
@@ -241,7 +327,7 @@ const HomeNew: React.FC = () => {
                     We Build
                   </SplitText>
                   <br />
-                  <SplitText as="span" className="gradient-text" type="words" delay={0.45} stagger={0.08}>
+                  <SplitText as="span" className="text-skyblue" type="words" delay={0.45} stagger={0.08}>
                     What's Next.
                   </SplitText>
                 </h1>
@@ -257,7 +343,7 @@ const HomeNew: React.FC = () => {
                   — from Lagos to the world.
                 </motion.p>
 
-                {/* Buttons — action layer, arrives last in text column */}
+                {/* Button — action layer, arrives last in text column */}
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -265,19 +351,17 @@ const HomeNew: React.FC = () => {
                   className="flex flex-wrap gap-4 mt-10"
                 >
                   <MagneticButton>
-                    <Link
-                      to="/new/services"
-                      className="inline-flex items-center gap-2.5 px-8 py-4 bg-skyblue text-white font-semibold rounded-full shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_40px_rgba(0,152,218,0.4)] transition-all duration-300"
-                    >
+                    <Button variant="primary" size="lg" onClick={() => navigate("/services")} rightIcon={<ArrowRightIcon size={16} />}>
                       Explore Services
-                      <ArrowRightIcon size={16} />
-                    </Link>
+                    </Button>
                   </MagneticButton>
                   <Link
-                    to="/new/contact"
-                    className="inline-flex items-center gap-2 px-8 py-4 border border-white/15 text-white/80 font-medium rounded-full hover:bg-white/5 hover:border-white/30 transition-all duration-300"
+                    to="/contact"
+                    className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
                   >
-                    Get in Touch
+                    <span className="relative z-10">Get in Touch</span>
+                    <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
                   </Link>
                 </motion.div>
               </div>
@@ -322,10 +406,21 @@ const HomeNew: React.FC = () => {
           Only the label gets a subtle fade tied to scroll start.
           ══════════════════════════════════════════════════════ */}
       <div ref={textRevealRef} className="relative z-20" style={{ height: "280vh" }}>
-        <section className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+        <section className="sticky top-0 h-screen flex items-center bg-oxford-card overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: radialSpot("rgba(0,152,218,0.05)") }}
+          />
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 35, -25, 0], y: [0, -30, 20, 0], scale: [1, 1.12, 0.94, 1] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[20%] -right-36 w-[420px] h-[420px] rounded-full bg-skyblue/[0.08] blur-[120px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -20, 30, 0], y: [0, 25, -35, 0], scale: [1, 1.08, 0.95, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -left-28 w-[350px] h-[350px] rounded-full bg-orange/[0.06] blur-[100px] pointer-events-none"
           />
           <Container className="relative z-10">
             <motion.span
@@ -349,7 +444,7 @@ const HomeNew: React.FC = () => {
       {/* ══════════════════════════════════════════════════════
           § 3  MARQUEE — no entrance animation, always running
           ══════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-[23] bg-black border-y border-white/[0.05] py-4">
+      <div className="sticky top-0 z-[23] bg-oxford-deep border-y border-white/[0.05] py-4">
         <MarqueeText
           text="Design & Build · Print Shop · Tech Training · Innovation · Excellence · "
           speed={35}
@@ -368,8 +463,17 @@ const HomeNew: React.FC = () => {
             className="absolute inset-0 pointer-events-none"
             style={{ background: radialSpot("rgba(0,152,218,0.04)") }}
           />
+          <motion.div
+            animate={{ x: [0, 40, -20, 0], y: [0, -35, 25, 0], scale: [1, 1.1, 0.92, 1] }}
+            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-32 w-[480px] h-[480px] rounded-full bg-skyblue/[0.1] blur-[130px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -30, 35, 0], y: [0, 30, -40, 0], scale: [1, 1.12, 0.95, 1] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[5%] -right-36 w-[380px] h-[380px] rounded-full bg-orange/[0.07] blur-[110px] pointer-events-none"
+          />
 
-          {/* Background vector — rotates with scroll for depth */}
           <motion.svg
             style={{ rotate: procVecRotate }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none"
@@ -383,55 +487,53 @@ const HomeNew: React.FC = () => {
             <line x1="0" y1="400" x2="800" y2="400" stroke="#0098da" strokeWidth="0.3" opacity="0.02" />
           </motion.svg>
 
-          {/* Title — scales back and fades as cards enter */}
           <motion.div
             style={{ y: procTitleY, scale: procTitleScale, opacity: procTitleOpacity }}
-            className="relative z-10 mb-10 md:mb-14"
+            className="relative z-10 mb-8 md:mb-14"
           >
             <Container>
               <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/40 mb-5 block">
                 Our Process
               </span>
-              <h2 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-[-0.045em] leading-[0.88]">
+              <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-[-0.045em] leading-[0.88]">
                 How We<br />
                 <span className="text-skyblue">Work.</span>
               </h2>
-              <p className="text-white/40 text-lg md:text-xl max-w-lg mt-6 leading-relaxed">
+              <p className="text-white/40 text-base md:text-lg lg:text-xl max-w-lg mt-5 md:mt-6 leading-relaxed">
                 Four phases. Zero guesswork. Every step is intentional,
                 every decision backed by research and craft.
               </p>
             </Container>
           </motion.div>
 
-          {/* Cards — each enters individually, staggered by scroll position */}
           <div className="relative z-10">
-            <div className="flex gap-5 justify-center px-6 md:px-12">
-              {PROCESS.map((step, i) => (
-                <motion.div
-                  key={step.num}
-                  style={procCardStyles[i]}
-                  className="w-[260px] md:w-[280px] lg:w-[300px] shrink-0"
-                >
-                  <div className="group relative h-full p-7 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-skyblue/20 transition-colors duration-500">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                    <span className="font-mono text-[64px] md:text-[80px] font-bold text-white/[0.04] leading-none block mb-1 relative z-10">
-                      {step.num}
-                    </span>
-                    <step.Icon
-                      size={28}
-                      className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300 mb-4 relative z-10"
-                    />
-                    <h3 className="text-2xl md:text-[1.7rem] font-bold text-white mb-3 tracking-tight relative z-10">
-                      {step.title}
-                    </h3>
-                    <p className="text-white/40 text-[14px] leading-relaxed relative z-10">
-                      {step.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <Container>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
+                {PROCESS.map((step, i) => (
+                  <motion.div
+                    key={step.num}
+                    style={procCardStyles[i]}
+                  >
+                    <div className="group relative h-full p-5 md:p-7 lg:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-skyblue/20 transition-colors duration-500">
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      <span className="font-mono text-[48px] md:text-[64px] lg:text-[80px] font-bold text-white/[0.04] leading-none block mb-1 relative z-10">
+                        {step.num}
+                      </span>
+                      <step.Icon
+                        size={24}
+                        className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300 mb-3 md:mb-4 relative z-10"
+                      />
+                      <h3 className="text-lg md:text-xl lg:text-[1.7rem] font-bold text-white mb-2 md:mb-3 tracking-tight relative z-10">
+                        {step.title}
+                      </h3>
+                      <p className="text-white/40 text-[12px] md:text-[13px] lg:text-[14px] leading-relaxed relative z-10">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </Container>
           </div>
         </div>
       </div>
@@ -442,215 +544,215 @@ const HomeNew: React.FC = () => {
           → cards stagger with whileInView (0.06s apart)
           Cards use spring hover, not generic Reveal.
           ══════════════════════════════════════════════════════ */}
-      <section
-        ref={servicesRef}
-        className="sticky top-0 z-30 min-h-screen flex items-center py-28 md:py-40 bg-black overflow-hidden"
-      >
-        <div
-          className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
-        />
+      <div ref={servicesRef} className="relative z-30" style={{ height: "400vh" }}>
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-oxford-card">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.04)") }}
+          />
 
-        <motion.svg
-          style={{ y: svcDecoY }}
-          className="absolute -top-20 -right-20 w-[500px] h-[500px] pointer-events-none"
-          viewBox="0 0 500 500"
-          fill="none"
-          aria-hidden="true"
-        >
-          <line x1="0" y1="500" x2="500" y2="0" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
-          <circle cx="250" cy="250" r="180" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
-        </motion.svg>
+          <motion.svg
+            style={{ rotate: svcVecRotate }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] pointer-events-none"
+            viewBox="0 0 700 700"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="350" cy="350" r="320" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+            <circle cx="350" cy="350" r="220" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+            <line x1="0" y1="350" x2="700" y2="350" stroke="#0098da" strokeWidth="0.3" opacity="0.02" />
+          </motion.svg>
 
-        <Container className="relative z-10">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block">
-              What We Do
-            </span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl">
-              Three pillars,{" "}
-              <span className="text-skyblue">one mission.</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p className="text-white/40 text-lg md:text-xl max-w-xl mb-16 md:mb-20">
-              We don't try to do everything. We focus on what we're best
-              at and deliver work that speaks for itself.
-            </p>
-          </Reveal>
+          <motion.div
+            animate={{ x: [0, 40, -30, 0], y: [0, -30, 20, 0], scale: [1, 1.1, 0.95, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[20%] -right-32 w-[400px] h-[400px] rounded-full bg-skyblue/[0.08] blur-[120px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -20, 35, 0], y: [0, 25, -35, 0], scale: [1, 1.08, 0.93, 1] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -left-28 w-[350px] h-[350px] rounded-full bg-orange/[0.06] blur-[100px] pointer-events-none"
+          />
 
-          <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
-            {SERVICES.map((s, i) => (
-              <motion.div
-                key={s.num}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{
-                  duration: 0.7,
-                  delay: i * 0.1,
-                  ease: EASE,
-                }}
-              >
-                <Link to={s.href} className="block h-full">
-                  <motion.article
-                    whileHover={{ y: -8 }}
-                    transition={EASE_SPRING}
-                    className="group relative flex flex-col h-full p-8 lg:p-10 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500"
+          <motion.div
+            style={{ y: svcTitleY, scale: svcTitleScale, opacity: svcTitleOpacity }}
+            className="relative z-10 mb-8 md:mb-14"
+          >
+            <Container>
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-5 block">
+                What We Do
+              </span>
+              <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-[-0.045em] leading-[0.88]">
+                Three pillars,<br />
+                <span className="text-skyblue">one mission.</span>
+              </h2>
+              <p className="text-white/40 text-base md:text-lg lg:text-xl max-w-lg mt-5 md:mt-6 leading-relaxed">
+                We don't try to do everything. We focus on what we're best
+                at and deliver work that speaks for itself.
+              </p>
+            </Container>
+          </motion.div>
+
+          <div className="relative z-10">
+            <Container>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-5">
+                {SERVICES.map((s, i) => (
+                  <motion.div
+                    key={s.num}
+                    style={svcCardStyles[i]}
                   >
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                    <span className="font-mono text-[13px] text-white/15 relative z-10">
-                      {s.num}
-                    </span>
-                    <div className="mt-5 mb-5 relative z-10">
-                      <s.Icon
-                        size={32}
-                        className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300"
-                      />
-                    </div>
-                    <h3 className="text-2xl lg:text-[1.8rem] font-bold text-white mb-3 tracking-tight relative z-10">
-                      {s.title}
-                    </h3>
-                    <p className="text-white/40 leading-relaxed mb-6 relative z-10 flex-1">
-                      {s.desc}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-8 relative z-10">
-                      {s.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-[0.1em] text-white/25 bg-white/[0.03] border border-white/[0.04]"
-                        >
-                          {tag}
+                    <Link to={s.href} className="block h-full">
+                      <div className="group relative flex flex-col h-full p-6 md:p-8 lg:p-10 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-skyblue/20 transition-colors duration-500">
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                        <span className="font-mono text-[48px] md:text-[64px] lg:text-[80px] font-bold text-white/[0.04] leading-none block mb-1 relative z-10">
+                          {s.num}
                         </span>
-                      ))}
-                    </div>
-                    <span className="inline-flex items-center gap-2 text-skyblue/70 group-hover:text-skyblue text-sm font-medium relative z-10 transition-all duration-300 group-hover:gap-3">
-                      Explore
-                      <ArrowRightIcon size={14} />
-                    </span>
-                  </motion.article>
-                </Link>
-              </motion.div>
-            ))}
+                        <s.Icon size={28} className="text-skyblue/60 group-hover:text-skyblue transition-colors duration-300 mb-3 md:mb-4 relative z-10" />
+                        <h3 className="text-xl md:text-2xl lg:text-[1.8rem] font-bold text-white mb-2 md:mb-3 tracking-tight relative z-10">{s.title}</h3>
+                        <p className="text-white/40 text-[12px] md:text-[13px] lg:text-[14px] leading-relaxed mb-4 md:mb-6 relative z-10 flex-1">{s.desc}</p>
+                        <div className="flex flex-wrap gap-1.5 md:gap-2 mb-5 md:mb-8 relative z-10">
+                          {s.tags.map((tag) => (
+                            <span key={tag} className="px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[8px] md:text-[9px] font-mono uppercase tracking-[0.1em] text-white/25 bg-white/[0.03] border border-white/[0.04]">{tag}</span>
+                          ))}
+                        </div>
+                        <span className="inline-flex items-center gap-2 text-skyblue/70 group-hover:text-skyblue text-sm font-medium relative z-10 transition-all duration-300 group-hover:gap-3">
+                          Explore <ArrowRightIcon size={14} />
+                        </span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </Container>
           </div>
-        </Container>
-      </section>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
           § 6  STATS
           Numbers ARE the animation — no extra entrance.
           Stagger counters from left to right (0.15s apart).
           ══════════════════════════════════════════════════════ */}
-      <section className="sticky top-0 z-40 h-screen flex items-center bg-oxford-deep overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
-        />
+      <div ref={statsRef} className="relative z-40" style={{ height: "350vh" }}>
+        <div className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
+          />
 
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
-          viewBox="0 0 600 600"
-          fill="none"
-          aria-hidden="true"
-        >
-          <line x1="300" y1="50" x2="300" y2="550" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
-          <line x1="50" y1="300" x2="550" y2="300" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
-        </svg>
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 35, -25, 0], y: [0, -20, 40, 0], scale: [1, 1.12, 0.94, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[25%] -left-36 w-[450px] h-[450px] rounded-full bg-skyblue/[0.08] blur-[120px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -40, 20, 0], y: [0, 35, -25, 0], scale: [1, 1.08, 0.96, 1] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[20%] -right-28 w-[380px] h-[380px] rounded-full bg-orange/[0.06] blur-[110px] pointer-events-none"
+          />
 
-        <Container className="relative z-10">
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-16 md:mb-20 block text-center"
+          <svg
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+            viewBox="0 0 600 600"
+            fill="none"
+            aria-hidden="true"
           >
-            By The Numbers
-          </motion.span>
+            <line x1="300" y1="50" x2="300" y2="550" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+            <line x1="50" y1="300" x2="550" y2="300" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+          </svg>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4">
-            {STATS.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.12, ease: EASE }}
-                className={`py-10 md:py-14 lg:py-16 text-center ${
-                  i < 3 ? "lg:border-r border-white/[0.05]" : ""
-                } ${i < 2 ? "border-b lg:border-b-0 border-white/[0.05]" : ""}`}
-              >
-                <span className="block text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-[-0.04em]">
-                  <AnimatedCounter target={stat.value} duration={2} />
-                  <span className="text-skyblue">{stat.suffix}</span>
-                </span>
-                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white/25 mt-4 block">
-                  {stat.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
+          <Container className="relative z-10 w-full">
+            <motion.span
+              style={{ opacity: statsTitleOpacity, y: statsTitleY }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-16 md:mb-20 block text-center"
+            >
+              By The Numbers
+            </motion.span>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4">
+              {STATS.map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  style={statCardStyles[i]}
+                  className={`py-10 md:py-14 lg:py-16 text-center ${
+                    i < 3 ? "lg:border-r border-white/[0.05]" : ""
+                  } ${i < 2 ? "border-b lg:border-b-0 border-white/[0.05]" : ""}`}
+                >
+                  <span className="block text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-[-0.04em]">
+                    <AnimatedCounter target={stat.value} duration={2} />
+                    <span className="text-skyblue">{stat.suffix}</span>
+                  </span>
+                  <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white/25 mt-4 block">
+                    {stat.label}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
           § 7  QUOTE
           Orchestration: icon(spring scale) → quote(fade up) → attr(fade)
           Each layer has its own timing, not a single Reveal.
           ══════════════════════════════════════════════════════ */}
-      <section className="sticky top-0 z-[45] h-screen flex items-center bg-black overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02]" style={gridBg} />
+      <div ref={quoteRef} className="relative z-[45]" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen flex items-center bg-oxford-card overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.02]" style={gridBg} />
 
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
-          viewBox="0 0 500 500"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle cx="250" cy="250" r="230" stroke="#0098da" strokeWidth="0.5" opacity="0.05" />
-        </svg>
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 30, -20, 0], y: [0, -25, 35, 0], scale: [1, 1.1, 0.93, 1] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[30%] left-[10%] w-[400px] h-[400px] rounded-full bg-skyblue/[0.07] blur-[130px] pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -25, 30, 0], y: [0, 20, -30, 0], scale: [1, 1.06, 0.97, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[25%] right-[15%] w-[320px] h-[320px] rounded-full bg-orange/[0.05] blur-[100px] pointer-events-none"
+          />
 
-        <Container className="relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Icon — spring scale from 0 */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ ...EASE_SPRING, delay: 0 }}
-              className="mb-8"
-            >
-              <ShieldCheckIcon size={36} className="text-skyblue/30 mx-auto" />
-            </motion.div>
+          <svg
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
+            viewBox="0 0 500 500"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="250" cy="250" r="230" stroke="#0098da" strokeWidth="0.5" opacity="0.05" />
+          </svg>
 
-            {/* Quote — fades up after icon lands */}
-            <motion.blockquote
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-[-0.03em] mb-8"
-            >
-              "Good design is good business.{" "}
-              <span className="text-skyblue">Great design changes lives.</span>"
-            </motion.blockquote>
+          <Container className="relative z-10 w-full">
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Icon — scroll-driven scale */}
+              <motion.div
+                style={{ scale: qIconScale, opacity: qIconOpacity }}
+                className="mb-8"
+              >
+                <ShieldCheckIcon size={36} className="text-skyblue/30 mx-auto" />
+              </motion.div>
 
-            {/* Attribution — subtle fade, arrives last */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
-              className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/20"
-            >
-              The GR8QM philosophy
-            </motion.p>
-          </div>
-        </Container>
-      </section>
+              {/* Quote — scroll-driven slide up */}
+              <motion.blockquote
+                style={{ y: qTextY, opacity: qTextOpacity }}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-[-0.03em] mb-8"
+              >
+                "Good design is good business.{" "}
+                <span className="text-skyblue">Great design changes lives.</span>"
+              </motion.blockquote>
+
+              {/* Attribution — scroll-driven fade */}
+              <motion.p
+                style={{ opacity: qAttrOpacity }}
+                className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/20"
+              >
+                The GR8QM philosophy
+              </motion.p>
+            </div>
+          </Container>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
           § 8  REVERSE MARQUEE
@@ -669,71 +771,73 @@ const HomeNew: React.FC = () => {
           Orchestration: label(0) → heading(0.08) → paragraph(0.16)
           → button(spring, 0.28) → footer text(0.5)
           ══════════════════════════════════════════════════════ */}
-      <section className="relative z-50 h-screen flex items-center bg-oxford-deep overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-skyblue/[0.04] blur-[160px]" />
-          <div className="absolute bottom-0 right-1/4 w-[350px] h-[350px] rounded-full bg-orange/[0.03] blur-[120px]" />
-        </div>
-        <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
+      <div ref={ctaRef} className="relative z-50" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none">
+            <motion.div
+              animate={{ x: [0, 45, -30, 0], y: [0, -35, 25, 0], scale: [1, 1.15, 0.9, 1] }}
+              transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-skyblue/[0.1] blur-[160px]"
+            />
+            <motion.div
+              animate={{ x: [0, -35, 25, 0], y: [0, 30, -20, 0], scale: [1, 1.1, 0.94, 1] }}
+              transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-0 right-1/4 w-[350px] h-[350px] rounded-full bg-orange/[0.07] blur-[120px]"
+            />
+          </div>
+          <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
 
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
-          viewBox="0 0 600 600"
-          fill="none"
-          aria-hidden="true"
-        >
-          <line x1="100" y1="100" x2="500" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
-          <line x1="500" y1="100" x2="100" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
-        </svg>
+          <svg
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+            viewBox="0 0 600 600"
+            fill="none"
+            aria-hidden="true"
+          >
+            <line x1="100" y1="100" x2="500" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
+            <line x1="500" y1="100" x2="100" y2="500" stroke="#0098da" strokeWidth="0.4" opacity="0.03" />
+          </svg>
 
-        <Container className="relative z-10 text-center">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block">
+          <Container className="relative z-10 text-center w-full">
+            <motion.span
+              style={{ y: ctaLabelY, opacity: ctaLabelO }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block"
+            >
               Ready to Start?
-            </span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-4xl mx-auto">
+            </motion.span>
+
+            <motion.h2
+              style={{ y: ctaHeadY, opacity: ctaHeadO }}
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-4xl mx-auto"
+            >
               Let's build something{" "}
               <span className="text-skyblue">extraordinary.</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <p className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-12">
+            </motion.h2>
+
+            <motion.p
+              style={{ y: ctaParaY, opacity: ctaParaO }}
+              className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-12"
+            >
               Whether you need a digital product, creative services, or
               tech training — we're ready when you are.
-            </p>
-          </Reveal>
+            </motion.p>
 
-          {/* Button — spring entrance, not fade */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ ...EASE_SPRING, delay: 0.28 }}
-          >
-            <MagneticButton>
-              <Link
-                to="/new/contact"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-skyblue text-white font-semibold rounded-full text-lg shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_50px_rgba(0,152,218,0.4)] transition-all duration-300"
-              >
-                Let's Talk
-                <ArrowRightIcon size={18} />
-              </Link>
-            </MagneticButton>
-          </motion.div>
+            <motion.div style={{ y: ctaBtnY, opacity: ctaBtnO }}>
+              <MagneticButton>
+                <Button variant="primary" size="lg" onClick={() => navigate("/contact")} rightIcon={<ArrowRightIcon size={18} />}>
+                  Let's Talk
+                </Button>
+              </MagneticButton>
+            </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-            className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/15 mt-20"
-          >
-            Rooted in faith · Driven by excellence
-          </motion.p>
-        </Container>
-      </section>
+            <motion.p
+              style={{ opacity: ctaFootO }}
+              className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/15 mt-20"
+            >
+              Rooted in faith · Driven by excellence
+            </motion.p>
+          </Container>
+        </div>
+      </div>
     </PageTransition>
   );
 };

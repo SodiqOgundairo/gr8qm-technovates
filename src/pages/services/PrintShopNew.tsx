@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import Container from "../../components/layout/Container";
-import Button from "../../components/common/Button";
 import CloudinaryImage from "../../utils/cloudinaryImage";
 import { ArrowRightIcon, PrinterIcon } from "../../components/icons";
+import { Button } from "devign";
 import { Star } from "lucide-react";
 import ServiceRequestModal from "../../components/services/ServiceRequestModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import OrbitalBackground from "../../components/animations/OrbitalBackground";
-import {
-  Reveal,
-  DotGrid,
-  DiagonalLines,
-  CrossMark,
-  AccentLine,
-  FloatingRule,
-  SectionConnector,
-} from "../../components/animations/DesignElements";
+import MagneticButton from "../../components/animations/MagneticButton";
+
+const EASE_SMOOTH: [number, number, number, number] = [0.22, 0.6, 0.36, 1];
 
 const products = [
   {
@@ -120,93 +113,68 @@ const PrintShopNewPage: React.FC = () => {
   return (
     <main className="flex flex-col bg-oxford-deep">
       {/* ==================== HERO ==================== */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden sticky top-0 z-10">
-        <OrbitalBackground variant="hero" />
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden sticky top-0 z-10">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+        />
 
-        {/* Geometric decorations */}
-        <DotGrid className="top-8 left-8 text-skyblue/20" />
-        <DiagonalLines className="bottom-0 right-0 text-orange/10" thick />
-        <CrossMark className="absolute top-[15%] right-[20%] text-skyblue/15" size={20} />
-        <CrossMark className="absolute bottom-[20%] left-[12%] text-orange/15" size={14} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <circle cx="15%" cy="20%" r="120" stroke="white" fill="none" strokeWidth="0.5"/>
+          <line x1="70%" y1="0" x2="70%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          <circle cx="85%" cy="75%" r="80" stroke="white" fill="none" strokeWidth="0.3"/>
+        </svg>
 
         <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 flex flex-col gap-6">
-            <Reveal delay={0.1}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
               <motion.div
-                className="bg-orange/10 border border-orange/30 rounded-full px-4 py-2 w-fit"
+                className="bg-orange/10 rounded-full px-4 py-2 w-fit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <p className="text-sm text-orange font-medium tracking-widest uppercase">
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50">
                   Print Shop
                 </p>
               </motion.div>
-            </Reveal>
+            </motion.div>
 
-            <Reveal delay={0.2}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
                 <span className="text-white">Quality Prints,</span>{" "}
                 <span className="text-orange">Every Time</span>
               </h1>
-            </Reveal>
+            </motion.div>
 
-            <Reveal delay={0.3}>
-              <p className="text-lg md:text-xl text-iceblue/70 leading-relaxed max-w-xl">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.3 }}>
+              <p className="text-lg md:text-xl text-white/40 leading-relaxed max-w-xl">
                 From business cards to banners, we deliver professional printing
                 services that elevate your brand. Fast turnaround, premium
                 quality, and exceptional service.
               </p>
-            </Reveal>
+            </motion.div>
 
-            <Reveal delay={0.4}>
-              <AccentLine color="orange" thickness="medium" width="w-24" className="my-2" />
-            </Reveal>
-
-            <Reveal delay={0.5}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.5 }}>
               <div className="flex gap-4 flex-wrap items-center">
-                <motion.button
-                  onClick={() => setModalOpen(true)}
-                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-orange text-white font-semibold rounded-full text-lg overflow-hidden"
-                  whileHover={{ width: "auto", paddingLeft: 48, paddingRight: 48 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                >
-                  <motion.span
-                    className="absolute inset-0 bg-skyblue rounded-full"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.4, ease: [0.22, 0.6, 0.36, 1] }}
-                    style={{ transformOrigin: "left" }}
-                  />
-                  <span className="relative z-10 flex items-center gap-3">
-                    Request a Quote
-                    <motion.span
-                      className="inline-block"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 6 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                      <ArrowRightIcon size={20} />
-                    </motion.span>
-                  </span>
-                </motion.button>
-                <Button
-                  variant="sec"
-                  onClick={() => navigate("/portfolio?category=print-shop")}
-                >
-                  <div className="button-content">
-                    View Samples
-                    <ArrowRightIcon size={18} className="arrow" />
-                  </div>
+                <Button variant="accent" size="lg" className="!rounded-full" onClick={() => navigate("/portfolio?category=print-shop")}>
+                  View Samples
+                  <ArrowRightIcon size={20} />
                 </Button>
               </div>
-            </Reveal>
+            </motion.div>
           </div>
 
           <div className="flex-1">
-            <Reveal delay={0.3} direction="right">
-              <div className="overflow-hidden rounded-2xl border border-white/10">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.3 }}>
+              <div className="overflow-hidden rounded-2xl">
                 <motion.div
                   whileHover={{ scale: 1.08 }}
                   transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
@@ -218,48 +186,56 @@ const PrintShopNewPage: React.FC = () => {
                   />
                 </motion.div>
               </div>
-            </Reveal>
+            </motion.div>
           </div>
         </Container>
-
-        <SectionConnector color="orange" side="right" />
       </section>
 
       {/* ==================== PRODUCTS ==================== */}
-      <section className="relative py-24 md:py-36 bg-oxford-deep sticky top-0 z-20 overflow-hidden">
-        <OrbitalBackground variant="section" />
+      <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-20 overflow-hidden">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[20%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[10%] -left-20 w-[400px] h-[400px] rounded-full bg-skyblue/[0.1] blur-[140px]"
+        />
 
-        <DotGrid className="top-12 right-12 text-iceblue/10" />
-        <CrossMark className="absolute top-[10%] left-[8%] text-skyblue/15" size={16} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="orange" dashed />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <circle cx="80%" cy="30%" r="100" stroke="white" fill="none" strokeWidth="0.5"/>
+          <line x1="20%" y1="0" x2="20%" y2="100%" stroke="white" strokeWidth="0.3"/>
+        </svg>
 
         <Container className="relative z-10">
           <div className="text-center mb-16">
-            <Reveal>
-              <AccentLine color="skyblue" thickness="thin" width="w-16" className="mx-auto mb-6" />
-            </Reveal>
-            <Reveal delay={0.1}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-6">Our Products</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
                 What We Print
               </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}>
+              <p className="text-white/40 text-lg max-w-2xl mx-auto">
                 Professional printing solutions for all your business needs
               </p>
-            </Reveal>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
-              <Reveal key={index} delay={index * 0.08}>
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: index * 0.08 }}>
                 <motion.div
-                  className="group bg-white/[0.03] border border-white/10 rounded-xl p-6 cursor-default backdrop-blur-sm h-full"
+                  className="group bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 cursor-default backdrop-blur-sm h-full hover:border-skyblue/20"
                   whileHover={{
                     y: -6,
                     scale: 1.02,
-                    borderColor: "rgba(245, 134, 52, 0.4)",
                     boxShadow: "0 20px 40px rgba(0,152,218,0.08)",
                   }}
                   whileTap={{ scale: 0.97 }}
@@ -275,12 +251,12 @@ const PrintShopNewPage: React.FC = () => {
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange transition-colors duration-300">
                     {product.title}
                   </h3>
-                  <p className="text-iceblue/70 mb-4">{product.description}</p>
+                  <p className="text-white/40 mb-4">{product.description}</p>
                   <ul className="space-y-2">
                     {product.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-center gap-2 text-sm text-iceblue/60"
+                        className="flex items-center gap-2 text-sm text-white/40"
                       >
                         <motion.div
                           whileHover={{ rotate: 15, scale: 1.2 }}
@@ -293,45 +269,54 @@ const PrintShopNewPage: React.FC = () => {
                     ))}
                   </ul>
                 </motion.div>
-              </Reveal>
+              </motion.div>
             ))}
           </div>
         </Container>
-
-        <SectionConnector color="skyblue" side="left" />
       </section>
 
       {/* ==================== FEATURES ==================== */}
-      <section className="relative py-24 md:py-36 bg-oxford-deep sticky top-0 z-30 overflow-hidden">
-        <OrbitalBackground variant="section" />
+      <section className="relative min-h-screen flex flex-col justify-center bg-oxford-deep sticky top-0 z-30 overflow-hidden">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+        />
 
-        <DiagonalLines className="top-0 left-0 text-skyblue/5" />
-        <CrossMark className="absolute bottom-[15%] right-[10%] text-orange/15" size={18} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <line x1="30%" y1="0" x2="30%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          <circle cx="75%" cy="50%" r="150" stroke="white" fill="none" strokeWidth="0.5"/>
+        </svg>
 
         <Container className="relative z-10">
           <div className="text-center mb-16">
-            <Reveal>
-              <AccentLine color="orange" thickness="thin" width="w-16" className="mx-auto mb-6" />
-            </Reveal>
-            <Reveal delay={0.1}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-6">Why Us</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
                 Why Choose Our Print Shop?
               </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}>
+              <p className="text-white/40 text-lg max-w-2xl mx-auto">
                 Excellence in every print, service in every interaction
               </p>
-            </Reveal>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Reveal key={index} delay={index * 0.1}>
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: index * 0.1 }}>
                 <motion.div
-                  className="group bg-white/[0.03] border border-white/10 rounded-xl p-6 text-center cursor-default backdrop-blur-sm h-full"
+                  className="group bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 text-center cursor-default backdrop-blur-sm h-full hover:border-skyblue/20"
                   whileHover={{
                     y: -6,
                     scale: 1.02,
@@ -350,46 +335,54 @@ const PrintShopNewPage: React.FC = () => {
                   <h3 className="text-lg font-bold text-white mb-3 group-hover:text-skyblue transition-colors duration-300">
                     {feature.title}
                   </h3>
-                  <p className="text-iceblue/60 text-sm">{feature.description}</p>
+                  <p className="text-white/40 text-sm">{feature.description}</p>
                 </motion.div>
-              </Reveal>
+              </motion.div>
             ))}
           </div>
         </Container>
-
-        <SectionConnector color="orange" side="right" />
       </section>
 
       {/* ==================== PROCESS ==================== */}
-      <section className="relative py-24 md:py-36 bg-oxford-deep sticky top-0 z-40 overflow-hidden">
-        <OrbitalBackground variant="section" />
+      <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-40 overflow-hidden">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[15%] -left-20 w-[550px] h-[550px] rounded-full bg-skyblue/[0.12] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[20%] -right-20 w-[450px] h-[450px] rounded-full bg-orange/[0.1] blur-[140px]"
+        />
 
-        <DotGrid className="bottom-8 left-8 text-orange/10" />
-        <DiagonalLines className="top-0 right-0 text-iceblue/5" thick />
-        <CrossMark className="absolute top-[12%] right-[18%] text-skyblue/15" size={14} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="orange" dashed />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <circle cx="50%" cy="50%" r="180" stroke="white" fill="none" strokeWidth="0.5"/>
+          <line x1="85%" y1="0" x2="85%" y2="100%" stroke="white" strokeWidth="0.3"/>
+        </svg>
 
         <Container className="relative z-10">
           <div className="text-center mb-16">
-            <Reveal>
-              <AccentLine color="skyblue" thickness="thin" width="w-16" className="mx-auto mb-6" />
-            </Reveal>
-            <Reveal delay={0.1}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-6">Process</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
                 How It Works
               </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}>
+              <p className="text-white/40 text-lg max-w-2xl mx-auto">
                 Simple, fast, and hassle-free printing process
               </p>
-            </Reveal>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {processSteps.map((item, index) => (
-              <Reveal key={index} delay={index * 0.12}>
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: index * 0.12 }}>
                 <motion.div
                   className="group text-center cursor-default"
                   whileHover={{ y: -6, scale: 1.02 }}
@@ -406,47 +399,55 @@ const PrintShopNewPage: React.FC = () => {
                   <h3 className="text-xl font-bold mb-2 text-iceblue group-hover:text-orange transition-colors duration-300">
                     {item.title}
                   </h3>
-                  <p className="text-iceblue/60">{item.desc}</p>
+                  <p className="text-white/40">{item.desc}</p>
                 </motion.div>
-              </Reveal>
+              </motion.div>
             ))}
           </div>
         </Container>
-
-        <SectionConnector color="skyblue" side="center" />
       </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
-      <section className="relative py-24 md:py-36 bg-oxford-deep sticky top-0 z-50 overflow-hidden">
-        <OrbitalBackground variant="section" />
+      <section className="relative min-h-screen flex flex-col justify-center bg-oxford-deep sticky top-0 z-50 overflow-hidden">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+        />
 
-        <DotGrid className="top-12 left-12 text-skyblue/10" />
-        <CrossMark className="absolute bottom-[18%] right-[14%] text-orange/15" size={16} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <circle cx="15%" cy="60%" r="100" stroke="white" fill="none" strokeWidth="0.5"/>
+          <line x1="60%" y1="0" x2="60%" y2="100%" stroke="white" strokeWidth="0.3"/>
+        </svg>
 
         <Container className="relative z-10">
           <div className="text-center mb-16">
-            <Reveal>
-              <AccentLine color="orange" thickness="thin" width="w-16" className="mx-auto mb-6" />
-            </Reveal>
-            <Reveal delay={0.1}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-6">Testimonials</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
                 What Our Clients Say
               </h2>
-            </Reveal>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Reveal key={index} delay={index * 0.1}>
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: index * 0.1 }}>
                 <motion.div
-                  className="group bg-white/[0.03] border border-white/10 rounded-xl p-6 cursor-default backdrop-blur-sm h-full"
+                  className="group bg-white/[0.03] border border-white/[0.08] rounded-xl p-6 cursor-default backdrop-blur-sm h-full hover:border-skyblue/20"
                   whileHover={{
                     y: -6,
                     scale: 1.02,
                     boxShadow: "0 20px 40px rgba(0,152,218,0.08)",
-                    borderColor: "rgba(245, 134, 52, 0.4)",
                   }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
@@ -462,69 +463,73 @@ const PrintShopNewPage: React.FC = () => {
                       </motion.div>
                     ))}
                   </div>
-                  <p className="text-iceblue/70 mb-4 italic">
+                  <p className="text-white/45 mb-4 italic">
                     "{testimonial.text}"
                   </p>
                   <div>
                     <p className="font-bold text-white group-hover:text-skyblue transition-colors duration-300">
                       {testimonial.name}
                     </p>
-                    <p className="text-sm text-iceblue/50">{testimonial.role}</p>
+                    <p className="text-sm text-white/40">{testimonial.role}</p>
                   </div>
                 </motion.div>
-              </Reveal>
+              </motion.div>
             ))}
           </div>
         </Container>
-
-        <SectionConnector color="orange" side="left" />
       </section>
 
       {/* ==================== CTA ==================== */}
-      <section className="relative py-24 md:py-36 bg-oxford-deep sticky top-0 z-[60] overflow-hidden">
-        <OrbitalBackground variant="cta" />
+      <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-[60] overflow-hidden">
+        {/* Animated atmospheric orbs */}
+        <motion.div
+          animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[15%] -left-20 w-[550px] h-[550px] rounded-full bg-skyblue/[0.12] blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[20%] -right-20 w-[450px] h-[450px] rounded-full bg-orange/[0.1] blur-[140px]"
+        />
 
-        <DiagonalLines className="top-0 left-0 text-orange/5" thick />
-        <DotGrid className="bottom-8 right-8 text-skyblue/10" />
-        <CrossMark className="absolute top-[20%] left-[15%] text-skyblue/15" size={18} />
-        <CrossMark className="absolute bottom-[25%] right-[12%] text-orange/15" size={12} />
-
-        <FloatingRule className="top-0 left-0 w-full" color="orange" thick />
+        {/* Geometric SVGs */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+          <circle cx="50%" cy="50%" r="200" stroke="white" fill="none" strokeWidth="0.5"/>
+          <line x1="10%" y1="0" x2="10%" y2="100%" stroke="white" strokeWidth="0.3"/>
+        </svg>
 
         <Container className="relative z-10 text-center">
-          <Reveal>
-            <AccentLine color="skyblue" thickness="medium" width="w-20" className="mx-auto mb-8" />
-          </Reveal>
-          <Reveal delay={0.1}>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-8">Get Started</p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.1 }}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight">
               Ready to Print?
             </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-iceblue/70 text-lg mb-10 max-w-2xl mx-auto">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}>
+            <p className="text-white/40 text-lg mb-10 max-w-2xl mx-auto">
               Get a free quote today and experience the Gr8QM difference.
             </p>
-          </Reveal>
-          <Reveal delay={0.3}>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.3 }}>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Button variant="pry" onClick={() => setModalOpen(true)}>
-                Get a Quote
-                <ArrowRightIcon size={20} />
-              </Button>
-              <Button
-                variant="sec"
-                onClick={() => navigate("/portfolio?category=print-shop")}
-                className="border-white/20 text-white hover:border-skyblue/40"
+              <MagneticButton>
+                <Button variant="primary" size="lg" onClick={() => setModalOpen(true)}>
+                  Get a Quote <ArrowRightIcon size={18} />
+                </Button>
+              </MagneticButton>
+              <Link
+                to="/portfolio?category=print-shop"
+                className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-white/[0.08] text-white hover:border-skyblue/20 transition-all duration-300"
               >
-                <div className="button-content">
-                  View Portfolio
-                  <ArrowRightIcon size={18} className="arrow" />
-                </div>
-              </Button>
+                <span className="relative z-10">View Portfolio</span>
+                <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+              </Link>
             </div>
-          </Reveal>
-
-          <FloatingRule className="bottom-0 left-0 w-full" color="skyblue" dashed />
+          </motion.div>
         </Container>
       </section>
 

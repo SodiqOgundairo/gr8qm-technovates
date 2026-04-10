@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import OrbitalBackground from "../components/animations/OrbitalBackground";
 import Container from "../components/layout/Container";
-import { DotGrid, DiagonalLines, CrossMark } from "../components/animations/DesignElements";
 
 const glitchKeyframes = {
   hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
@@ -21,14 +19,25 @@ const stagger = {
 const NotFoundNew: React.FC = () => {
   return (
     <div className="fixed inset-0 bg-oxford-deep overflow-hidden flex items-center justify-center">
-      {/* Orbital glow background */}
-      <OrbitalBackground variant="hero" />
+      {/* Animated atmospheric orbs */}
+      <motion.div
+        animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+      />
+      <motion.div
+        animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+      />
 
-      {/* Geometric decorations */}
-      <DotGrid className="top-8 left-8 text-skyblue/20" />
-      <DiagonalLines className="bottom-0 right-0 text-orange/10" thick />
-      <CrossMark className="absolute top-[15%] right-[20%] text-skyblue/15" size={20} />
-      <CrossMark className="absolute bottom-[20%] left-[15%] text-orange/15" size={14} />
+      {/* Geometric SVGs */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+        <circle cx="15%" cy="20%" r="120" stroke="white" fill="none" strokeWidth="0.5"/>
+        <circle cx="85%" cy="75%" r="80" stroke="white" fill="none" strokeWidth="0.3"/>
+        <line x1="70%" y1="0" x2="70%" y2="100%" stroke="white" strokeWidth="0.3"/>
+        <line x1="0" y1="60%" x2="100%" y2="60%" stroke="white" strokeWidth="0.3"/>
+      </svg>
 
       {/* Floating geometric shapes */}
       <motion.div
@@ -100,8 +109,8 @@ const NotFoundNew: React.FC = () => {
           {/* CTA Button */}
           <motion.div variants={glitchKeyframes}>
             <Link
-              to="/new"
-              className="group relative inline-flex items-center gap-3 px-8 py-3.5 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
+              to="/"
+              className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
             >
               <motion.span
                 className="relative z-10 text-skyblue"

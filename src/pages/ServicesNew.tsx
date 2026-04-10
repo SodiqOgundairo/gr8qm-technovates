@@ -1,13 +1,13 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
 import SplitText from "../components/animations/SplitText";
 import MarqueeText from "../components/animations/MarqueeText";
 import MagneticButton from "../components/animations/MagneticButton";
+import { Button } from "devign";
 import ScrollTextReveal from "../components/animations/ScrollTextReveal";
-import { Reveal } from "../components/animations/DesignElements";
 import {
   ArrowRightIcon,
   CodeIcon,
@@ -34,7 +34,7 @@ const SERVICES = [
       "Database Design",
       "Ongoing Support",
     ],
-    href: "/new/services/design-build",
+    href: "/services/design-build",
   },
   {
     num: "02",
@@ -49,7 +49,7 @@ const SERVICES = [
       "Custom Packaging",
       "Fast Turnaround",
     ],
-    href: "/new/services/print-shop",
+    href: "/services/print-shop",
   },
   {
     num: "03",
@@ -64,7 +64,7 @@ const SERVICES = [
       "QA & Automation",
       "Sponsored Programs",
     ],
-    href: "/new/services/tech-training",
+    href: "/services/tech-training",
   },
 ];
 
@@ -87,10 +87,16 @@ const radialSpot = (color: string, y = "50%") =>
    SERVICES — editorial showcase
    ════════════════════════════════════════════════════════════ */
 const ServicesNew: React.FC = () => {
+  const navigate = useNavigate();
+
+  /* ── refs ── */
   const heroRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const whyRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
+  /* ── hero parallax ── */
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef as React.RefObject<HTMLElement>,
     offset: ["start start", "end start"],
@@ -99,11 +105,72 @@ const ServicesNew: React.FC = () => {
   const heroOrbY = useTransform(heroProgress, [0, 1], [0, -50]);
   const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
 
+  /* ── cards section: scroll-driven transforms ── */
   const { scrollYProgress: cardsProgress } = useScroll({
     target: cardsRef as React.RefObject<HTMLElement>,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
   const decoY = useTransform(cardsProgress, [0, 1], [60, -60]);
+  // title stagger
+  const cardsTitleY = useTransform(cardsProgress, [0.02, 0.12], [40, 0]);
+  const cardsTitleO = useTransform(cardsProgress, [0.02, 0.10], [0, 1]);
+  const cardsHeadY = useTransform(cardsProgress, [0.05, 0.15], [50, 0]);
+  const cardsHeadO = useTransform(cardsProgress, [0.05, 0.13], [0, 1]);
+  // title fades out as cards scroll through
+  const cardsTitleFadeO = useTransform(cardsProgress, [0.75, 0.88], [1, 0]);
+  const cardsTitleFadeY = useTransform(cardsProgress, [0.75, 0.88], [0, -50]);
+
+  // staggered per-service-block transforms (3 blocks)
+  const sb0y = useTransform(cardsProgress, [0.10, 0.30], [120, 0]);
+  const sb0o = useTransform(cardsProgress, [0.10, 0.22], [0, 1]);
+  const sb1y = useTransform(cardsProgress, [0.28, 0.48], [120, 0]);
+  const sb1o = useTransform(cardsProgress, [0.28, 0.40], [0, 1]);
+  const sb2y = useTransform(cardsProgress, [0.46, 0.66], [120, 0]);
+  const sb2o = useTransform(cardsProgress, [0.46, 0.58], [0, 1]);
+
+  const svcBlockStyles = [
+    { y: sb0y, opacity: sb0o },
+    { y: sb1y, opacity: sb1o },
+    { y: sb2y, opacity: sb2o },
+  ];
+
+  /* ── why us: scroll-driven transforms ── */
+  const { scrollYProgress: whyProgress } = useScroll({
+    target: whyRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const whyLabelY = useTransform(whyProgress, [0.05, 0.20], [40, 0]);
+  const whyLabelO = useTransform(whyProgress, [0.05, 0.16], [0, 1]);
+  const whyHeadY = useTransform(whyProgress, [0.10, 0.25], [50, 0]);
+  const whyHeadO = useTransform(whyProgress, [0.10, 0.22], [0, 1]);
+
+  // staggered per-card transforms
+  const w0y = useTransform(whyProgress, [0.18, 0.38], [100, 0]);
+  const w0o = useTransform(whyProgress, [0.18, 0.30], [0, 1]);
+  const w1y = useTransform(whyProgress, [0.26, 0.46], [100, 0]);
+  const w1o = useTransform(whyProgress, [0.26, 0.38], [0, 1]);
+  const w2y = useTransform(whyProgress, [0.34, 0.54], [100, 0]);
+  const w2o = useTransform(whyProgress, [0.34, 0.46], [0, 1]);
+
+  const whyCardStyles = [
+    { y: w0y, opacity: w0o },
+    { y: w1y, opacity: w1o },
+    { y: w2y, opacity: w2o },
+  ];
+
+  /* ── CTA: staggered element scroll transforms ── */
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const ctaLabelY = useTransform(ctaProgress, [0.05, 0.22], [40, 0]);
+  const ctaLabelO = useTransform(ctaProgress, [0.05, 0.18], [0, 1]);
+  const ctaHeadY = useTransform(ctaProgress, [0.12, 0.32], [50, 0]);
+  const ctaHeadO = useTransform(ctaProgress, [0.12, 0.25], [0, 1]);
+  const ctaParaY = useTransform(ctaProgress, [0.20, 0.40], [40, 0]);
+  const ctaParaO = useTransform(ctaProgress, [0.20, 0.33], [0, 1]);
+  const ctaBtnY = useTransform(ctaProgress, [0.30, 0.48], [30, 0]);
+  const ctaBtnO = useTransform(ctaProgress, [0.30, 0.42], [0, 1]);
 
   return (
     <PageTransition>
@@ -117,7 +184,7 @@ const ServicesNew: React.FC = () => {
           ══════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="sticky top-0 z-10 h-screen flex flex-col justify-center overflow-hidden bg-black"
+        className="sticky top-0 z-10 h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep"
       >
         <motion.div style={{ y: heroOrbY }} className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[20%] left-1/4 w-[500px] h-[500px] rounded-full bg-skyblue/[0.06] blur-[130px]" />
@@ -186,7 +253,7 @@ const ServicesNew: React.FC = () => {
           § 2  SCROLL TEXT — philosophy
           ══════════════════════════════════════════════════════ */}
       <div ref={storyRef} className="relative z-20" style={{ height: "250vh" }}>
-        <section className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+        <section className="sticky top-0 h-screen flex items-center bg-oxford-card overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: radialSpot("rgba(0,152,218,0.05)") }}
@@ -207,7 +274,7 @@ const ServicesNew: React.FC = () => {
       {/* ══════════════════════════════════════════════════════
           § 3  MARQUEE
           ══════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-[25] bg-black border-y border-white/[0.05] py-4">
+      <div className="sticky top-0 z-[25] bg-oxford-deep border-y border-white/[0.05] py-4">
         <MarqueeText
           text="Design & Build · Print Shop · Tech Training · Premium Quality · "
           speed={35}
@@ -217,135 +284,143 @@ const ServicesNew: React.FC = () => {
 
       {/* ══════════════════════════════════════════════════════
           § 4  SERVICES — alternating editorial cards
+          Scroll-driven: title staggers in, each service block
+          enters with staggered y/opacity transforms.
           ══════════════════════════════════════════════════════ */}
-      <section
-        ref={cardsRef}
-        className="sticky top-0 z-30 min-h-screen flex items-center py-28 md:py-40 bg-oxford-deep overflow-hidden"
-      >
-        <div
-          className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
-        />
+      <div ref={cardsRef} className="relative z-30" style={{ height: "500vh" }}>
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep">
+          <div
+            className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
+          />
 
-        {/* Bold geometric vector */}
-        <motion.svg style={{ y: decoY }} className="absolute -top-20 -left-20 w-[600px] h-[600px] pointer-events-none" viewBox="0 0 600 600" fill="none" aria-hidden="true">
-          <circle cx="300" cy="300" r="280" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
-          <line x1="0" y1="300" x2="600" y2="300" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
-          <line x1="300" y1="0" x2="300" y2="600" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
-        </motion.svg>
+          {/* Bold geometric vector */}
+          <motion.svg style={{ y: decoY }} className="absolute -top-20 -left-20 w-[600px] h-[600px] pointer-events-none" viewBox="0 0 600 600" fill="none" aria-hidden="true">
+            <circle cx="300" cy="300" r="280" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+            <line x1="0" y1="300" x2="600" y2="300" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+            <line x1="300" y1="0" x2="300" y2="600" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+          </motion.svg>
 
-        <Container className="relative z-10">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block">
-              Our Services
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-20 max-w-3xl">
-              Everything you need,{" "}
-              <span className="text-skyblue">under one roof.</span>
-            </h2>
-          </Reveal>
+          <motion.div
+            style={{ y: cardsTitleFadeY, opacity: cardsTitleFadeO }}
+            className="relative z-10 mb-6 md:mb-10"
+          >
+            <Container>
+              <motion.span
+                style={{ y: cardsTitleY, opacity: cardsTitleO }}
+                className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block"
+              >
+                Our Services
+              </motion.span>
+              <motion.h2
+                style={{ y: cardsHeadY, opacity: cardsHeadO }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] max-w-3xl"
+              >
+                Everything you need,{" "}
+                <span className="text-skyblue">under one roof.</span>
+              </motion.h2>
+            </Container>
+          </motion.div>
 
-          {/* Service blocks — alternating layout */}
-          <div className="flex flex-col gap-20 md:gap-28">
-            {SERVICES.map((s, i) => {
-              const isEven = i % 2 === 0;
-              return (
-                <Reveal key={s.num} delay={0.1}>
-                  <div className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start ${
-                    !isEven ? "lg:[direction:rtl]" : ""
-                  }`}>
-                    {/* Text side */}
-                    <div className={`${!isEven ? "lg:[direction:ltr]" : ""}`}>
-                      <span className="font-mono text-[13px] text-white/15 block mb-3">{s.num}</span>
-                      <s.Icon size={32} className="text-skyblue/60 mb-5" />
-                      <h3 className="text-3xl md:text-4xl lg:text-[2.8rem] font-bold text-white tracking-[-0.02em] mb-4">
-                        {s.title}<span className="text-skyblue">.</span>
-                      </h3>
-                      <p className="text-white/40 text-lg leading-relaxed mb-8 max-w-md">{s.desc}</p>
-                      <MagneticButton>
-                        <Link
-                          to={s.href}
-                          className="inline-flex items-center gap-2.5 text-skyblue font-medium hover:gap-4 transition-all duration-300"
-                        >
-                          Explore {s.title}
-                          <ArrowRightIcon size={16} />
-                        </Link>
-                      </MagneticButton>
-                    </div>
-
-                    {/* Features card */}
-                    <div className={`${!isEven ? "lg:[direction:ltr]" : ""}`}>
-                      <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-8 lg:p-10">
-                        <ul className="space-y-4">
-                          {s.features.map((feat, fi) => (
-                            <motion.li
-                              key={fi}
-                              className="flex items-center gap-3 text-white/50"
-                              initial={{ opacity: 0, x: -16 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ delay: 0.2 + fi * 0.06, duration: 0.4, ease: [0.22, 0.6, 0.36, 1] }}
+          {/* Service blocks — alternating layout, scroll-driven */}
+          <div className="relative z-10 overflow-y-auto max-h-[60vh] scrollbar-hide">
+            <Container>
+              <div className="flex flex-col gap-14 md:gap-20">
+                {SERVICES.map((s, i) => {
+                  const isEven = i % 2 === 0;
+                  return (
+                    <motion.div key={s.num} style={svcBlockStyles[i]}>
+                      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start ${
+                        !isEven ? "lg:[direction:rtl]" : ""
+                      }`}>
+                        {/* Text side */}
+                        <div className={`${!isEven ? "lg:[direction:ltr]" : ""}`}>
+                          <span className="font-mono text-[13px] text-white/15 block mb-3">{s.num}</span>
+                          <s.Icon size={32} className="text-skyblue/60 mb-5" />
+                          <h3 className="text-3xl md:text-4xl lg:text-[2.8rem] font-bold text-white tracking-[-0.02em] mb-4">
+                            {s.title}<span className="text-skyblue">.</span>
+                          </h3>
+                          <p className="text-white/40 text-lg leading-relaxed mb-8 max-w-md">{s.desc}</p>
+                          <MagneticButton>
+                            <Link
+                              to={s.href}
+                              className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
                             >
-                              <span className="w-1 h-1 rounded-full bg-skyblue/50 flex-shrink-0" />
-                              <span className="text-[15px]">{feat}</span>
-                            </motion.li>
-                          ))}
-                        </ul>
-                        <motion.div
-                          className="mt-8 h-px w-0 bg-skyblue/15"
-                          whileInView={{ width: "100%" }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.6, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        />
+                              <span className="relative z-10">Explore {s.title}</span>
+                              <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                              <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+                            </Link>
+                          </MagneticButton>
+                        </div>
+
+                        {/* Features card */}
+                        <div className={`${!isEven ? "lg:[direction:ltr]" : ""}`}>
+                          <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-8 lg:p-10">
+                            <ul className="space-y-4">
+                              {s.features.map((feat, fi) => (
+                                <li
+                                  key={fi}
+                                  className="flex items-center gap-3 text-white/50"
+                                >
+                                  <span className="w-1 h-1 rounded-full bg-skyblue/50 flex-shrink-0" />
+                                  <span className="text-[15px]">{feat}</span>
+                                </li>
+                              ))}
+                            </ul>
+                            <div className="mt-8 h-px w-full bg-skyblue/15" />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Reveal>
-              );
-            })}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </Container>
           </div>
-        </Container>
-      </section>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
-          § 5  WHY US
+          § 5  WHY US — scroll-driven staggered cards
           ══════════════════════════════════════════════════════ */}
-      <section className="sticky top-0 z-40 min-h-screen flex items-center py-28 md:py-40 bg-black overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
-        />
+      <div ref={whyRef} className="relative z-40" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-oxford-card">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
+          />
 
-        <Container className="relative z-10">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-4 block text-center">
+          <Container className="relative z-10">
+            <motion.span
+              style={{ y: whyLabelY, opacity: whyLabelO }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-4 block text-center"
+            >
               Why Us
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] mb-16 md:mb-20 text-center max-w-3xl mx-auto">
+            </motion.span>
+            <motion.h2
+              style={{ y: whyHeadY, opacity: whyHeadO }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-[-0.04em] mb-16 md:mb-20 text-center max-w-3xl mx-auto"
+            >
               Why <span className="text-skyblue">GR8QM</span>?
-            </h2>
-          </Reveal>
+            </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
-            {WHY.map((w, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="group relative flex flex-col h-full p-8 lg:p-10 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500 text-center">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="flex justify-center mb-5 relative z-10">
-                    <w.Icon size={32} className="text-skyblue/50 group-hover:text-skyblue transition-colors duration-300" />
+            <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
+              {WHY.map((w, i) => (
+                <motion.div key={i} style={whyCardStyles[i]}>
+                  <div className="group relative flex flex-col h-full p-8 lg:p-10 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500 text-center">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    <div className="flex justify-center mb-5 relative z-10">
+                      <w.Icon size={32} className="text-skyblue/50 group-hover:text-skyblue transition-colors duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 relative z-10">{w.title}</h3>
+                    <p className="text-white/40 leading-relaxed text-[15px] relative z-10">{w.desc}</p>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3 relative z-10">{w.title}</h3>
-                  <p className="text-white/40 leading-relaxed text-[15px] relative z-10">{w.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
           § 6  REVERSE MARQUEE
@@ -360,44 +435,49 @@ const ServicesNew: React.FC = () => {
       </div>
 
       {/* ══════════════════════════════════════════════════════
-          § 7  CTA
+          § 7  CTA — scroll-driven staggered elements
           ══════════════════════════════════════════════════════ */}
-      <section className="relative z-50 h-screen flex items-center bg-oxford-deep overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-skyblue/[0.04] blur-[150px]" />
-          <div className="absolute bottom-0 left-1/4 w-[350px] h-[350px] rounded-full bg-orange/[0.03] blur-[120px]" />
-        </div>
-        <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
+      <div ref={ctaRef} className="relative z-50" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-oxford-deep">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-skyblue/[0.04] blur-[150px]" />
+            <div className="absolute bottom-0 left-1/4 w-[350px] h-[350px] rounded-full bg-orange/[0.03] blur-[120px]" />
+          </div>
+          <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
 
-        <Container className="relative z-10 text-center">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block">
+          <Container className="relative z-10 text-center w-full">
+            <motion.span
+              style={{ y: ctaLabelY, opacity: ctaLabelO }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block"
+            >
               Let's Work Together
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl mx-auto">
+            </motion.span>
+
+            <motion.h2
+              style={{ y: ctaHeadY, opacity: ctaHeadO }}
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl mx-auto"
+            >
               Got a project in{" "}
               <span className="text-skyblue">mind?</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-12">
+            </motion.h2>
+
+            <motion.p
+              style={{ y: ctaParaY, opacity: ctaParaO }}
+              className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-12"
+            >
               Tell us what you're building. We'll tell you how we can help.
-            </p>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <MagneticButton>
-              <Link
-                to="/new/contact"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-skyblue text-white font-semibold rounded-full text-lg shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_50px_rgba(0,152,218,0.4)] transition-all duration-400"
-              >
-                Start a Conversation <ArrowRightIcon size={18} />
-              </Link>
-            </MagneticButton>
-          </Reveal>
-        </Container>
-      </section>
+            </motion.p>
+
+            <motion.div style={{ y: ctaBtnY, opacity: ctaBtnO }}>
+              <MagneticButton>
+                <Button variant="primary" size="lg" onClick={() => navigate("/contact")} rightIcon={<ArrowRightIcon size={18} />}>
+                  Start a Conversation
+                </Button>
+              </MagneticButton>
+            </motion.div>
+          </Container>
+        </div>
+      </div>
     </PageTransition>
   );
 };

@@ -74,33 +74,9 @@ function App() {
       <CursorTrail />
       <ChatWidget />
       <Routes>
-        {/* ═══ NEW DESIGN ROUTES (permanent dark) ═══ */}
+        {/* ═══ OLD DESIGN ROUTES ═══ */}
         <Route
-          path="/new/*"
-          element={
-            <DarkLayout>
-              <Routes>
-                <Route path="/" element={<HomeNew />} />
-                <Route path="/about" element={<AboutNew />} />
-                <Route path="/services" element={<ServicesNew />} />
-                <Route path="/services/design-build" element={<DesignBuildNew />} />
-                <Route path="/services/print-shop" element={<PrintShopNew />} />
-                <Route path="/services/tech-training" element={<TechTrainingNew />} />
-                <Route path="/trainings" element={<TrainingsNew />} />
-                <Route path="/portfolio" element={<PortfolioNew />} />
-                <Route path="/careers" element={<CareersNew />} />
-                <Route path="/contact" element={<ContactNew />} />
-                <Route path="/blog" element={<BlogIndexNew />} />
-                <Route path="/blog/:slug" element={<BlogPostNew />} />
-                <Route path="*" element={<NotFoundNew />} />
-              </Routes>
-            </DarkLayout>
-          }
-        />
-
-        {/* ═══ ORIGINAL DESIGN ROUTES ═══ */}
-        <Route
-          path="/*"
+          path="/old/*"
           element={
             <>
               <Header />
@@ -190,6 +166,32 @@ function App() {
 
         {/* Public invoice payment page */}
         <Route path="/pay-invoice/:invoiceNumber" element={<PayInvoice />} />
+
+        {/* ═══ MAIN ROUTES (dark design) — catch-all last ═══ */}
+        <Route
+          path="/*"
+          element={
+            <DarkLayout>
+              <Routes>
+                <Route path="/" element={<HomeNew />} />
+                <Route path="/about" element={<AboutNew />} />
+                <Route path="/services" element={<ServicesNew />} />
+                <Route path="/services/design-build" element={<DesignBuildNew />} />
+                <Route path="/services/print-shop" element={<PrintShopNew />} />
+                <Route path="/services/tech-training" element={<TechTrainingNew />} />
+                <Route path="/trainings" element={<TrainingsNew />} />
+                <Route path="/portfolio" element={<PortfolioNew />} />
+                <Route path="/careers" element={<CareersNew />} />
+                <Route path="/contact" element={<ContactNew />} />
+                <Route path="/blog" element={<BlogIndexNew />} />
+                <Route path="/blog/:slug" element={<BlogPostNew />} />
+                <Route path="/forms/:shortCode" element={<PublicForm />} />
+                <Route path="/forms/:shortCode/success" element={<FormSuccess />} />
+                <Route path="*" element={<NotFoundNew />} />
+              </Routes>
+            </DarkLayout>
+          }
+        />
       </Routes>
     </Router>
   );

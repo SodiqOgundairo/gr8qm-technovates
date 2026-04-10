@@ -136,6 +136,34 @@ export default function Applications() {
     );
   };
 
+  const handleConfirm = async (app: Application) => {
+    if (!confirm(`Confirm application from ${app.name}?`)) return;
+    try {
+      const { error } = await supabase
+        .from("course_applications")
+        .update({ status: "confirmed" })
+        .eq("id", app.id);
+      if (error) throw error;
+      fetchApplications(page, pageSize, query, statusFilter, paymentFilter);
+    } catch (err: any) {
+      alert(`Error: ${err.message}`);
+    }
+  };
+
+  const handleReject = async (app: Application) => {
+    if (!confirm(`Reject application from ${app.name}?`)) return;
+    try {
+      const { error } = await supabase
+        .from("course_applications")
+        .update({ status: "rejected" })
+        .eq("id", app.id);
+      if (error) throw error;
+      fetchApplications(page, pageSize, query, statusFilter, paymentFilter);
+    } catch (err: any) {
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -298,10 +326,10 @@ export default function Applications() {
                               {app.status === "pending" &&
                                 app.payment_status === "paid" && (
                                   <>
-                                    <button className="text-green-600 hover:text-green-800">
+                                    <button className="text-green-600 hover:text-green-800" onClick={() => handleConfirm(app)} title="Confirm">
                                       <FaCheckCircle size={20} />
                                     </button>
-                                    <button className="text-red-600 hover:text-red-800">
+                                    <button className="text-red-600 hover:text-red-800" onClick={() => handleReject(app)} title="Reject">
                                       <FaTimesCircle size={20} />
                                     </button>
                                   </>

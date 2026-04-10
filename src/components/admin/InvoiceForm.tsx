@@ -220,6 +220,7 @@ export default function InvoiceForm({
               to: formData.client_email,
               subject: emailTemplate.subject,
               html: emailTemplate.html,
+              text: emailTemplate.text,
             }),
           });
 

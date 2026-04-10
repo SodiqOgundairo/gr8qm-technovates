@@ -14,6 +14,27 @@ export interface EmailReceipt {
 }
 
 /**
+ * Strip HTML tags and decode common entities to produce plain text.
+ */
+function generatePlainText(html: string): string {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&#8358;|₦/g, 'NGN ')
+    .replace(/\n\s*\n\s*\n/g, '\n\n')
+    .replace(/[ \t]+/g, ' ')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line, i, arr) => !(line === '' && arr[i - 1] === ''))
+    .join('\n')
+    .trim();
+}
+
+/**
  * Send payment receipt email via Supabase Edge Function
  */
 export const sendReceiptEmail = async (receipt: EmailReceipt) => {
@@ -49,6 +70,7 @@ export const sendReceiptEmail = async (receipt: EmailReceipt) => {
           to: receipt.to,
           subject: emailTemplate.subject,
           html: emailTemplate.html,
+          text: emailTemplate.text,
         }),
       }
     );
@@ -167,7 +189,7 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>✓ Payment Confirmed!</h1>
+              <h1>Payment Confirmed</h1>
               <p style="margin: 10px 0 0 0; font-size: 16px;">Thank you for your commitment, ${receipt.customerName}</p>
             </div>
             <div class="content">
@@ -203,6 +225,7 @@ export const emailTemplates = {
         </body>
       </html>
     `,
+    text: `Payment Confirmed\n\nThank you for your commitment, ${receipt.customerName}.\n\nPayment Receipt\n- Course: ${receipt.courseName}\n- Amount Paid: NGN ${receipt.amount.toLocaleString()}\n- Payment Reference: ${receipt.reference}\n- Date: ${receipt.date}\n\n100% REFUNDABLE UPON COURSE COMPLETION\n\nGR8QM Technovates\nFaith that builds. Impact that lasts.\nNeed help? Contact us at hello@gr8qm.com`,
   }),
 
   serviceReceipt: (receipt: EmailReceipt) => ({
@@ -283,7 +306,7 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>✓ Payment Received!</h1>
+              <h1>Payment Received</h1>
               <p style="margin: 10px 0 0 0; font-size: 16px;">Verified Payment for ${receipt.customerName}</p>
             </div>
             <div class="content">
@@ -319,6 +342,7 @@ export const emailTemplates = {
         </body>
       </html>
     `,
+    text: `Payment Received\n\nVerified Payment for ${receipt.customerName}.\n\nPayment Receipt\n- Item: ${receipt.courseName}\n- Amount Paid: NGN ${receipt.amount.toLocaleString()}\n- Payment Reference: ${receipt.reference}\n- Date: ${receipt.date}\n\nWe have successfully received your payment for the above invoice/service.\n\nGR8QM Technovates\nFaith that builds. Impact that lasts.\nNeed help? Contact us at hello@gr8qm.com`,
   }),
 
   invoice: (invoice: any) => ({
@@ -361,7 +385,7 @@ export const emailTemplates = {
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="https://www.gr8qm.com/pay-invoice/${invoice.invoice_number}" class="pay-button">
-                  💳 Pay Now
+                  Pay Now
                 </a>
               </div>
               
@@ -378,6 +402,7 @@ export const emailTemplates = {
         </body>
       </html>
     `,
+    text: `Invoice ${invoice.invoice_number} from GR8QM Technovates\n\nDear ${invoice.client_name},\n\nThank you for choosing GR8QM Technovates. Please find your invoice details below:\n\n- Service: ${invoice.service_description}\n- Due Date: ${new Date(invoice.due_date).toLocaleDateString()}${invoice.notes ? `\n- Notes: ${invoice.notes}` : ''}\n\nAmount Due: NGN ${invoice.amount.toLocaleString()}\n\nPay Now: https://www.gr8qm.com/pay-invoice/${invoice.invoice_number}\n\nIf you have any questions, feel free to contact us.\n\nGR8QM Technovates\nFaith that builds. Impact that lasts.\nhello@gr8qm.com`,
   }),
 
   serviceRequestNotification: (request: any) => ({
@@ -399,7 +424,7 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h2>🔔 New Service Request</h2>
+              <h2>New Service Request</h2>
             </div>
             <div class="content">
               <p>A new service request has been submitted:</p>
@@ -420,6 +445,7 @@ export const emailTemplates = {
         </body>
       </html>
     `,
+    text: `New Service Request\n\nA new service request has been submitted:\n\n- Service Type: ${request.service_type}\n- Name: ${request.name}\n- Email: ${request.email}\n- Phone: ${request.phone}\n- Budget Range: ${request.budget_range || 'Not specified'}\n- Timeline: ${request.timeline || 'Not specified'}\n- Description: ${request.project_description}\n\nLog in to the admin panel to respond to this request.`,
   }),
 
   contactMessage: (data: { name: string; email: string; message: string }) => ({
@@ -441,7 +467,7 @@ export const emailTemplates = {
         <body>
           <div class="container">
             <div class="header">
-              <h1 style="margin: 0;">📬 New Contact Message</h1>
+              <h1 style="margin: 0;">New Contact Message</h1>
             </div>
             <div class="content">
               <p style="font-size: 16px; color: #666;">You have received a new message from your website's contact form.</p>
@@ -458,5 +484,6 @@ export const emailTemplates = {
         </body>
       </html>
     `,
+    text: `New Contact Message\n\nYou have received a new message from your website's contact form.\n\n- Name: ${data.name}\n- Email: ${data.email}\n- Message: ${data.message || 'No message provided'}\n\nYou can reply directly to ${data.email} or view all messages in the admin panel.`,
   }),
 };

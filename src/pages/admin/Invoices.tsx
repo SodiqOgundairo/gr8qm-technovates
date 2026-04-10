@@ -141,6 +141,7 @@ export default function Invoices() {
             to: invoice.client_email,
             subject: emailTemplate.subject,
             html: emailTemplate.html,
+            text: emailTemplate.text,
           }),
         }
       );

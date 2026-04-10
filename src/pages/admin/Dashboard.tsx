@@ -40,9 +40,8 @@ const AdminDashboard: React.FC = () => {
           .select("*", { count: "exact", head: true })
           .eq("status", "pending"),
         supabase
-          .from("contact_messages")
-          .select("*", { count: "exact", head: true })
-          .eq("read", false),
+          .from("messages")
+          .select("*", { count: "exact", head: true }),
         supabase
           .from("transactions")
           .select("*")
@@ -199,7 +198,7 @@ const AdminDashboard: React.FC = () => {
                 <Mail className="h-6 w-6 text-oxford" />
               </div>
               <span className="text-xs font-semibold text-gray-500 uppercase">
-                Unread Messages
+                Total Messages
               </span>
             </div>
             <div className="text-2xl font-bold text-oxford">

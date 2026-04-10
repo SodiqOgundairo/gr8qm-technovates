@@ -1,15 +1,15 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
+import MagneticButton from "../components/animations/MagneticButton";
 import SplitText from "../components/animations/SplitText";
 import MarqueeText from "../components/animations/MarqueeText";
 import AnimatedCounter from "../components/animations/AnimatedCounter";
-import MagneticButton from "../components/animations/MagneticButton";
 import ScrollTextReveal from "../components/animations/ScrollTextReveal";
 import HeroVisual from "../components/animations/HeroVisual";
-import { Reveal } from "../components/animations/DesignElements";
+import { Button } from "devign";
 import {
   ArrowRightIcon,
   HeartIcon,
@@ -53,15 +53,21 @@ const radialSpot = (color: string, y = "50%") =>
    ABOUT — editorial storytelling
    ════════════════════════════════════════════════════════════ */
 const AboutNew: React.FC = () => {
+  const navigate = useNavigate();
   const pageSEO = getPageSEO("about");
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "https://gr8qm.com/" },
     { name: "About", url: "https://gr8qm.com/about" },
   ]);
 
+  /* ── refs ── */
   const heroRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
+  const valuesRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
+  /* ── hero parallax (unchanged) ── */
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef as React.RefObject<HTMLElement>,
     offset: ["start start", "end start"],
@@ -69,6 +75,89 @@ const AboutNew: React.FC = () => {
   const heroTextY = useTransform(heroProgress, [0, 1], [0, -160]);
   const heroOrbY = useTransform(heroProgress, [0, 1], [0, -50]);
   const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
+
+  /* ── values: scroll-driven transforms ── */
+  const { scrollYProgress: valuesProgress } = useScroll({
+    target: valuesRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  // title group stays visible then fades as cards enter
+  const valTitleY = useTransform(valuesProgress, [0.65, 0.82], [0, -60]);
+  const valTitleScale = useTransform(valuesProgress, [0.65, 0.82], [1, 0.85]);
+  const valTitleOpacity = useTransform(valuesProgress, [0.65, 0.82], [1, 0]);
+
+  // label
+  const valLabelY = useTransform(valuesProgress, [0.02, 0.12], [40, 0]);
+  const valLabelO = useTransform(valuesProgress, [0.02, 0.10], [0, 1]);
+  // heading
+  const valHeadY = useTransform(valuesProgress, [0.06, 0.18], [50, 0]);
+  const valHeadO = useTransform(valuesProgress, [0.06, 0.14], [0, 1]);
+  // paragraph
+  const valParaY = useTransform(valuesProgress, [0.10, 0.22], [40, 0]);
+  const valParaO = useTransform(valuesProgress, [0.10, 0.18], [0, 1]);
+
+  // staggered per-card transforms (6 cards)
+  const vc0y = useTransform(valuesProgress, [0.18, 0.38], [120, 0]);
+  const vc0o = useTransform(valuesProgress, [0.18, 0.30], [0, 1]);
+  const vc1y = useTransform(valuesProgress, [0.24, 0.44], [120, 0]);
+  const vc1o = useTransform(valuesProgress, [0.24, 0.36], [0, 1]);
+  const vc2y = useTransform(valuesProgress, [0.30, 0.50], [120, 0]);
+  const vc2o = useTransform(valuesProgress, [0.30, 0.42], [0, 1]);
+  const vc3y = useTransform(valuesProgress, [0.36, 0.56], [120, 0]);
+  const vc3o = useTransform(valuesProgress, [0.36, 0.48], [0, 1]);
+  const vc4y = useTransform(valuesProgress, [0.42, 0.62], [120, 0]);
+  const vc4o = useTransform(valuesProgress, [0.42, 0.54], [0, 1]);
+  const vc5y = useTransform(valuesProgress, [0.48, 0.68], [120, 0]);
+  const vc5o = useTransform(valuesProgress, [0.48, 0.60], [0, 1]);
+
+  const valCardStyles = [
+    { y: vc0y, opacity: vc0o },
+    { y: vc1y, opacity: vc1o },
+    { y: vc2y, opacity: vc2o },
+    { y: vc3y, opacity: vc3o },
+    { y: vc4y, opacity: vc4o },
+    { y: vc5y, opacity: vc5o },
+  ];
+
+  /* ── stats: per-item scroll transforms ── */
+  const { scrollYProgress: statsProgress } = useScroll({
+    target: statsRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const statsTitleY = useTransform(statsProgress, [0.0, 0.15], [40, 0]);
+  const statsTitleO = useTransform(statsProgress, [0.0, 0.15], [0, 1]);
+
+  const st0y = useTransform(statsProgress, [0.12, 0.35], [80, 0]);
+  const st0o = useTransform(statsProgress, [0.12, 0.25], [0, 1]);
+  const st1y = useTransform(statsProgress, [0.20, 0.43], [80, 0]);
+  const st1o = useTransform(statsProgress, [0.20, 0.33], [0, 1]);
+  const st2y = useTransform(statsProgress, [0.28, 0.51], [80, 0]);
+  const st2o = useTransform(statsProgress, [0.28, 0.41], [0, 1]);
+  const st3y = useTransform(statsProgress, [0.36, 0.59], [80, 0]);
+  const st3o = useTransform(statsProgress, [0.36, 0.49], [0, 1]);
+
+  const statCardStyles = [
+    { y: st0y, opacity: st0o },
+    { y: st1y, opacity: st1o },
+    { y: st2y, opacity: st2o },
+    { y: st3y, opacity: st3o },
+  ];
+
+  /* ── CTA: staggered element scroll transforms ── */
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef as React.RefObject<HTMLElement>,
+    offset: ["start start", "end end"],
+  });
+  const ctaLabelY = useTransform(ctaProgress, [0.05, 0.22], [40, 0]);
+  const ctaLabelO = useTransform(ctaProgress, [0.05, 0.18], [0, 1]);
+  const ctaHeadY = useTransform(ctaProgress, [0.12, 0.32], [50, 0]);
+  const ctaHeadO = useTransform(ctaProgress, [0.12, 0.25], [0, 1]);
+  const ctaPara1Y = useTransform(ctaProgress, [0.20, 0.40], [40, 0]);
+  const ctaPara1O = useTransform(ctaProgress, [0.20, 0.33], [0, 1]);
+  const ctaPara2Y = useTransform(ctaProgress, [0.28, 0.46], [40, 0]);
+  const ctaPara2O = useTransform(ctaProgress, [0.28, 0.40], [0, 1]);
+  const ctaBtnY = useTransform(ctaProgress, [0.36, 0.52], [30, 0]);
+  const ctaBtnO = useTransform(ctaProgress, [0.36, 0.48], [0, 1]);
 
   return (
     <PageTransition>
@@ -86,7 +175,7 @@ const AboutNew: React.FC = () => {
           ══════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="sticky top-0 z-10 h-screen flex flex-col justify-center overflow-hidden bg-black"
+        className="sticky top-0 z-10 h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep"
       >
         <motion.div style={{ y: heroOrbY }} className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[20%] -right-32 w-[450px] h-[450px] rounded-full bg-skyblue/[0.06] blur-[120px]" />
@@ -137,18 +226,17 @@ const AboutNew: React.FC = () => {
                   className="flex flex-wrap gap-4 mt-10"
                 >
                   <MagneticButton>
-                    <Link
-                      to="/new/contact"
-                      className="inline-flex items-center gap-2.5 px-8 py-4 bg-skyblue text-white font-semibold rounded-full shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_40px_rgba(0,152,218,0.4)] transition-all duration-400"
-                    >
-                      Start a Project <ArrowRightIcon size={16} />
-                    </Link>
+                    <Button variant="primary" size="lg" onClick={() => navigate("/contact")} rightIcon={<ArrowRightIcon size={16} />}>
+                      Start a Project
+                    </Button>
                   </MagneticButton>
                   <Link
-                    to="/new/services"
-                    className="inline-flex items-center gap-2 px-8 py-4 border border-white/15 text-white/80 font-medium rounded-full hover:bg-white/5 transition-all duration-300"
+                    to="/services"
+                    className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
                   >
-                    Our Services
+                    <span className="relative z-10">Our Services</span>
+                    <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
                   </Link>
                 </motion.div>
 
@@ -211,7 +299,7 @@ const AboutNew: React.FC = () => {
           § 2  SCROLL TEXT — vision & mission revealed on scroll
           ══════════════════════════════════════════════════════ */}
       <div ref={storyRef} className="relative z-20" style={{ height: "300vh" }}>
-        <section className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+        <section className="sticky top-0 h-screen flex items-center bg-oxford-card overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: radialSpot("rgba(0,152,218,0.05)") }}
@@ -232,7 +320,7 @@ const AboutNew: React.FC = () => {
       {/* ══════════════════════════════════════════════════════
           § 3  MARQUEE
           ══════════════════════════════════════════════════════ */}
-      <div className="sticky top-0 z-[25] bg-black border-y border-white/[0.05] py-4">
+      <div className="sticky top-0 z-[25] bg-oxford-deep border-y border-white/[0.05] py-4">
         <MarqueeText
           text="Purpose · Craft · Excellence · Integrity · Impact · Faith · "
           speed={30}
@@ -241,80 +329,99 @@ const AboutNew: React.FC = () => {
       </div>
 
       {/* ══════════════════════════════════════════════════════
-          § 4  CORE VALUES — editorial grid
+          § 4  CORE VALUES — editorial grid (scroll-driven)
           ══════════════════════════════════════════════════════ */}
-      <section className="sticky top-0 z-30 min-h-screen flex items-center py-28 md:py-40 bg-oxford-deep overflow-hidden">
-        <div
-          className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
-        />
+      <div ref={valuesRef} className="relative z-30" style={{ height: "500vh" }}>
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep">
+          <div
+            className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.04)", "0%") }}
+          />
 
-        {/* Bold geometric vector */}
-        <svg className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 w-[600px] h-[600px] pointer-events-none" viewBox="0 0 600 600" fill="none" aria-hidden="true">
-          <circle cx="300" cy="300" r="280" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
-          <circle cx="300" cy="300" r="200" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
-        </svg>
+          {/* Bold geometric vector */}
+          <svg className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 w-[600px] h-[600px] pointer-events-none" viewBox="0 0 600 600" fill="none" aria-hidden="true">
+            <circle cx="300" cy="300" r="280" stroke="#0098da" strokeWidth="0.5" opacity="0.04" />
+            <circle cx="300" cy="300" r="200" stroke="#0098da" strokeWidth="0.3" opacity="0.03" />
+          </svg>
 
-        <Container className="relative z-10">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block">
-              What Drives Us
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl">
-              Our core <span className="text-skyblue">values.</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="text-white/40 text-lg max-w-xl mb-16 md:mb-20">
-              The principles behind every pixel, every line of code,
-              and every decision we make.
-            </p>
-          </Reveal>
+          <motion.div
+            style={{ y: valTitleY, scale: valTitleScale, opacity: valTitleOpacity }}
+            className="relative z-10 mb-8 md:mb-14"
+          >
+            <Container>
+              <motion.span
+                style={{ y: valLabelY, opacity: valLabelO }}
+                className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/45 mb-4 block"
+              >
+                What Drives Us
+              </motion.span>
+              <motion.h2
+                style={{ y: valHeadY, opacity: valHeadO }}
+                className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-3xl"
+              >
+                Our core <span className="text-skyblue">values.</span>
+              </motion.h2>
+              <motion.p
+                style={{ y: valParaY, opacity: valParaO }}
+                className="text-white/40 text-lg max-w-xl"
+              >
+                The principles behind every pixel, every line of code,
+                and every decision we make.
+              </motion.p>
+            </Container>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            {VALUES.map((v, i) => (
-              <Reveal key={v.num} delay={i * 0.08}>
-                <div className="group relative flex flex-col h-full p-8 lg:p-9 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="relative z-10">
+            <Container>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+                {VALUES.map((v, i) => (
+                  <motion.div key={v.num} style={valCardStyles[i]}>
+                    <div className="group relative flex flex-col h-full p-8 lg:p-9 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-skyblue/20 transition-colors duration-500">
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-skyblue/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                  <div className="flex items-start justify-between mb-5 relative z-10">
-                    <v.Icon size={24} className="text-skyblue/50 group-hover:text-skyblue transition-colors duration-300" />
-                    <span className="font-mono text-[12px] text-white/10">{v.num}</span>
-                  </div>
+                      <div className="flex items-start justify-between mb-5 relative z-10">
+                        <v.Icon size={24} className="text-skyblue/50 group-hover:text-skyblue transition-colors duration-300" />
+                        <span className="font-mono text-[12px] text-white/10">{v.num}</span>
+                      </div>
 
-                  <h3 className="text-xl font-bold text-white mb-3 relative z-10">{v.title}</h3>
-                  <p className="text-white/40 leading-relaxed text-[15px] relative z-10">{v.desc}</p>
-                </div>
-              </Reveal>
-            ))}
+                      <h3 className="text-xl font-bold text-white mb-3 relative z-10">{v.title}</h3>
+                      <p className="text-white/40 leading-relaxed text-[15px] relative z-10">{v.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </Container>
           </div>
-        </Container>
-      </section>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
-          § 5  STATS
+          § 5  STATS (scroll-driven)
           ══════════════════════════════════════════════════════ */}
-      <section className="sticky top-0 z-40 h-screen flex items-center bg-black overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
-        />
+      <div ref={statsRef} className="relative z-40" style={{ height: "350vh" }}>
+        <div className="sticky top-0 h-screen flex items-center bg-oxford-card overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: radialSpot("rgba(0,152,218,0.03)") }}
+          />
 
-        <Container className="relative z-10">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-16 md:mb-20 block text-center">
+          <Container className="relative z-10 w-full">
+            <motion.span
+              style={{ y: statsTitleY, opacity: statsTitleO }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-white/25 mb-16 md:mb-20 block text-center"
+            >
               Impact in Numbers
-            </span>
-          </Reveal>
+            </motion.span>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4">
-            {STATS.map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 0.08}>
-                <div className={`py-10 md:py-14 lg:py-16 text-center ${
-                  i < 3 ? "lg:border-r border-white/[0.05]" : ""
-                } ${i < 2 ? "border-b lg:border-b-0 border-white/[0.05]" : ""}`}>
+            <div className="grid grid-cols-2 lg:grid-cols-4">
+              {STATS.map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  style={statCardStyles[i]}
+                  className={`py-10 md:py-14 lg:py-16 text-center ${
+                    i < 3 ? "lg:border-r border-white/[0.05]" : ""
+                  } ${i < 2 ? "border-b lg:border-b-0 border-white/[0.05]" : ""}`}
+                >
                   <span className="block text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-[-0.04em]">
                     <AnimatedCounter target={stat.value} duration={2} />
                     <span className="text-skyblue">{stat.suffix}</span>
@@ -322,59 +429,66 @@ const AboutNew: React.FC = () => {
                   <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white/25 mt-4 block">
                     {stat.label}
                   </span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════
-          § 6  CTA
+          § 6  CTA (scroll-driven)
           ══════════════════════════════════════════════════════ */}
-      <section className="relative z-50 h-screen flex items-center bg-oxford-deep overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-skyblue/[0.04] blur-[150px]" />
-          <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] rounded-full bg-orange/[0.03] blur-[100px]" />
-        </div>
-        <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
+      <div ref={ctaRef} className="relative z-50" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen flex items-center bg-oxford-deep overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-skyblue/[0.04] blur-[150px]" />
+            <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] rounded-full bg-orange/[0.03] blur-[100px]" />
+          </div>
+          <div className="absolute inset-0 opacity-[0.015]" style={gridBg} />
 
-        <Container className="relative z-10 text-center">
-          <Reveal>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block">
+          <Container className="relative z-10 text-center w-full">
+            <motion.span
+              style={{ y: ctaLabelY, opacity: ctaLabelO }}
+              className="font-mono text-[11px] uppercase tracking-[0.3em] text-orange/40 mb-6 block"
+            >
               Built on Faith
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-4xl mx-auto">
+            </motion.span>
+
+            <motion.h2
+              style={{ y: ctaHeadY, opacity: ctaHeadO }}
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.95] tracking-[-0.04em] mb-6 max-w-4xl mx-auto"
+            >
               Ready to work with a team that{" "}
               <span className="text-skyblue">cares?</span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-4">
+            </motion.h2>
+
+            <motion.p
+              style={{ y: ctaPara1Y, opacity: ctaPara1O }}
+              className="text-lg md:text-xl text-white/35 max-w-lg mx-auto mb-4"
+            >
               Good design is good business. Great design changes lives.
               Let's create something extraordinary together.
-            </p>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <p className="text-sm text-white/20 italic max-w-md mx-auto mb-12">
+            </motion.p>
+
+            <motion.p
+              style={{ y: ctaPara2Y, opacity: ctaPara2O }}
+              className="text-sm text-white/20 italic max-w-md mx-auto mb-12"
+            >
               Our work is rooted in faith — the belief that what we create
               should uplift, serve, and reflect something greater than ourselves.
-            </p>
-          </Reveal>
-          <Reveal delay={0.4}>
-            <MagneticButton>
-              <Link
-                to="/new/contact"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-skyblue text-white font-semibold rounded-full text-lg shadow-[0_2px_20px_rgba(0,152,218,0.25)] hover:shadow-[0_4px_50px_rgba(0,152,218,0.4)] transition-all duration-400"
-              >
-                Let's Talk <ArrowRightIcon size={18} />
-              </Link>
-            </MagneticButton>
-          </Reveal>
-        </Container>
-      </section>
+            </motion.p>
+
+            <motion.div style={{ y: ctaBtnY, opacity: ctaBtnO }}>
+              <MagneticButton>
+                <Button variant="primary" size="lg" onClick={() => navigate("/contact")} rightIcon={<ArrowRightIcon size={18} />}>
+                  Let's Talk
+                </Button>
+              </MagneticButton>
+            </motion.div>
+          </Container>
+        </div>
+      </div>
     </PageTransition>
   );
 };

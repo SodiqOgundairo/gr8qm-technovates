@@ -407,7 +407,36 @@ export default function ServiceRequests() {
                   </p>
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col gap-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-3">
+                    <label className="text-sm font-semibold text-gray-500">
+                      Update Status:
+                    </label>
+                    <select
+                      value={selectedRequest.status}
+                      onChange={async (e) => {
+                        const newStatus = e.target.value;
+                        try {
+                          const { error } = await supabase
+                            .from("service_requests")
+                            .update({ status: newStatus })
+                            .eq("id", selectedRequest.id);
+                          if (error) throw error;
+                          setSelectedRequest({ ...selectedRequest, status: newStatus });
+                          fetchRequests(page, pageSize, query, statusFilter, serviceFilter);
+                        } catch (err: any) {
+                          alert(`Error: ${err.message}`);
+                        }
+                      }}
+                      className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-skyblue focus:outline-none"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="contacted">Contacted</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
                   <Button
                     variant="pry"
                     onClick={() => setSelectedRequest(null)}

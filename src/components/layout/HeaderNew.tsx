@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Container from "./Container";
 import CloudinaryImage from "../../utils/cloudinaryImage";
+import { Button } from "devign";
 
 const navLinks = [
-  { label: "About", path: "/new/about" },
+  { label: "About", path: "/about" },
   {
     label: "Services",
     children: [
-      { label: "Design & Build", path: "/new/services/design-build" },
-      { label: "Print Shop", path: "/new/services/print-shop" },
-      { label: "Tech Training", path: "/new/services/tech-training" },
+      { label: "Design & Build", path: "/services/design-build" },
+      { label: "Print Shop", path: "/services/print-shop" },
+      { label: "Tech Training", path: "/services/tech-training" },
     ],
   },
-  { label: "Portfolio", path: "/new/portfolio" },
-  { label: "Blog", path: "/new/blog" },
-  { label: "Careers", path: "/new/careers" },
+  { label: "Portfolio", path: "/portfolio" },
+  { label: "Blog", path: "/blog" },
+  { label: "Careers", path: "/careers" },
 ];
 
 const Header: React.FC = () => {
@@ -26,6 +27,7 @@ const Header: React.FC = () => {
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
   const location = useLocation();
+  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { scrollY } = useScroll();
@@ -84,7 +86,7 @@ const Header: React.FC = () => {
       >
         <Container className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/new" aria-label="Gr8QM homepage" className="relative z-10">
+          <Link to="/" aria-label="Gr8QM homepage" className="relative z-10">
             <motion.div
               whileHover={{ scale: 1.05, rotate: -2 }}
               transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
@@ -181,7 +183,7 @@ const Header: React.FC = () => {
           {/* CTA */}
           <div className="hidden lg:block">
             <Link
-              to="/new/contact"
+              to="/contact"
               className="group relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
             >
               <span className="relative z-10">Let's Talk</span>
@@ -304,13 +306,9 @@ const Header: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="mt-12"
             >
-              <Link
-                to="/new/contact"
-                onClick={() => setMobileOpen(false)}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-skyblue text-white font-medium rounded-full text-lg"
-              >
+              <Button variant="primary" size="lg" className="w-full" onClick={() => { setMobileOpen(false); navigate("/contact"); }}>
                 Let's Talk →
-              </Link>
+              </Button>
             </motion.div>
           </motion.div>
         )}

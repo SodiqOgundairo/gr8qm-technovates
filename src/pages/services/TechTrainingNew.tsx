@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "../../components/layout/Container";
-import Button from "../../components/common/Button";
+import { Button } from "devign";
 import CloudinaryImage from "../../utils/cloudinaryImage";
 import { ArrowRightIcon, GraduationCapIcon } from "../../components/icons";
 import { useNavigate } from "react-router-dom";
@@ -15,16 +15,9 @@ import {
   generateBreadcrumbSchema,
 } from "../../utils/structured-data";
 
-import OrbitalBackground from "../../components/animations/OrbitalBackground";
-import {
-  Reveal,
-  DotGrid,
-  DiagonalLines,
-  CrossMark,
-  AccentLine,
-  FloatingRule,
-  SectionConnector,
-} from "../../components/animations/DesignElements";
+import MagneticButton from "../../components/animations/MagneticButton";
+
+const EASE_SMOOTH: [number, number, number, number] = [0.22, 0.6, 0.36, 1];
 
 const TechTrainingNewPage: React.FC = () => {
   const navigate = useNavigate();
@@ -142,14 +135,25 @@ const TechTrainingNewPage: React.FC = () => {
       <main className="flex flex-col overflow-x-hidden">
 
         {/* ═══════════════ HERO SECTION ═══════════════ */}
-        <section className="relative min-h-screen flex items-center overflow-hidden bg-oxford-deep sticky top-0 z-10">
-          <OrbitalBackground variant="hero" />
+        <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-oxford-deep sticky top-0 z-10">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+          />
 
-          {/* Geometric decorations */}
-          <DotGrid className="top-8 left-8 text-skyblue/20" />
-          <DiagonalLines className="bottom-0 right-0 text-orange/10" thick />
-          <CrossMark className="absolute top-[15%] right-[20%] text-skyblue/15" size={20} />
-          <CrossMark className="absolute bottom-[20%] left-[12%] text-orange/15" size={14} />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="15%" cy="20%" r="120" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="70%" y1="0" x2="70%" y2="100%" stroke="white" strokeWidth="0.3"/>
+            <circle cx="85%" cy="75%" r="80" stroke="white" fill="none" strokeWidth="0.3"/>
+          </svg>
 
           {/* Floating geometric shapes */}
           <motion.div
@@ -165,59 +169,54 @@ const TechTrainingNewPage: React.FC = () => {
             aria-hidden="true"
           />
 
-          <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
-
           <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12 py-16 md:py-28 lg:py-36">
             <div className="flex-1 flex flex-col gap-6">
-              <Reveal>
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
                 <motion.div
-                  className="bg-skyblue/10 border border-oxford-border rounded-full px-4 py-2 w-fit"
+                  className="bg-skyblue/10 rounded-full px-4 py-2 w-fit"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <p className="text-sm text-iceblue/70 font-medium tracking-widest uppercase">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50">
                     Tech Training
                   </p>
                 </motion.div>
-              </Reveal>
-              <Reveal delay={0.15}>
-                <AccentLine color="skyblue" thickness="medium" width="w-16" className="mb-2" />
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.15, ease: EASE_SMOOTH }}>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
                   <span className="text-white">Launch Your Tech Career,</span>{" "}
                   <span className="text-skyblue">Sponsored</span>
                 </h1>
-              </Reveal>
-              <Reveal delay={0.3}>
-                <p className="text-lg md:text-xl text-iceblue/70 leading-relaxed">
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.3, ease: EASE_SMOOTH }}>
+                <p className="text-lg md:text-xl text-white/40 leading-relaxed">
                   Master in-demand tech skills with our specialized training
                   programs. Learn from industry experts, build real projects,
                   and start your journey to a rewarding tech career. Only a
                   small commitment fee required.
                 </p>
-              </Reveal>
-              <Reveal delay={0.45}>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.45, ease: EASE_SMOOTH }}>
                 <div className="flex gap-4 flex-wrap">
-                  <Button variant="pry" onClick={() => navigate("/trainings")}>
-                    Browse Courses
-                    <ArrowRightIcon size={20} />
-                  </Button>
-                  <Button
-                    variant="sec"
-                    onClick={() =>
-                      navigate("/portfolio?category=tech-training")
-                    }
+                  <MagneticButton>
+                    <Button variant="primary" size="lg" onClick={() => navigate("/trainings")} rightIcon={<ArrowRightIcon size={20} />}>
+                      Browse Courses
+                    </Button>
+                  </MagneticButton>
+                  <button
+                    onClick={() => navigate("/portfolio?category=tech-training")}
+                    className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-white/[0.08] text-white hover:border-skyblue/20 transition-all duration-300"
                   >
-                    <div className="button-content">
-                      Student Success Stories
-                      <ArrowRightIcon size={18} className="arrow" />
-                    </div>
-                  </Button>
+                    <span className="relative z-10">Student Success Stories</span>
+                    <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+                  </button>
                 </div>
-              </Reveal>
+              </motion.div>
             </div>
             <div className="flex-1">
-              <Reveal delay={0.6}>
-                <div className="overflow-hidden rounded-2xl border border-oxford-border">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.6, ease: EASE_SMOOTH }}>
+                <div className="overflow-hidden rounded-2xl">
                   <motion.div
                     whileHover={{ scale: 1.08 }}
                     transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
@@ -229,39 +228,49 @@ const TechTrainingNewPage: React.FC = () => {
                     />
                   </motion.div>
                 </div>
-              </Reveal>
+              </motion.div>
             </div>
           </Container>
-
-          <SectionConnector color="skyblue" side="right" />
         </section>
 
         {/* ═══════════════ WHY SPONSORED SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-20 overflow-hidden">
-          <OrbitalBackground variant="section" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-20 overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[20%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[10%] -left-20 w-[400px] h-[400px] rounded-full bg-skyblue/[0.1] blur-[140px]"
+          />
 
-          <DotGrid className="top-12 right-12 text-orange/15" />
-          <CrossMark className="absolute top-[10%] left-[18%] text-skyblue/12" size={16} />
-          <FloatingRule className="bottom-0 left-0 w-full" color="orange" dashed />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="80%" cy="30%" r="100" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="20%" y1="0" x2="20%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          </svg>
 
           <Container className="relative z-10">
-            <Reveal>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
               <div className="max-w-3xl mx-auto text-center mb-12">
-                <AccentLine color="orange" thickness="medium" width="w-12" className="mx-auto mb-4" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-4">Sponsored Training</p>
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
                   Launch Your Tech Career with <br />
                   <span className="text-skyblue">Sponsored Training</span>
                 </h2>
-                <p className="text-base text-iceblue/70 max-w-[612px] mx-auto mt-3">
+                <p className="text-base text-white/40 max-w-[612px] mx-auto mt-3">
                   We believe financial barriers shouldn't stop talent. Start
                   your journey to a rewarding tech career. Only a small
                   commitment fee required.
                 </p>
               </div>
-            </Reveal>
-            <Reveal delay={0.2}>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.2, ease: EASE_SMOOTH }}>
               <motion.div
-                className="bg-white/5 backdrop-blur-sm border border-oxford-border rounded-2xl p-8 max-w-2xl mx-auto"
+                className="bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] rounded-2xl p-8 max-w-2xl mx-auto hover:border-skyblue/20"
                 whileHover={{
                   y: -6,
                   scale: 1.02,
@@ -282,7 +291,7 @@ const TechTrainingNewPage: React.FC = () => {
                     <h3 className="text-xl font-bold text-white mb-2">
                       Commitment Fee Policy
                     </h3>
-                    <p className="text-iceblue/70">
+                    <p className="text-white/40">
                       Pay a one-time commitment fee when you enroll. This
                       secures your spot and ensures serious participation in the
                       cohort. It's that simple.
@@ -290,41 +299,50 @@ const TechTrainingNewPage: React.FC = () => {
                   </div>
                 </div>
               </motion.div>
-            </Reveal>
+            </motion.div>
           </Container>
-
-          <SectionConnector color="orange" side="left" />
         </section>
 
         {/* ═══════════════ AVAILABLE COURSES SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-30 overflow-hidden">
-          <OrbitalBackground variant="section" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-deep sticky top-0 z-30 overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+          />
 
-          <DiagonalLines className="top-0 left-0 text-skyblue/8" />
-          <CrossMark className="absolute bottom-[12%] right-[15%] text-orange/12" size={18} />
-          <FloatingRule className="top-0 left-0 w-full" color="skyblue" />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <line x1="30%" y1="0" x2="30%" y2="100%" stroke="white" strokeWidth="0.3"/>
+            <circle cx="75%" cy="50%" r="150" stroke="white" fill="none" strokeWidth="0.5"/>
+          </svg>
 
           <Container className="relative z-10">
-            <Reveal>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
               <div className="text-center mb-12">
-                <AccentLine color="skyblue" thickness="medium" width="w-14" className="mx-auto mb-4" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-4">Courses</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Available Courses
                 </h2>
-                <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+                <p className="text-white/40 text-lg max-w-2xl mx-auto">
                   Choose from our range of industry-leading tech programs
                 </p>
               </div>
-            </Reveal>
+            </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {courses.map((course, index) => (
-                <Reveal key={index} delay={index * 0.08}>
+                <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: index * 0.08, ease: EASE_SMOOTH }}>
                   <motion.div
-                    className="group bg-white/5 backdrop-blur-sm border border-oxford-border rounded-xl p-6 h-full cursor-default"
+                    className="group bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] rounded-xl p-6 h-full cursor-default hover:border-skyblue/20"
                     whileHover={{
                       y: -6,
                       scale: 1.02,
-                      borderColor: "rgba(0,152,218,0.4)",
                       boxShadow: "0 20px 40px rgba(0,152,218,0.08)",
                     }}
                     whileTap={{ scale: 0.97 }}
@@ -340,8 +358,8 @@ const TechTrainingNewPage: React.FC = () => {
                     <h3 className="text-xl font-bold text-white mb-2 group-hover:text-skyblue transition-colors duration-300">
                       {course.title}
                     </h3>
-                    <p className="text-iceblue/70 mb-4">{course.description}</p>
-                    <div className="flex items-center justify-between text-sm text-iceblue/50">
+                    <p className="text-white/40 mb-4">{course.description}</p>
+                    <div className="flex items-center justify-between text-sm text-white/40">
                       <motion.span
                         className="flex items-center gap-1"
                         whileHover={{ scale: 1.05 }}
@@ -351,55 +369,64 @@ const TechTrainingNewPage: React.FC = () => {
                       </motion.span>
                     </div>
                   </motion.div>
-                </Reveal>
+                </motion.div>
               ))}
             </div>
-            <Reveal delay={0.4}>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: 0.4, ease: EASE_SMOOTH }}>
               <div className="text-center mt-8">
-                <Button variant="pry" onClick={() => navigate("/trainings")}>
-                  View All Courses & Apply
-                  <ArrowRightIcon size={20} />
-                </Button>
+                <MagneticButton>
+                  <Button variant="primary" size="lg" onClick={() => navigate("/trainings")} rightIcon={<ArrowRightIcon size={20} />}>
+                    View All Courses & Apply
+                  </Button>
+                </MagneticButton>
               </div>
-            </Reveal>
+            </motion.div>
           </Container>
-
-          <SectionConnector color="skyblue" side="right" />
         </section>
 
         {/* ═══════════════ BENEFITS SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-40 overflow-hidden">
-          <OrbitalBackground variant="section" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-40 overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] -left-20 w-[550px] h-[550px] rounded-full bg-skyblue/[0.12] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[20%] -right-20 w-[450px] h-[450px] rounded-full bg-orange/[0.1] blur-[140px]"
+          />
 
-          <DotGrid className="bottom-8 left-8 text-skyblue/15" />
-          <DiagonalLines className="top-0 right-0 text-orange/8" thick />
-          <CrossMark className="absolute top-[18%] right-[22%] text-skyblue/12" size={16} />
-          <CrossMark className="absolute bottom-[15%] left-[10%] text-orange/10" size={12} />
-
-          <FloatingRule className="top-0 left-0 w-full" color="orange" dashed />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="10%" cy="60%" r="100" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="white" strokeWidth="0.3"/>
+            <circle cx="90%" cy="25%" r="70" stroke="white" fill="none" strokeWidth="0.3"/>
+          </svg>
 
           <Container className="relative z-10">
-            <Reveal>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
               <div className="text-center mb-12">
-                <AccentLine color="iceblue" thickness="medium" width="w-12" className="mx-auto mb-4" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-4">Benefits</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Why Choose <span className="text-iceblue">Gr8QM</span>{" "}
                   Training?
                 </h2>
-                <p className="text-iceblue/70 text-lg max-w-2xl mx-auto">
+                <p className="text-white/40 text-lg max-w-2xl mx-auto">
                   More than just courses—a complete career transformation
                 </p>
               </div>
-            </Reveal>
+            </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {benefits.map((benefit, index) => (
-                <Reveal key={index} delay={index * 0.12}>
+                <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: index * 0.12, ease: EASE_SMOOTH }}>
                   <motion.div
-                    className="group bg-white/5 backdrop-blur-sm border border-oxford-border rounded-xl p-6 text-center h-full cursor-default"
+                    className="group bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] rounded-xl p-6 text-center h-full cursor-default hover:border-skyblue/20"
                     whileHover={{
                       y: -6,
                       scale: 1.05,
-                      backgroundColor: "rgba(255, 255, 255, 0.08)",
+                      backgroundColor: "rgba(255, 255, 255, 0.06)",
                       boxShadow: "0 20px 40px rgba(0,152,218,0.08)",
                     }}
                     whileTap={{ scale: 0.97 }}
@@ -415,35 +442,45 @@ const TechTrainingNewPage: React.FC = () => {
                     <h3 className="text-lg font-bold mb-3 text-iceblue group-hover:text-orange transition-colors duration-300">
                       {benefit.title}
                     </h3>
-                    <p className="text-iceblue/70 text-sm">
+                    <p className="text-white/40 text-sm">
                       {benefit.description}
                     </p>
                   </motion.div>
-                </Reveal>
+                </motion.div>
               ))}
             </div>
           </Container>
-
-          <SectionConnector color="orange" side="left" />
         </section>
 
         {/* ═══════════════ HOW IT WORKS SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-50 overflow-hidden">
-          <OrbitalBackground variant="section" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-deep sticky top-0 z-50 overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+          />
 
-          <DotGrid className="top-8 right-8 text-skyblue/12" />
-          <CrossMark className="absolute bottom-[18%] right-[18%] text-orange/12" size={14} />
-          <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="50%" cy="50%" r="180" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="85%" y1="0" x2="85%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          </svg>
 
           <Container className="relative z-10">
-            <Reveal>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
               <div className="text-center mb-12">
-                <AccentLine color="orange" thickness="medium" width="w-14" className="mx-auto mb-4" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-4">How It Works</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   How It Works
                 </h2>
               </div>
-            </Reveal>
+            </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
                 {
@@ -467,7 +504,7 @@ const TechTrainingNewPage: React.FC = () => {
                   desc: "Complete the course and land your dream job",
                 },
               ].map((item, index) => (
-                <Reveal key={index} delay={index * 0.12}>
+                <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: index * 0.12, ease: EASE_SMOOTH }}>
                   <motion.div
                     className="group text-center relative h-full cursor-default"
                     whileHover={{ y: -6, scale: 1.02 }}
@@ -475,7 +512,7 @@ const TechTrainingNewPage: React.FC = () => {
                     transition={{ type: "spring" as const, stiffness: 300, damping: 15 }}
                   >
                     <motion.div
-                      className="bg-skyblue/20 border border-oxford-border text-skyblue text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                      className="bg-skyblue/20 border border-white/[0.08] text-skyblue text-2xl font-black w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
                       whileHover={{ rotate: 15, scale: 1.2 }}
                       whileTap={{ rotate: -10, scale: 0.9 }}
                     >
@@ -484,44 +521,53 @@ const TechTrainingNewPage: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 text-white group-hover:text-skyblue transition-colors duration-300">
                       {item.title}
                     </h3>
-                    <p className="text-iceblue/70">{item.desc}</p>
+                    <p className="text-white/40">{item.desc}</p>
                     {index < 3 && (
                       <div className="hidden md:block absolute top-8 -right-4 transform z-10">
                         <ArrowRightIcon size={32} className="text-skyblue/40" />
                       </div>
                     )}
                   </motion.div>
-                </Reveal>
+                </motion.div>
               ))}
             </div>
           </Container>
-
-          <SectionConnector color="skyblue" side="center" />
         </section>
 
         {/* ═══════════════ FAQS SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-[60] overflow-hidden">
-          <OrbitalBackground variant="section" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-card sticky top-0 z-[60] overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, -80, 100, -60, 0], y: [0, 60, -80, 50, 0], scale: [1, 1.15, 0.9, 1.1, 1] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] -left-20 w-[550px] h-[550px] rounded-full bg-skyblue/[0.12] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, 90, -70, 50, 0], y: [0, -70, 60, -30, 0], scale: [1, 0.85, 1.2, 0.95, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[20%] -right-20 w-[450px] h-[450px] rounded-full bg-orange/[0.1] blur-[140px]"
+          />
 
-          <DiagonalLines className="bottom-0 left-0 text-skyblue/6" />
-          <CrossMark className="absolute top-[12%] left-[20%] text-orange/10" size={16} />
-          <CrossMark className="absolute bottom-[10%] right-[14%] text-skyblue/10" size={12} />
-          <FloatingRule className="top-0 left-0 w-full" color="orange" />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="20%" cy="40%" r="120" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="65%" y1="0" x2="65%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          </svg>
 
           <Container className="relative z-10">
-            <Reveal>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
               <div className="text-center mb-12">
-                <AccentLine color="skyblue" thickness="medium" width="w-12" className="mx-auto mb-4" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-4">FAQs</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Frequently Asked Questions
                 </h2>
               </div>
-            </Reveal>
+            </motion.div>
             <div className="max-w-3xl mx-auto space-y-6">
               {faqs.map((faq, index) => (
-                <Reveal key={index} delay={index * 0.08}>
+                <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, delay: index * 0.08, ease: EASE_SMOOTH }}>
                   <motion.div
-                    className="group bg-white/5 backdrop-blur-sm border border-oxford-border rounded-xl p-6 cursor-default"
+                    className="group bg-white/[0.03] backdrop-blur-sm border border-white/[0.08] rounded-xl p-6 cursor-default hover:border-skyblue/20"
                     whileHover={{
                       y: -6,
                       scale: 1.02,
@@ -539,55 +585,60 @@ const TechTrainingNewPage: React.FC = () => {
                       </motion.div>
                       {faq.question}
                     </h3>
-                    <p className="text-iceblue/70 pl-7">{faq.answer}</p>
+                    <p className="text-white/40 pl-7">{faq.answer}</p>
                   </motion.div>
-                </Reveal>
+                </motion.div>
               ))}
             </div>
           </Container>
-
-          <SectionConnector color="orange" side="right" />
         </section>
 
         {/* ═══════════════ CTA SECTION ═══════════════ */}
-        <section className="relative py-20 md:py-28 bg-oxford-deep sticky top-0 z-[70] overflow-hidden">
-          <OrbitalBackground variant="cta" />
+        <section className="relative min-h-screen flex flex-col justify-center bg-oxford-deep sticky top-0 z-[70] overflow-hidden">
+          {/* Animated atmospheric orbs */}
+          <motion.div
+            animate={{ x: [0, 120, -80, 60, 0], y: [0, -90, 70, -40, 0], scale: [1, 1.25, 0.85, 1.15, 1] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-20 w-[600px] h-[600px] rounded-full bg-skyblue/[0.15] blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -100, 60, -120, 0], y: [0, 80, -60, 40, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[15%] -right-20 w-[500px] h-[500px] rounded-full bg-orange/[0.12] blur-[140px]"
+          />
 
-          <DotGrid className="top-8 left-8 text-skyblue/15" />
-          <DotGrid className="bottom-8 right-8 text-orange/10" />
-          <DiagonalLines className="top-0 right-0 text-skyblue/6" />
-          <CrossMark className="absolute top-[20%] right-[25%] text-orange/12" size={18} />
-          <CrossMark className="absolute bottom-[25%] left-[18%] text-skyblue/10" size={14} />
-
-          <FloatingRule className="top-0 left-0 w-full" color="skyblue" dashed thick />
+          {/* Geometric SVGs */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]">
+            <circle cx="50%" cy="50%" r="200" stroke="white" fill="none" strokeWidth="0.5"/>
+            <line x1="10%" y1="0" x2="10%" y2="100%" stroke="white" strokeWidth="0.3"/>
+          </svg>
 
           <Container className="relative z-10 text-center">
-            <Reveal>
-              <AccentLine color="orange" thickness="thick" width="w-16" className="mx-auto mb-6" />
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6, ease: EASE_SMOOTH }}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50 mb-6">Get Started</p>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
                 Ready to Transform Your Career?
               </h2>
-              <p className="text-iceblue/70 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-white/40 text-lg mb-8 max-w-2xl mx-auto">
                 Join hundreds of students who have launched successful tech
                 careers through our specialized training programs.
               </p>
               <div className="flex gap-4 justify-center flex-wrap">
-                <Button
-                  variant="pry"
-                  onClick={() => navigate("/trainings")}
-                >
-                  Browse Courses
-                  <ArrowRightIcon size={20} />
-                </Button>
-                <Button
-                  variant="sec"
+                <MagneticButton>
+                  <Button variant="primary" size="lg" onClick={() => navigate("/trainings")} rightIcon={<ArrowRightIcon size={20} />}>
+                    Browse Courses
+                  </Button>
+                </MagneticButton>
+                <button
                   onClick={() => navigate("/portfolio?category=tech-training")}
+                  className="group relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full overflow-hidden border border-white/[0.08] text-white hover:border-skyblue/20 transition-all duration-300"
                 >
-                  See Student Work
-                  <ArrowRightIcon size={18} className="arrow" />
-                </Button>
+                  <span className="relative z-10">See Student Work</span>
+                  <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+                </button>
               </div>
-            </Reveal>
+            </motion.div>
           </Container>
         </section>
       </main>

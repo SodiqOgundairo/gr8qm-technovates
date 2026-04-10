@@ -10,9 +10,8 @@ import {
   FacebookIcon,
   ArrowRightIcon,
 } from "../icons";
-import Button from "../common/Button";
 import Container from "./Container";
-import Input from "../common/Input";
+import { Input, Textarea } from "devign";
 import { motion } from "framer-motion";
 import { Reveal } from "../animations/DesignElements";
 import MarqueeText from "../animations/MarqueeText";
@@ -23,17 +22,17 @@ const footerSections = [
   {
     title: "SERVICES",
     links: [
-      { label: "Design & Build", path: "/new/services/design-build" },
-      { label: "Tech Training", path: "/new/services/tech-training" },
-      { label: "Print Shop", path: "/new/services/print-shop" },
+      { label: "Design & Build", path: "/services/design-build" },
+      { label: "Tech Training", path: "/services/tech-training" },
+      { label: "Print Shop", path: "/services/print-shop" },
     ],
   },
   {
     title: "INFORMATION",
     links: [
-      { label: "About Us", path: "/new/about" },
-      { label: "Our Work", path: "/new/portfolio" },
-      { label: "Careers", path: "/new/careers" },
+      { label: "About Us", path: "/about" },
+      { label: "Our Work", path: "/portfolio" },
+      { label: "Careers", path: "/careers" },
     ],
   },
 ];
@@ -96,6 +95,7 @@ const Footer: React.FC = () => {
               to: "hello@gr8qm.com",
               subject: emailTemplate.subject,
               html: emailTemplate.html,
+              text: emailTemplate.text,
               replyTo: formData.email,
             }),
           });
@@ -115,18 +115,18 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative z-[60] bg-oxford-deep text-white overflow-hidden">
+    <footer className="relative z-[60] bg-oxford-card text-white overflow-hidden">
       {/* Decorative orbs */}
       <motion.div
-        className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-skyblue/5 blur-[200px]"
-        animate={{ y: [0, -30, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 15, repeat: Infinity }}
+        className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-skyblue/10 blur-[200px]"
+        animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 8, repeat: Infinity }}
         aria-hidden="true"
       />
       <motion.div
-        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-orange/5 blur-[150px]"
-        animate={{ y: [0, 20, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-orange/8 blur-[150px]"
+        animate={{ x: [0, -30, 25, 0], y: [0, 20, -15, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 10, repeat: Infinity }}
         aria-hidden="true"
       />
 
@@ -145,7 +145,7 @@ const Footer: React.FC = () => {
           {/* Subscribe Section */}
           <div className="lg:col-span-5">
             <Reveal direction="left">
-              <div className="p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-oxford-border">
+              <div className="p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
                 <p className="text-orange text-xs font-mono tracking-wider uppercase mb-3">
                   Let's Go
                 </p>
@@ -158,9 +158,14 @@ const Footer: React.FC = () => {
                   <div className="flex flex-col gap-4">
                     <h4 className="text-xl font-medium text-white">Request Sent!</h4>
                     <p className="text-iceblue/60">Thank you for reaching out. We'll get back to you shortly.</p>
-                    <Button variant="inverted" onClick={() => setSubmitStatus("idle")} className="w-fit mt-4">
-                      Send another
-                    </Button>
+                    <button
+                      onClick={() => setSubmitStatus("idle")}
+                      className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300 mt-4"
+                    >
+                      <span className="relative z-10">Send another</span>
+                      <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                      <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+                    </button>
                   </div>
                 ) : submitStatus === "cooldown" ? (
                   <div className="flex flex-col gap-4">
@@ -170,20 +175,25 @@ const Footer: React.FC = () => {
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputChange} required />
-                      <Input type="email" placeholder="email@example.com" name="email" value={formData.email} onChange={handleInputChange} required />
+                      <Input type="text" placeholder="Name" name="name" value={formData.name} onChange={handleInputChange} required className="!bg-white/[0.04] !border-white/[0.08] !text-white !placeholder-white/20 !rounded-xl focus:!border-white/[0.16]" />
+                      <Input type="email" placeholder="email@example.com" name="email" value={formData.email} onChange={handleInputChange} required className="!bg-white/[0.04] !border-white/[0.08] !text-white !placeholder-white/20 !rounded-xl focus:!border-white/[0.16]" />
                     </div>
-                    <motion.textarea
-                      className="w-full rounded-lg border border-oxford-border bg-oxford-card text-white placeholder-iceblue/30 px-4 py-3 h-24 focus:border-skyblue focus:outline-none focus:bg-oxford-elevated transition-all duration-300 text-sm"
+                    <Textarea
                       name="message"
                       placeholder="Tell us about your project..."
                       value={formData.message}
                       onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-                      whileFocus={{ scale: 1.01 }}
+                      className="!bg-white/[0.04] !border-white/[0.08] !text-white !placeholder-white/20 !rounded-xl focus:!border-white/[0.16] h-24"
                     />
-                    <Button type="submit" variant="inverted" className="flex items-center gap-2 w-fit" loading={loading}>
-                      Send a request <ArrowRightIcon size={16} />
-                    </Button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="relative z-10">{loading ? "Sending..." : "Send a request"}</span>
+                      <span className="relative z-10 text-skyblue transition-transform duration-300 group-hover:translate-x-1">→</span>
+                      <span className="absolute inset-0 bg-skyblue/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,0.6,0.36,1)]" />
+                    </button>
                   </form>
                 )}
               </div>
@@ -234,7 +244,7 @@ const Footer: React.FC = () => {
           {/* Logo & Tagline Section */}
           <div className="lg:col-span-3 flex flex-col justify-between items-start lg:items-end gap-8">
             <Reveal direction="right">
-              <Link to="/new" aria-label="Homepage">
+              <Link to="/" aria-label="Homepage">
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: -2 }}
                   transition={{ type: "spring" as const, stiffness: 200 }}
