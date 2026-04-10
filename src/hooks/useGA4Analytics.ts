@@ -44,7 +44,7 @@ async function fetchFromPageViews(days: number): Promise<GA4TrafficStats> {
   // Parallel queries
   const [
     { data: views },
-    { data: prevViews },
+    { count: prevCount },
     { count: totalCount },
   ] = await Promise.all([
     supabase.from("page_views").select("path, referrer, device, created_at").gte("created_at", sinceISO).order("created_at", { ascending: true }),
@@ -54,7 +54,7 @@ async function fetchFromPageViews(days: number): Promise<GA4TrafficStats> {
 
   const rows = (views || []) as { path: string; referrer: string | null; device: string; created_at: string }[];
   const currentCount = rows.length;
-  const previousCount = prevViews || 0;
+  const previousCount = prevCount || 0;
 
   // Daily views
   const dailyMap = new Map<string, number>();

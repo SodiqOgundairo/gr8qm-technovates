@@ -244,7 +244,7 @@ const AnalyticsPage: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                   <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickFormatter={(v) => `₦${fmtNum(v)}`} />
-                  <Tooltip contentStyle={TT_STYLE} labelFormatter={formatMonthLabel} formatter={(v: number) => [`₦${fmtNum(v)}`, "Revenue"]} />
+                  <Tooltip contentStyle={TT_STYLE} labelFormatter={(l) => formatMonthLabel(String(l))} formatter={(v) => [`₦${fmtNum(Number(v))}`, "Revenue"]} />
                   <Area type="monotone" dataKey="amount" stroke="#22c55e" fill="url(#rg)" strokeWidth={1.5} />
                 </AreaChart>
               </ResponsiveContainer>
@@ -285,7 +285,7 @@ const AnalyticsPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                     <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                     <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} allowDecimals={false} />
-                    <Tooltip contentStyle={TT_STYLE} labelFormatter={formatMonthLabel} />
+                    <Tooltip contentStyle={TT_STYLE} labelFormatter={(l) => formatMonthLabel(String(l))} />
                     <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
