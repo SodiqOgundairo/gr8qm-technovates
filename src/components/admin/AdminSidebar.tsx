@@ -62,7 +62,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   const { profile, can, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const visibleItems = navItems.filter((item) => can(item.module, "read"));
+  // Show all items if profile hasn't loaded (table missing, fetch failed, etc.)
+  const visibleItems = profile ? navItems.filter((item) => can(item.module, "read")) : navItems;
   const roleInfo = profile ? ROLE_LABELS[profile.role] : null;
 
   const handleSignOut = async () => {
