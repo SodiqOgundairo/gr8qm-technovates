@@ -35,7 +35,13 @@
       "WebFetch(domain:experiments.withgoogle.com)",
       "WebFetch(domain:web.archive.org)",
       "WebFetch(domain:nexalgrowth.com)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(npx devign:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "WebFetch(domain:www.superside.com)",
+      "WebFetch(domain:material.io)",
+      "WebFetch(domain:m3.material.io)"
     ]
   }
 }

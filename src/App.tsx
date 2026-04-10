@@ -4,29 +4,10 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import DarkLayout from "./components/layout/DarkLayout";
 
-/* Public pages (original) */
-import Home from "./pages/Home";
-import AboutPage from "./pages/About";
-import ContactPage from "./pages/Contact";
-import ServicesPage from "./pages/Services";
-import TrainingsPage from "./pages/Trainings";
-import PortfolioPage from "./pages/Portfolio";
-import CareersPage from "./pages/Careers";
-import DesignBuildPage from "./pages/services/DesignBuild";
-import PrintShopPage from "./pages/services/PrintShop";
-import TechTrainingPage from "./pages/services/TechTraining";
-import PublicForm from "./pages/PublicForm";
-import FormSuccess from "./pages/FormSuccess";
-import Cohort4 from "./pages/Cohort4";
-import BlogIndex from "./pages/Blog/BlogIndex";
-import BlogPost from "./pages/Blog/BlogPost";
-
-/* New design pages */
+/* Pages */
 import HomeNew from "./pages/HomeNew";
 import AboutNew from "./pages/AboutNew";
 import ContactNew from "./pages/ContactNew";
@@ -39,6 +20,10 @@ import PrintShopNew from "./pages/services/PrintShopNew";
 import TechTrainingNew from "./pages/services/TechTrainingNew";
 import BlogIndexNew from "./pages/Blog/BlogIndexNew";
 import BlogPostNew from "./pages/Blog/BlogPostNew";
+import PublicForm from "./pages/PublicForm";
+import FormSuccess from "./pages/FormSuccess";
+import Cohort4 from "./pages/Cohort4";
+import NotFoundNew from "./pages/NotFoundNew";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
@@ -61,8 +46,6 @@ import AdminBlogEditor from "./pages/admin/Blog/BlogEditor";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
-import NotFound from "./pages/PageNotFound";
-import NotFoundNew from "./pages/NotFoundNew";
 import CursorTrail from "./components/animations/CursorTrail";
 
 import ChatWidget from "./components/common/ChatWidget";
@@ -74,46 +57,6 @@ function App() {
       <CursorTrail />
       <ChatWidget />
       <Routes>
-        {/* ═══ OLD DESIGN ROUTES ═══ */}
-        <Route
-          path="/old/*"
-          element={
-            <>
-              <Header />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route
-                  path="/services/design-build"
-                  element={<DesignBuildPage />}
-                />
-                <Route
-                  path="/services/print-shop"
-                  element={<PrintShopPage />}
-                />
-                <Route
-                  path="/services/tech-training"
-                  element={<TechTrainingPage />}
-                />
-                <Route path="/trainings" element={<TrainingsPage />} />
-                <Route path="/portfolio" element={<PortfolioPage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/forms/:shortCode" element={<PublicForm />} />
-                <Route
-                  path="/forms/:shortCode/success"
-                  element={<FormSuccess />}
-                />
-                <Route path="/blog" element={<BlogIndex />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <Footer />
-            </>
-          }
-        />
-
         {/* Standalone Pages */}
         <Route path="/cohort4" element={<Cohort4 />} />
 
