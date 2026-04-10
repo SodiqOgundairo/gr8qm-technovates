@@ -6,17 +6,14 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-/** Inner component that reads auth state from context */
 const AuthGuard: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
+    // Minimal loading — should resolve almost instantly from cached session
     return (
-      <div className="flex items-center justify-center min-h-screen bg-light">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-skyblue mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
-        </div>
+      <div className="flex items-center justify-center min-h-screen bg-[#f8f9fb]">
+        <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
       </div>
     );
   }
@@ -28,16 +25,10 @@ const AuthGuard: React.FC<ProtectedRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-/**
- * Wraps admin routes with AuthProvider + auth check.
- * All child components can use `useAuth()` to get user/profile/permissions.
- */
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  return (
-    <AuthProvider>
-      <AuthGuard>{children}</AuthGuard>
-    </AuthProvider>
-  );
-};
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => (
+  <AuthProvider>
+    <AuthGuard>{children}</AuthGuard>
+  </AuthProvider>
+);
 
 export default ProtectedRoute;

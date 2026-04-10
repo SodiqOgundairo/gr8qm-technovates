@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "../utils/supabase";
 import type { User, Session } from "@supabase/supabase-js";
 import type {
@@ -18,11 +18,8 @@ export interface AuthState {
   profile: AdminProfile | null;
   permissions: PermissionsMap | null;
   loading: boolean;
-  /** Check a single permission */
   can: (module: AdminModule, action: PermissionAction) => boolean;
-  /** Reload profile from DB */
   refreshProfile: () => Promise<void>;
-  /** Sign out */
   signOut: () => Promise<void>;
 }
 
@@ -39,77 +36,89 @@ const AuthContext = createContext<AuthState>({
 export const useAuth = () => useContext(AuthContext);
 
 // ════════════════════════════════════════════════════════════
-// PROVIDER
+// PROVIDER — fast, no blocking on profile
 // ════════════════════════════════════════════════════════════
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<AdminProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const profileFetched = useRef(false);
 
+  // Fetch profile without blocking — fire and forget errors
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from("admin_profiles")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("admin_profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .single();
 
-    if (data) {
+      if (error || !data) {
+        // Table might not exist or no profile — skip silently
+        // Auto-provision on first load only
+        if (!profileFetched.current) {
+          profileFetched.current = true;
+          try {
+            const { count } = await supabase
+              .from("admin_profiles")
+              .select("*", { count: "exact", head: true });
+
+            const role = (count === 0 || count === null) ? "super_admin" : "viewer";
+            const { data: u } = await supabase.auth.getUser();
+
+            const { data: newProfile } = await supabase
+              .from("admin_profiles")
+              .insert({
+                user_id: userId,
+                role,
+                display_name: u?.user?.user_metadata?.full_name || u?.user?.email?.split("@")[0] || "Admin",
+                email: u?.user?.email || "",
+                permissions: null,
+              })
+              .select()
+              .single();
+
+            if (newProfile) setProfile(newProfile as AdminProfile);
+          } catch {
+            // Table doesn't exist — that's fine
+          }
+        }
+        return;
+      }
+
       setProfile(data as AdminProfile);
-      // Update last_active timestamp
+      profileFetched.current = true;
+
+      // Update last_active in background — don't await
       supabase
         .from("admin_profiles")
         .update({ last_active_at: new Date().toISOString() })
         .eq("user_id", userId)
         .then(() => {});
-    } else {
-      // No profile yet — auto-create with default role
-      // First user becomes super_admin, others become viewer
-      const { count } = await supabase
-        .from("admin_profiles")
-        .select("*", { count: "exact", head: true });
-
-      const role = (count === 0 || count === null) ? "super_admin" : "viewer";
-
-      const { data: currentUser } = await supabase.auth.getUser();
-
-      const { data: newProfile } = await supabase
-        .from("admin_profiles")
-        .insert({
-          user_id: userId,
-          role,
-          display_name: currentUser?.user?.user_metadata?.full_name || currentUser?.user?.email?.split("@")[0] || "Admin",
-          email: currentUser?.user?.email || "",
-          permissions: null,
-        })
-        .select()
-        .single();
-
-      if (newProfile) setProfile(newProfile as AdminProfile);
+    } catch {
+      // Silently fail — profile is optional
     }
   }, []);
 
   useEffect(() => {
-    const init = async () => {
-      const { data } = await supabase.auth.getUser();
-      const currentUser = data.user;
-      setUser(currentUser);
-      if (currentUser) {
-        await fetchProfile(currentUser.id);
-      }
-      setLoading(false);
-    };
-
-    init();
+    // Use getSession (local/cached) instead of getUser (network call)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const u = session?.user || null;
+      setUser(u);
+      setLoading(false); // Unblock immediately
+      if (u) fetchProfile(u.id); // Profile loads in background
+    });
 
     const { data: sub } = supabase.auth.onAuthStateChange(
-      async (_event: string, session: Session | null) => {
-        const sessionUser = session?.user || null;
-        setUser(sessionUser);
-        if (sessionUser) {
-          await fetchProfile(sessionUser.id);
-        } else {
+      (_event: string, session: Session | null) => {
+        const u = session?.user || null;
+        setUser(u);
+        if (!u) {
           setProfile(null);
+          profileFetched.current = false;
+        } else {
+          fetchProfile(u.id);
         }
       }
     );
@@ -134,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
+    profileFetched.current = false;
   }, []);
 
   return React.createElement(
