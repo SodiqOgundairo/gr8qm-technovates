@@ -2,8 +2,16 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
-import { GraduationCap, ClipboardList, Mail, FileText, DollarSign, Users } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  GraduationCap,
+  ClipboardList,
+  Mail,
+  FileText,
+  DollarSign,
+  Users,
+  ArrowRight,
+  TrendingUp,
+} from "lucide-react";
 
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState({
@@ -22,8 +30,6 @@ const AdminDashboard: React.FC = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-
-      // Fetch stats in parallel
       const [
         { count: applicationsCount },
         { data: transactionsData },
@@ -31,25 +37,13 @@ const AdminDashboard: React.FC = () => {
         { count: messagesCount },
         { data: recentTx },
       ] = await Promise.all([
-        supabase
-          .from("course_applications")
-          .select("*", { count: "exact", head: true }),
+        supabase.from("course_applications").select("*", { count: "exact", head: true }),
         supabase.from("transactions").select("amount, status"),
-        supabase
-          .from("service_requests")
-          .select("*", { count: "exact", head: true })
-          .eq("status", "pending"),
-        supabase
-          .from("messages")
-          .select("*", { count: "exact", head: true }),
-        supabase
-          .from("transactions")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(5),
+        supabase.from("service_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("messages").select("*", { count: "exact", head: true }),
+        supabase.from("transactions").select("*").order("created_at", { ascending: false }).limit(5),
       ]);
 
-      // Calculate total revenue from successful transactions
       const revenue =
         transactionsData
           ?.filter((t) => t.status === "success")
@@ -61,7 +55,6 @@ const AdminDashboard: React.FC = () => {
         pendingRequests: requestsCount || 0,
         unreadMessages: messagesCount || 0,
       });
-
       setRecentTransactions(recentTx || []);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -70,292 +63,106 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-    }).format(amount);
-  };
+  const fmt = (n: number) =>
+    new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(n);
+
+  const statCards = [
+    { label: "Applications", value: stats.totalApplications, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Revenue", value: fmt(stats.totalRevenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
+    { label: "Pending Requests", value: stats.pendingRequests, icon: FileText, color: "text-amber-600", bg: "bg-amber-50" },
+    { label: "Messages", value: stats.unreadMessages, icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
+  ];
 
   const quickActions = [
-    {
-      name: "Manage Courses",
-      description: "Create, edit, and manage training courses",
-      icon: GraduationCap,
-      path: "/admin/courses",
-      color: "bg-skyblue",
-    },
-    {
-      name: "View Applications",
-      description: "Review course applications and payments",
-      icon: ClipboardList,
-      path: "/admin/applications",
-      color: "bg-orange",
-    },
-    {
-      name: "Service Requests",
-      description: "Manage design & print service requests",
-      icon: FileText,
-      path: "/admin/service-requests",
-      color: "bg-iceblue",
-    },
-    {
-      name: "Messages",
-      description: "View contact form submissions",
-      icon: Mail,
-      path: "/admin/messages",
-      color: "bg-oxford",
-    },
+    { name: "Courses", desc: "Manage training courses", icon: GraduationCap, path: "/admin/courses", color: "text-blue-600", bg: "bg-blue-50" },
+    { name: "Applications", desc: "Review applications", icon: ClipboardList, path: "/admin/applications", color: "text-green-600", bg: "bg-green-50" },
+    { name: "Service Requests", desc: "Design & print requests", icon: FileText, path: "/admin/service-requests", color: "text-amber-600", bg: "bg-amber-50" },
+    { name: "Analytics", desc: "Traffic & business data", icon: TrendingUp, path: "/admin/analytics", color: "text-purple-600", bg: "bg-purple-50" },
   ];
 
   return (
-    <AdminLayout>
-      <div className="space-y-8">
-        {/* Welcome Header */}
-        <div className="flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-bold text-oxford mb-2">Dashboard</h1>
-            <p className="text-gray-600">
-              Welcome to the GR8QM Admin Dashboard
-            </p>
-          </div>
-          <div className="text-sm text-gray-500">
-            Last updated: {new Date().toLocaleTimeString()}
-          </div>
+    <AdminLayout title="Dashboard">
+      <div className="space-y-6 max-w-7xl">
+        {/* Stat cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {statCards.map((s) => (
+            <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{s.label}</span>
+                <div className={`${s.bg} ${s.color} p-2 rounded-lg`}>
+                  <s.icon size={16} />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">
+                {loading ? <span className="inline-block w-16 h-7 bg-gray-100 rounded animate-pulse" /> : s.value}
+              </p>
+            </div>
+          ))}
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0 }}
-            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
-            className="bg-white p-6 rounded-lg shadow border-l-4 border-skyblue cursor-default"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-skyblue/10 p-3 rounded-full">
-                <Users className="h-6 w-6 text-skyblue" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500 uppercase">
-                Total Applications
-              </span>
-            </div>
-            <div className="text-2xl font-bold text-oxford">
-              {loading ? "..." : stats.totalApplications}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
-            className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500 cursor-default"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-green-100 p-3 rounded-full">
-                <DollarSign className="h-6 w-6 text-green-600" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500 uppercase">
-                Total Revenue
-              </span>
-            </div>
-            <div className="text-2xl font-bold text-oxford">
-              {loading ? "..." : formatCurrency(stats.totalRevenue)}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
-            className="bg-white p-6 rounded-lg shadow border-l-4 border-orange cursor-default"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-orange/10 p-3 rounded-full">
-                <FileText className="h-6 w-6 text-orange" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500 uppercase">
-                Pending Requests
-              </span>
-            </div>
-            <div className="text-2xl font-bold text-oxford">
-              {loading ? "..." : stats.pendingRequests}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            whileHover={{ y: -4, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
-            className="bg-white p-6 rounded-lg shadow border-l-4 border-oxford cursor-default"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-oxford/10 p-3 rounded-full">
-                <Mail className="h-6 w-6 text-oxford" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500 uppercase">
-                Total Messages
-              </span>
-            </div>
-            <div className="text-2xl font-bold text-oxford">
-              {loading ? "..." : stats.unreadMessages}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Quick Actions Grid */}
+        {/* Quick Actions */}
         <div>
-          <h2 className="text-xl font-semibold text-oxford mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {quickActions.map((action, index) => (
-              <Link key={action.path} to={action.path}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                  whileHover={{
-                    y: -8,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
-                  }}
-                  className="bg-white rounded-lg p-6 shadow group cursor-pointer"
-                >
-                  <motion.div
-                    className={`${action.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <action.icon className="h-6 w-6 text-white" />
-                  </motion.div>
-                  <h3 className="text-lg font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors">
-                    {action.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">{action.description}</p>
-                </motion.div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Quick Actions</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((a) => (
+              <Link
+                key={a.path}
+                to={a.path}
+                className="bg-white rounded-xl border border-gray-200 p-5 group hover:border-gray-300 hover:shadow-sm transition-all"
+              >
+                <div className={`${a.bg} ${a.color} w-10 h-10 rounded-lg flex items-center justify-center mb-3`}>
+                  <a.icon size={18} />
+                </div>
+                <p className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors">{a.name}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{a.desc}</p>
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Recent Transactions & Info */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Recent Transactions */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-oxford">
-                Recent Transactions
-              </h3>
-              <Link
-                to="/admin/transactions"
-                className="text-sm text-skyblue hover:underline"
-              >
-                View All
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                    <th className="pb-3">Reference</th>
-                    <th className="pb-3">Customer</th>
-                    <th className="pb-3">Amount</th>
-                    <th className="pb-3">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        className="py-4 text-center text-gray-500"
-                      >
-                        Loading...
-                      </td>
-                    </tr>
-                  ) : recentTransactions.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        className="py-4 text-center text-gray-500"
-                      >
-                        No recent transactions
-                      </td>
-                    </tr>
-                  ) : (
-                    recentTransactions.map((tx) => (
-                      <tr key={tx.id} className="text-sm">
-                        <td className="py-3 font-mono text-gray-600">
-                          {tx.reference.substring(0, 8)}...
-                        </td>
-                        <td className="py-3 text-gray-800">
-                          {tx.customer_name || tx.customer_email}
-                        </td>
-                        <td className="py-3 font-medium text-oxford">
-                          {formatCurrency(tx.amount)}
-                        </td>
-                        <td className="py-3">
-                          <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                              tx.status === "success"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
-                            {tx.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+        {/* Recent Transactions */}
+        <div className="bg-white rounded-xl border border-gray-200">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
+            <Link to="/admin/transactions" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
+              View all <ArrowRight size={12} />
+            </Link>
           </div>
-
-          {/* Info Card */}
-          <div className="bg-linear-to-br from-skyblue/20 to-iceblue/20 rounded-lg p-6 h-fit">
-            <h3 className="text-lg font-bold text-oxford mb-4">
-              System Status
-            </h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Database</span>
-                <span className="text-green-600 font-medium flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Connected
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Payment Gateway</span>
-                <span className="text-green-600 font-medium flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Active
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Email Service</span>
-                <span className="text-green-600 font-medium flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Active
-                </span>
-              </div>
-            </div>
-            <div className="mt-6 pt-6 border-t border-white/20">
-              <p className="text-xs text-gray-500">
-                Need help? Contact support at <br />
-                <a
-                  href="mailto:support@gr8qm.com"
-                  className="text-skyblue hover:underline"
-                >
-                  support@gr8qm.com
-                </a>
-              </p>
-            </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-xs text-gray-500 border-b border-gray-100">
+                  <th className="text-left px-5 py-3 font-medium">Reference</th>
+                  <th className="text-left px-5 py-3 font-medium">Customer</th>
+                  <th className="text-right px-5 py-3 font-medium">Amount</th>
+                  <th className="text-right px-5 py-3 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">Loading...</td></tr>
+                ) : recentTransactions.length === 0 ? (
+                  <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">No transactions yet</td></tr>
+                ) : (
+                  recentTransactions.map((tx) => (
+                    <tr key={tx.id} className="border-b border-gray-50 last:border-0">
+                      <td className="px-5 py-3 font-mono text-xs text-gray-500">{tx.reference?.slice(0, 12) || "—"}</td>
+                      <td className="px-5 py-3 text-gray-900">{tx.customer_name || tx.customer_email || "—"}</td>
+                      <td className="px-5 py-3 text-right font-medium text-gray-900">{fmt(tx.amount)}</td>
+                      <td className="px-5 py-3 text-right">
+                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                          tx.status === "success" ? "bg-green-50 text-green-700" :
+                          tx.status === "pending" ? "bg-amber-50 text-amber-700" :
+                          "bg-red-50 text-red-700"
+                        }`}>
+                          {tx.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

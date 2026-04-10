@@ -1,7 +1,6 @@
 import React, { type ReactNode, useState } from "react";
 import AdminSidebar from "./AdminSidebar";
-import { Menu, LogOut, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 export interface AdminLayoutProps {
   children: ReactNode;
@@ -11,21 +10,13 @@ export interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, subtitle }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    // Clear any auth tokens/session data here
-    localStorage.removeItem("admin_token");
-    // Redirect to login
-    navigate("/admin/login");
-  };
 
   return (
-    <div className="flex h-screen bg-light">
+    <div className="flex h-screen bg-gray-50">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -42,40 +33,25 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, subtitle }) 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white shadow-sm z-10">
-          <div className="flex items-center justify-between px-4 py-4 lg:px-8">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden text-gray-600 hover:text-oxford focus:outline-none"
-            >
-              {sidebarOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-            <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-oxford">{title || "Admin Dashboard"}</h1>
-              {subtitle && <p className="text-sm text-gray-500 ml-2 hidden sm:block">{subtitle}</p>}
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600 hidden sm:block">
-                Admin User
-              </span>
+        <header className="bg-white border-b border-gray-200 z-10">
+          <div className="flex items-center justify-between px-4 py-3 lg:px-6">
+            <div className="flex items-center gap-3">
               <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
-                title="Logout"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="lg:hidden text-gray-500 hover:text-gray-700"
               >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
+                {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">{title || "Dashboard"}</h1>
+                {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+              </div>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-light p-4 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           {children}
         </main>
       </div>
