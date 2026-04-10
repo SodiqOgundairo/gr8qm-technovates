@@ -12,6 +12,7 @@ import {
   MailIcon,
   PhoneIcon,
   MapPinIcon,
+  CalendarIcon,
   ZapIcon,
   ShieldCheckIcon,
   SparklesIcon,
@@ -130,8 +131,10 @@ const ContactPage: React.FC = () => {
   const card1O = useTransform(formProgress, [0.14, 0.24], [0, 1]);
   const card2Y = useTransform(formProgress, [0.18, 0.32], [80, 0]);
   const card2O = useTransform(formProgress, [0.18, 0.28], [0, 1]);
-  const trustY = useTransform(formProgress, [0.22, 0.36], [80, 0]);
-  const trustO = useTransform(formProgress, [0.22, 0.32], [0, 1]);
+  const card3Y = useTransform(formProgress, [0.22, 0.36], [80, 0]);
+  const card3O = useTransform(formProgress, [0.22, 0.32], [0, 1]);
+  const trustY = useTransform(formProgress, [0.26, 0.40], [80, 0]);
+  const trustO = useTransform(formProgress, [0.26, 0.36], [0, 1]);
 
   const contactCardStyles = [
     { y: card0Y, opacity: card0O },
@@ -558,6 +561,36 @@ const ContactPage: React.FC = () => {
                         </p>
                       </div>
                     </motion.div>
+                  </motion.div>
+
+                  {/* Book a Meeting */}
+                  <motion.div style={{ y: card3Y, opacity: card3O }}>
+                    <motion.a
+                      href="https://calendar.app.google/CTLVpRdKZS2y37cG6"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-4 p-5 rounded-2xl border border-white/[0.08] bg-gradient-to-br from-skyblue/[0.08] to-orange/[0.05] hover:border-skyblue/30 transition-all duration-300 block backdrop-blur-sm"
+                      whileHover={{ scale: 1.02, y: -4 }}
+                      transition={SPRING_SOFT}
+                    >
+                      <motion.div
+                        className="w-14 h-14 rounded-xl bg-gradient-to-br from-skyblue/20 to-orange/20 border border-skyblue/20 flex items-center justify-center"
+                        whileHover={{ rotate: -10 }}
+                      >
+                        <CalendarIcon size={24} className="text-skyblue" />
+                      </motion.div>
+                      <div>
+                        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-skyblue/50">
+                          Schedule
+                        </p>
+                        <p className="text-white font-bold text-lg group-hover:text-skyblue transition-colors">
+                          Book a Meeting
+                        </p>
+                        <p className="text-iceblue/40 text-xs mt-0.5">
+                          Pick a time that works for you
+                        </p>
+                      </div>
+                    </motion.a>
                   </motion.div>
 
                   {/* Trust indicators */}

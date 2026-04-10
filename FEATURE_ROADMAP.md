@@ -6,167 +6,163 @@ Features inspired by [aienai-academy](../aienai-academy) that can be built into 
 
 ## High Priority (Directly Applicable)
 
-### 1. Email Marketing System
-**Source:** `aienai-academy/src/pages/admin/EmailMarketingPage.tsx`
+### 1. ~~Email Marketing System~~ ✅ BUILT
+**Status:** Implemented
 
-Gr8qm currently only sends transactional emails (invoices, receipts, contact notifications). This adds bulk outreach.
+- **Email Template Builder** - HTML editor with starter templates + live preview
+- **Campaign Builder** - Compose, select recipients (all/category/labels), schedule
+- **Recipient Segmentation** - Filter by category, labels, with unsubscribe filtering
+- **Campaign Analytics** - Delivered, opened, clicked, bounced tracking via Resend webhooks
+- **Contact Management** - CRUD, bulk ops (labels, category, delete), CSV import/export
+- **Unsubscribe System** - Public `/unsubscribe` page, auto-footer on campaigns
 
-- **Email Template Builder** - Rich HTML editor with reusable templates
-- **Campaign Builder** - Compose campaigns, select recipients, schedule send time
-- **Recipient Segmentation** - Filter by labels, enrollment status, service type
-- **Merge Tags** - Dynamic content (`{{name}}`, `{{service_type}}`, etc.)
-- **Campaign Analytics** - Open rates, click tracking, unsubscribe rates
-- **Scheduled Sending** - Vercel cron job runs daily at midnight to send queued campaigns
-- **Contact List Management** - Bulk label assignment, CSV export
-
-**Supabase tables needed:** `email_templates`, `email_campaigns`, `email_campaign_messages`, `contacts`, `email_unsubscribes`
-**API routes needed:** `/api/send-scheduled-campaigns` (Vercel cron), `/api/resend-webhook` (bounce/complaint tracking)
+**Files:** `src/pages/admin/EmailMarketing.tsx`, `src/lib/emailCampaigns.ts`, `src/lib/contacts.ts`, `src/lib/emailTemplates.ts`, `src/lib/emailSenders.ts`, `api/resend-webhook.ts`, `api/unsubscribe.ts`, `src/pages/Unsubscribe.tsx`
+**Tables:** `email_templates`, `email_campaigns`, `email_campaign_messages`, `contacts`, `email_unsubscribes`, `email_senders`
+**Routes:** `/admin/email-marketing`, `/unsubscribe`
 
 ---
 
-### 2. Event Management
-**Source:** `aienai-academy/src/pages/admin/EventsPage.tsx`
+### 2. ~~Certificate & Alumni System~~ ✅ BUILT
+**Status:** Implemented
 
-For gr8qm's tech training workshops, webinars, and community events.
+- **Certificate Templates** - Custom template editor with orientation, colors, border styles, signature, QR code toggle, live preview
+- **Issue Certificates** - Issue certs linked to alumni + courses with auto-generated cert numbers (PREFIX-YEAR-XXXX)
+- **PDF Generation** - Client-side PDF rendering with jsPDF (borders, QR codes, signatures, accent stripes)
+- **Public Verification** - `/verify/:certNumber` page for certificate authenticity checks
+- **Alumni Portal** - Public `/alumni` page with tier-based grouping (Top Achievers, Certified, Community), search, cohort filter
+- **Alumni Management** - Admin CRUD for graduate profiles (name, email, photo, bio, LinkedIn, cohort)
+- **Certificate Lifecycle** - Active/revoked/expired statuses, revoke & delete actions
+- **Realtime Updates** - Supabase realtime subscriptions for all certificate/alumni tables
 
-- **Event CRUD** - Create webinars, workshops, meetups, AMAs with details
-- **Registration Forms** - Public registration page per event
-- **Reminder Emails** - Automated reminders before event date
-- **Attendee Tracking** - View registrations, check-in status
-- **Event Types** - Webinar, Workshop, Meetup, AMA
-
-**Supabase tables needed:** `events`, `event_registrations`
-**Public route needed:** `/events/:slug` (registration page)
-**Admin route needed:** `/admin/events`
-
----
-
-### 3. Certificate Generation
-**Source:** `aienai-academy/src/pages/admin/CertificateDesignerPage.tsx` + `aienai-academy/src/lib/certificate.ts`
-
-Gr8qm has training courses but no completion certificates.
-
-- **Visual Template Designer** - Canvas-based editor with drag-and-drop elements
-- **Preset Templates** - Pre-built certificate layouts
-- **Dynamic Fields** - Student name, certificate number, completion date, course name
-- **PDF Export** - Generate downloadable PDF certificates (jsPDF)
-- **Alumni Portal** - Public page where graduates can view/download their certificates
-
-**Supabase tables needed:** `certificate_templates`, `certificates`
-**Public route needed:** `/alumni` or `/certificates/:id`
-**Admin route needed:** `/admin/certificates`
+**Files:** `src/pages/admin/Certificates.tsx`, `src/lib/certificates.ts`, `src/lib/certificatePdf.ts`, `src/types/certificates.ts`, `src/pages/Alumni.tsx`, `src/pages/CertificateVerify.tsx`
+**Tables:** `certificate_templates`, `certificates`, `alumni`
+**Routes:** `/admin/certificates`, `/alumni`, `/verify`, `/verify/:certNumber`
 
 ---
 
-### 4. Flexible Checkout Modal
-**Source:** `aienai-academy/src/components/CheckoutModal.tsx`
+### 3. ~~Event Management~~ ✅ BUILT
+**Status:** Implemented
 
-Currently gr8qm only has Paystack with no installment options.
+- **Event CRUD** - Create/edit/delete webinars, workshops, meetups, AMAs with full details
+- **Public Events Page** - `/events` listing with type filtering, upcoming/past sections
+- **Event Detail Page** - `/events/:slug` with description, speakers, tags, calendar integration
+- **Inline Registration** - Public registration form with duplicate/capacity checks, atomic count increment
+- **Attendee Management** - View registrations per event, remove attendees, CSV export
+- **Event Types** - Webinar, Workshop, Meetup, AMA with color-coded badges
+- **Status Workflow** - Upcoming, Live, Completed, Cancelled with status filtering
+- **Add to Calendar** - Google Calendar link generation from event data
+- **Capacity Tracking** - Visual progress bar, auto-blocks registration when full
 
-- **Multi-Step Checkout** - Form fill -> payment selection -> processing -> success
-- **Installment Plans** - Split payments over multiple months with slider UI
-- **Coupon/Discount System** - Real-time coupon validation with percentage/fixed discounts
-- **Multi-Provider Payments** - Stripe + PayPal + Paystack abstraction
-- **Phone Number Formatting** - Country code selector with validation
-
-**Supabase tables needed:** `coupons` (code, discount_type, discount_value, max_uses, expires_at)
-**API routes needed:** `/api/validate-coupon`, `/api/create-stripe-session`, `/api/create-paypal-order`
-
----
-
-### 5. Analytics Dashboard
-**Source:** `aienai-academy/src/pages/admin/AnalyticsPage.tsx`
-
-Gr8qm's admin dashboard only shows basic counts. This adds real insights.
-
-- **12-Month Trend Charts** - Area and bar charts (Recharts library)
-- **GA4 Integration** - Page views, unique visitors, session duration
-- **Device Breakdown** - Desktop vs mobile vs tablet distribution
-- **Top Pages Ranking** - Most visited pages
-- **Conversion Funnels** - Track visitor -> contact -> client flow
-- **Revenue Analytics** - Monthly revenue trends, average invoice value
-
-**Dependencies:** `recharts` for charts, GA4 API via Vercel serverless function
-**Admin route needed:** `/admin/analytics`
+**Files:** `src/pages/admin/Events.tsx`, `src/lib/events.ts`, `src/types/events.ts`, `src/pages/Events.tsx`, `src/pages/EventDetail.tsx`
+**Tables:** `events`, `event_registrations` + RPC functions for atomic count updates
+**Routes:** `/admin/events`, `/events`, `/events/:slug`
 
 ---
 
-### 6. Role-Based Admin Permissions
-**Source:** `aienai-academy/src/lib/AuthContext.tsx` + `aienai-academy/src/types/permissions.ts`
+### 4. ~~Flexible Checkout Modal~~ ✅ BUILT
+**Status:** Implemented
 
-Gr8qm currently has flat auth — any logged-in user can do anything.
+- **Multi-Step Checkout** - Reusable `CheckoutModal` with Details → Review → Processing flow
+- **Installment Plans** - Optional split payments (2 or 3 months) with per-month display
+- **Coupon/Discount System** - Real-time coupon validation (percentage/fixed), inline apply/remove, discount preview
+- **Coupon Admin** - Full CRUD for coupons with code generator, usage limits, expiry, active toggle
+- **Coupon API** - Server-side validation via Vercel serverless + Supabase RPC
+- **Course Integration** - `CourseApplicationForm` now uses `CheckoutModal` with coupon support
 
-- **Role Tiers** - `super_admin` (full access), `admin` (limited), `viewer` (read-only)
-- **Per-Module Permissions** - Granular CRUD for each admin section (invoices, blog, portfolio, etc.)
-- **Permission Gate Component** - Wrap UI elements to show/hide based on permissions
-- **Session Timeout** - Auto-logout after 24h of inactivity
-- **Google OAuth** - Add Google sign-in alongside email/password
+**Files:** `src/components/checkout/CheckoutModal.tsx`, `src/lib/coupons.ts`, `src/types/checkout.ts`, `src/pages/admin/Coupons.tsx`, `api/validate-coupon.ts`
+**Tables:** `coupons` + `validate_coupon()` and `use_coupon()` RPC functions
+**Routes:** `/admin/coupons`
 
-**Supabase tables needed:** `admin_roles` (or add `role` + `permissions` JSON to existing auth)
+---
+
+### 5. ~~Analytics Dashboard~~ ✅ BUILT
+**Status:** Implemented
+
+- **12-Month Trend Charts** - Revenue area chart, course applications bar chart, certificate issuance trends
+- **10 Stat Cards** - Revenue, applications, invoices, messages, certificates, alumni, events, registrations, contacts, campaigns
+- **Application Insights** - By status (pie chart) and by course (bar chart)
+- **Invoice Breakdown** - Pie chart by payment status
+- **Email Campaign Stats** - Delivered/opened/clicked/bounced performance bars
+- **Events Overview** - By status with progress bars
+- **Recent Transactions** - Sortable table with status badges
+
+**Files:** `src/lib/analytics.ts`, `src/pages/admin/Analytics.tsx`
+**Dependencies:** `recharts`
+**Routes:** `/admin/analytics`
+
+---
+
+### 6. ~~Role-Based Admin Permissions~~ ✅ BUILT
+**Status:** Implemented
+
+- **Role Tiers** - `super_admin` (full access), `admin` (limited settings), `viewer` (read-only)
+- **Per-Module Permissions** - Granular CRUD for 17 admin modules with role defaults and custom overrides
+- **Auth Context** - `AuthProvider` with `useAuth()` hook providing user, profile, permissions, `can()` helper
+- **Permission Gate Component** - `<PermissionGate module="..." action="...">` for conditional rendering
+- **Permission-Aware Sidebar** - Nav items filtered by read access, user info + role badge, sign out
+- **Settings Page** - Admin user list with role management (super admin only), last active tracking
+- **Auto-Provisioning** - First user gets super_admin, subsequent users get viewer role
+
+**Files:** `src/types/permissions.ts`, `src/lib/auth.ts`, `src/components/auth/PermissionGate.tsx`, `src/components/auth/ProtectedRoute.tsx`, `src/pages/admin/Settings.tsx`, `src/components/admin/AdminSidebar.tsx`
+**Tables:** `admin_profiles` (user_id, role, display_name, email, permissions JSONB, last_active_at)
+**Routes:** `/admin/settings`
 
 ---
 
 ## Medium Priority (Needs Customization)
 
-### 7. Enhanced Form Builder
-**Source:** `aienai-academy/src/pages/admin/FormsPage.tsx`
+### 7. ~~Enhanced Form Builder~~ ✅ BUILT
+**Status:** Implemented (enhancements to existing form builder)
 
-Gr8qm already has a form builder. These are enhancements.
+- **Completion Actions** - Configurable post-submission behavior: custom success message, redirect to URL, or send confirmation email
+- **Conditional Logic** - Show/hide fields based on previous answers (already existed)
+- **Screener Questions** - Auto-disqualify respondents based on answers (already existed)
+- **File Upload Fields** - Upload to Supabase Storage with 10MB limit, supports PDF/DOC/images/CSV
+- **Number Fields** - Numeric input with min/max validation
+- **Max Responses** - Optional response cap per form
+- **Form Analytics** - Completion rates via FormAnalytics page (already existed)
 
-- **Completion Actions** - After submission: send email, calendar invite, file download, redirect, custom message
-- **Conditional Logic** - Show/hide fields based on previous answers
-- **Display Modes** - Embedded, popup, or standalone page
-- **File Upload Fields** - Upload to Supabase Storage
-- **Form Analytics** - Completion rates, drop-off points
-
----
-
-### 8. Client/Graduate Showcase (Alumni System)
-**Source:** `aienai-academy/src/pages/AlumniPage.tsx`
-
-Adapt for gr8qm to showcase training graduates and client projects.
-
-- **Graduate Profiles** - Name, photo, cohort, testimonial, certificate link
-- **Testimonial Management** - Collect and display client/student reviews
-- **Draggable Testimonial Carousel** - Interactive component for homepage/landing pages
-- **Bulk Upload** - CSV import for alumni data
-
-**Public route:** `/graduates` or `/testimonials`
+**Files:** `src/pages/admin/FormBuilder.tsx`, `src/pages/PublicForm.tsx` (updated)
+**Storage:** `form-uploads` bucket in Supabase Storage
 
 ---
 
-### 9. Unsubscribe & Email Compliance
-**Source:** `aienai-academy/src/pages/UnsubscribePage.tsx`
+### 8. ~~Client/Graduate Showcase (Alumni System)~~ ✅ BUILT (merged into Certificate & Alumni System above)
 
-Required for email marketing compliance (CAN-SPAM, GDPR).
+---
 
-- **Unsubscribe Page** - One-click unsubscribe from marketing emails
-- **Preference Center** - Choose which email types to receive
-- **Bounce/Complaint Handling** - Resend webhook to auto-remove bad addresses
+### 9. ~~Unsubscribe & Email Compliance~~ ✅ BUILT (part of Email Marketing System #1)
 
-**Public route:** `/unsubscribe?email=...&token=...`
-**API route:** `/api/unsubscribe`, `/api/resend-webhook`
+Included in the Email Marketing implementation: unsubscribe page, Resend webhook for bounce/complaint handling, auto-footer on campaigns.
 
 ---
 
 ## Low Priority (Reference / Future)
 
-### 10. Floating Contact Widget
-**Source:** `aienai-academy/src/components/ContactWidget.tsx`
+### 10. ~~Floating Contact Widget~~ ✅ KEPT AS-IS
+AI-powered ChatWidget already in place — no changes needed.
 
-Gr8qm has a ChatWidget already. Could upgrade to a tabbed version:
-- "Drop a Message" tab (form)
-- "Chat with Someone" tab (WhatsApp link or live chat)
+### 11. ~~Digi Dictionary / Glossary~~ ✅ BUILT
+**Status:** Implemented
 
-### 11. Digi Dictionary / Glossary
-**Source:** `aienai-academy/src/pages/DigiDictionaryPage.tsx`
+- **Public Glossary Page** - A-Z browseable, search, alphabet nav bar, category badges (web, design, data, ai, general)
+- **Admin CRUD** - Add/edit/delete terms, toggle published, search, category selector
+- **Realtime Updates** - Supabase realtime subscription for live admin list
 
-A-Z glossary of tech/design terms. Could be useful for gr8qm's tech training arm as a resource page.
+**Files:** `src/pages/Glossary.tsx`, `src/pages/admin/Glossary.tsx`, `src/lib/glossary.ts`
+**Tables:** `glossary_terms` (term, definition, category, letter (generated), published)
+**Routes:** `/glossary`, `/admin/glossary`
 
-### 12. Page View Tracking
-**Source:** `aienai-academy/src/hooks/usePageTracking.ts`
+### 12. ~~Page View Tracking~~ ✅ BUILT
+**Status:** Implemented
 
-Custom hook that logs every page view to a Supabase `page_views` table. Lightweight alternative to GA4 for basic analytics without third-party scripts.
+- **usePageTracking hook** - Logs every route change to `page_views` table
+- **Device detection** - Desktop/mobile/tablet from user agent
+- **Referrer tracking** - Captures document.referrer
+- **Admin-excluded** - Skips `/admin` routes to avoid inflating counts
+
+**Files:** `src/hooks/usePageTracking.ts`
+**Tables:** `page_views` (path, referrer, device, user_agent, created_at)
 
 ---
 

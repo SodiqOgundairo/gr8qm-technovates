@@ -37,3 +37,4 @@ export { default as TrophyIcon } from "./TrophyIcon";
 export { default as SpiralIcon } from "./SpiralIcon";
 export { default as HandshakeIcon } from "./HandshakeIcon";
 export { default as ZapIcon } from "./ZapIcon";
+export { default as CalendarIcon } from "./CalendarIcon";

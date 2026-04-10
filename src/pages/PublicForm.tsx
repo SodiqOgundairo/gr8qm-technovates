@@ -475,6 +475,63 @@ const PublicForm: React.FC = () => {
               error ? "border-red-500" : "border-gray-300"
             }`}
           />
+        ) : field.type === "file" ? (
+          <div className="relative">
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.csv,.xlsx"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.size > 10 * 1024 * 1024) {
+                  setErrors((prev) => ({ ...prev, [field.id]: "File must be under 10MB" }));
+                  return;
+                }
+                // Upload to Supabase Storage
+                const ext = file.name.split(".").pop();
+                const path = `form-uploads/${form!.id}/${field.id}-${Date.now()}.${ext}`;
+                const { error: uploadError } = await supabase.storage
+                  .from("form-uploads")
+                  .upload(path, file);
+                if (uploadError) {
+                  setErrors((prev) => ({ ...prev, [field.id]: "Upload failed. Please try again." }));
+                  return;
+                }
+                const { data: urlData } = supabase.storage.from("form-uploads").getPublicUrl(path);
+                handleInputChange(field.id, urlData.publicUrl);
+              }}
+              className="hidden"
+              id={`file-${field.id}`}
+            />
+            <label
+              htmlFor={`file-${field.id}`}
+              className={`flex items-center justify-center gap-2 w-full px-4 py-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                value
+                  ? "border-green-300 bg-green-50 text-green-700"
+                  : error
+                  ? "border-red-300 bg-red-50"
+                  : "border-gray-300 hover:border-skyblue hover:bg-skyblue/5"
+              }`}
+            >
+              {value ? (
+                <span className="text-sm font-medium">File uploaded successfully</span>
+              ) : (
+                <span className="text-sm text-gray-500">Click to upload a file (max 10MB)</span>
+              )}
+            </label>
+          </div>
+        ) : field.type === "number" ? (
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            placeholder={field.placeholder}
+            min={field.validation?.min}
+            max={field.validation?.max}
+            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-skyblue ${
+              error ? "border-red-500" : "border-gray-300"
+            }`}
+          />
         ) : null}
 
         {error && <p className="text-sm text-red-500">{error}</p>}

@@ -47,10 +47,24 @@ interface Field {
   };
 }
 
+interface CompletionAction {
+  type: "message" | "redirect" | "email";
+  /** Custom success message (for type=message) */
+  message?: string;
+  /** Redirect URL (for type=redirect) */
+  redirectUrl?: string;
+  /** Send confirmation email to respondent (for type=email) */
+  emailSubject?: string;
+  emailBody?: string;
+}
+
 interface FormData {
   title: string;
   description: string;
   status: "draft" | "published" | "closed";
+  completion_action?: CompletionAction;
+  max_responses?: number | null;
+  accept_file_types?: string; // comma-separated: "pdf,docx,jpg"
 }
 
 const FIELD_TYPES = [
@@ -63,6 +77,8 @@ const FIELD_TYPES = [
   { value: "dropdown", label: "Dropdown" },
   { value: "range", label: "Scale/Range" },
   { value: "date", label: "Date" },
+  { value: "file", label: "File Upload" },
+  { value: "number", label: "Number" },
 ];
 
 const generateShortCode = async (): Promise<string> => {
@@ -129,6 +145,8 @@ const FormBuilder: React.FC = () => {
         title: form.title,
         description: form.description || "",
         status: form.status,
+        completion_action: form.completion_action || undefined,
+        max_responses: form.max_responses || null,
       });
 
       const { data: formFields, error: fieldsError } = await supabase
@@ -169,6 +187,8 @@ const FormBuilder: React.FC = () => {
           title: formData.title,
           description: formData.description,
           status: publish ? "published" : formData.status,
+          completion_action: formData.completion_action || null,
+          max_responses: formData.max_responses || null,
         };
 
         if (publish && shortCode) {
@@ -200,6 +220,8 @@ const FormBuilder: React.FC = () => {
           title: formData.title,
           description: formData.description,
           status: publish ? "published" : "draft",
+          completion_action: formData.completion_action || null,
+          max_responses: formData.max_responses || null,
         };
 
         if (publish) {
@@ -426,6 +448,125 @@ const FormBuilder: React.FC = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-skyblue/50"
                   />
                 </div>
+
+                {/* Completion Action */}
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    After Submission
+                  </label>
+                  <select
+                    value={formData.completion_action?.type || "message"}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        completion_action: {
+                          ...formData.completion_action,
+                          type: e.target.value as CompletionAction["type"],
+                        },
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50 mb-3"
+                  >
+                    <option value="message">Show success message</option>
+                    <option value="redirect">Redirect to URL</option>
+                    <option value="email">Send confirmation email</option>
+                  </select>
+
+                  {(formData.completion_action?.type || "message") === "message" && (
+                    <textarea
+                      value={formData.completion_action?.message || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          completion_action: {
+                            ...formData.completion_action,
+                            type: "message",
+                            message: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder="Thank you for your submission! (leave blank for default)"
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50"
+                    />
+                  )}
+
+                  {formData.completion_action?.type === "redirect" && (
+                    <input
+                      type="url"
+                      value={formData.completion_action?.redirectUrl || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          completion_action: {
+                            ...formData.completion_action,
+                            type: "redirect",
+                            redirectUrl: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder="https://example.com/thank-you"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50"
+                    />
+                  )}
+
+                  {formData.completion_action?.type === "email" && (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={formData.completion_action?.emailSubject || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            completion_action: {
+                              ...formData.completion_action,
+                              type: "email",
+                              emailSubject: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Confirmation email subject"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50"
+                      />
+                      <textarea
+                        value={formData.completion_action?.emailBody || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            completion_action: {
+                              ...formData.completion_action,
+                              type: "email",
+                              emailBody: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Email body (HTML supported)"
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Max responses */}
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Max Responses (optional)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.max_responses || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        max_responses: e.target.value ? parseInt(e.target.value) : null,
+                      })
+                    }
+                    placeholder="Unlimited"
+                    min={1}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-skyblue/50"
+                  />
+                </div>
               </div>
 
               {/* Fields List */}
@@ -535,6 +676,19 @@ const FormBuilder: React.FC = () => {
                     {field.type === "date" && (
                       <input
                         type="date"
+                        className="w-full px-4 py-2 border rounded-lg"
+                        disabled
+                      />
+                    )}
+                    {field.type === "file" && (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-400 text-sm">
+                        Click or drag to upload file
+                      </div>
+                    )}
+                    {field.type === "number" && (
+                      <input
+                        type="number"
+                        placeholder={field.placeholder}
                         className="w-full px-4 py-2 border rounded-lg"
                         disabled
                       />

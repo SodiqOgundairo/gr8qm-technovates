@@ -1,33 +1,14 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { supabase } from "../../utils/supabase";
+import { AuthProvider, useAuth } from "../../lib/auth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data } = await supabase.auth.getUser();
-      setIsAuthenticated(!!data.user);
-      setLoading(false);
-    };
-
-    checkAuth();
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session?.user);
-    });
-
-    return () => {
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+/** Inner component that reads auth state from context */
+const AuthGuard: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -40,11 +21,23 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/admin/login" replace />;
   }
 
   return <>{children}</>;
+};
+
+/**
+ * Wraps admin routes with AuthProvider + auth check.
+ * All child components can use `useAuth()` to get user/profile/permissions.
+ */
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  return (
+    <AuthProvider>
+      <AuthGuard>{children}</AuthGuard>
+    </AuthProvider>
+  );
 };
 
 export default ProtectedRoute;

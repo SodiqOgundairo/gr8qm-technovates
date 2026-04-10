@@ -60,17 +60,56 @@ import AdminJobPostings from "./pages/admin/JobPostings";
 import JobPostingForm from "./pages/admin/JobPostingForm";
 import AdminBlogList from "./pages/admin/Blog/BlogList";
 import AdminBlogEditor from "./pages/admin/Blog/BlogEditor";
+import AdminEmailMarketing from "./pages/admin/EmailMarketing";
+import AdminAnalytics from "./pages/admin/Analytics";
+import AdminCoupons from "./pages/admin/Coupons";
+import AdminCertificates from "./pages/admin/Certificates";
+import AdminEvents from "./pages/admin/Events";
+import AdminSettings from "./pages/admin/Settings";
+import AdminDevignFX from "./pages/admin/DevignFX";
+import AdminGlossary from "./pages/admin/Glossary";
+import CertificateDesigner from "./pages/admin/CertificateDesigner";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
+import Unsubscribe from "./pages/Unsubscribe";
+import AlumniPage from "./pages/Alumni";
+import CertificateVerify from "./pages/CertificateVerify";
+import EventsPage from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
+import Glossary from "./pages/Glossary";
+import DevignFXPage from "./pages/DevignFX";
 import CursorTrail from "./components/animations/CursorTrail";
 
 import ChatWidget from "./components/common/ChatWidget";
+import { usePageTracking } from "./hooks/usePageTracking";
+
+function PageTracker() {
+  usePageTracking();
+  return null;
+}
+
+/** When accessed via devignfx.gr8qm.com, render only the DevignFX site */
+const isDevignFXHost = window.location.hostname === "devignfx.gr8qm.com";
 
 function App() {
+  if (isDevignFXHost) {
+    return (
+      <Router>
+        <ScrollToTop />
+        <PageTracker />
+        <Routes>
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="*" element={<DevignFXPage />} />
+        </Routes>
+      </Router>
+    );
+  }
+
   return (
     <Router>
       <ScrollToTop />
+      <PageTracker />
       <CursorTrail />
       <ChatWidget />
       <Routes>
@@ -143,6 +182,28 @@ function App() {
                 <Route path="blog" element={<AdminBlogList />} />
                 <Route path="blog/create" element={<AdminBlogEditor />} />
                 <Route path="blog/:id/edit" element={<AdminBlogEditor />} />
+                <Route
+                  path="email-marketing"
+                  element={<AdminEmailMarketing />}
+                />
+                <Route path="analytics" element={<AdminAnalytics />} />
+                <Route path="coupons" element={<AdminCoupons />} />
+                <Route path="events" element={<AdminEvents />} />
+                <Route
+                  path="certificates"
+                  element={<AdminCertificates />}
+                />
+                <Route
+                  path="certificates/designer"
+                  element={<CertificateDesigner />}
+                />
+                <Route
+                  path="certificates/designer/:id"
+                  element={<CertificateDesigner />}
+                />
+                <Route path="devignfx" element={<AdminDevignFX />} />
+                <Route path="glossary" element={<AdminGlossary />} />
+                <Route path="settings" element={<AdminSettings />} />
                 {/* Future admin routes go here */}
               </Routes>
             </ProtectedRoute>
@@ -154,6 +215,9 @@ function App() {
 
         {/* Public invoice payment page */}
         <Route path="/pay-invoice/:invoiceNumber" element={<PayInvoice />} />
+
+        {/* Unsubscribe page */}
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
 
         {/* ═══ MAIN ROUTES (dark design) — catch-all last ═══ */}
         <Route
@@ -173,8 +237,15 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<BlogIndex />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/events" element={<EventsPage />} />
+                <Route path="/events/:slug" element={<EventDetail />} />
+                <Route path="/alumni" element={<AlumniPage />} />
+                <Route path="/glossary" element={<Glossary />} />
+                <Route path="/verify" element={<CertificateVerify />} />
+                <Route path="/verify/:certNumber" element={<CertificateVerify />} />
                 <Route path="/forms/:shortCode" element={<PublicForm />} />
                 <Route path="/forms/:shortCode/success" element={<FormSuccess />} />
+                <Route path="/devignfx" element={<DevignFXPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </DarkLayout>
