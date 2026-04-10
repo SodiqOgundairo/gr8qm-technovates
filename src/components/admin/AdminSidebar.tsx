@@ -1,70 +1,72 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useAuth } from "../../lib/auth";
 import { ROLE_LABELS } from "../../types/permissions";
 import type { AdminModule } from "../../types/permissions";
-import {
-  DashboardIcon,
-  TrendingUpIcon,
-  ClipboardCheckIcon,
-  BriefcaseIcon,
-  GraduationCapIcon,
-  ClipboardListIcon,
-  FileTextIcon,
-  BookIcon,
-  MailIcon,
-  SendIcon,
-  TrophyIcon,
-  CalendarIcon,
-  BadgeIcon,
-  CreditCardIcon,
-  ImageIcon,
-  DollarIcon,
-  ShieldCheckIcon,
-  XIcon,
-} from "../icons";
+import { XIcon } from "../icons";
 
 interface AdminSidebarProps {
   onClose?: () => void;
 }
 
-interface NavItem {
-  name: string;
-  path: string;
-  icon: React.FC<{ size?: number }>;
-  module: AdminModule;
+interface NavSection {
+  label: string;
+  items: { name: string; path: string; module: AdminModule }[];
 }
 
-const navItems: NavItem[] = [
-  { name: "Dashboard", path: "/admin/dashboard", icon: DashboardIcon, module: "dashboard" },
-  { name: "Analytics", path: "/admin/analytics", icon: TrendingUpIcon, module: "analytics" },
-  { name: "Forms", path: "/admin/forms", icon: ClipboardCheckIcon, module: "forms" },
-  { name: "Job Postings", path: "/admin/jobs", icon: BriefcaseIcon, module: "jobs" },
-  { name: "Courses", path: "/admin/courses", icon: GraduationCapIcon, module: "courses" },
-  { name: "Applications", path: "/admin/applications", icon: ClipboardListIcon, module: "applications" },
-  { name: "Service Requests", path: "/admin/service-requests", icon: FileTextIcon, module: "service_requests" },
-  { name: "Events", path: "/admin/events", icon: CalendarIcon, module: "events" },
-  { name: "Email Marketing", path: "/admin/email-marketing", icon: SendIcon, module: "email_marketing" },
-  { name: "Certificates", path: "/admin/certificates", icon: TrophyIcon, module: "certificates" },
-  { name: "Blog", path: "/admin/blog", icon: BookIcon, module: "blog" },
-  { name: "Messages", path: "/admin/messages", icon: MailIcon, module: "messages" },
-  { name: "Coupons", path: "/admin/coupons", icon: BadgeIcon, module: "coupons" },
-  { name: "DevignFX", path: "/admin/devignfx", icon: ShieldCheckIcon, module: "devignfx" },
-  { name: "Invoices", path: "/admin/invoices", icon: CreditCardIcon, module: "invoices" },
-  { name: "Portfolio", path: "/admin/portfolio", icon: ImageIcon, module: "portfolio" },
-  { name: "Transactions", path: "/admin/transactions", icon: DollarIcon, module: "transactions" },
-  { name: "Glossary", path: "/admin/glossary", icon: BookIcon, module: "glossary" },
-  { name: "Settings", path: "/admin/settings", icon: ShieldCheckIcon, module: "settings" },
+const sections: NavSection[] = [
+  {
+    label: "Overview",
+    items: [
+      { name: "Dashboard", path: "/admin/dashboard", module: "dashboard" },
+      { name: "Analytics", path: "/admin/analytics", module: "analytics" },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { name: "Courses", path: "/admin/courses", module: "courses" },
+      { name: "Blog", path: "/admin/blog", module: "blog" },
+      { name: "Portfolio", path: "/admin/portfolio", module: "portfolio" },
+      { name: "Glossary", path: "/admin/glossary", module: "glossary" },
+      { name: "Certificates", path: "/admin/certificates", module: "certificates" },
+    ],
+  },
+  {
+    label: "Marketing",
+    items: [
+      { name: "Email Marketing", path: "/admin/email-marketing", module: "email_marketing" },
+      { name: "Coupons", path: "/admin/coupons", module: "coupons" },
+    ],
+  },
+  {
+    label: "Engagement",
+    items: [
+      { name: "Applications", path: "/admin/applications", module: "applications" },
+      { name: "Forms", path: "/admin/forms", module: "forms" },
+      { name: "Events", path: "/admin/events", module: "events" },
+      { name: "Messages", path: "/admin/messages", module: "messages" },
+      { name: "Service Requests", path: "/admin/service-requests", module: "service_requests" },
+    ],
+  },
+  {
+    label: "Management",
+    items: [
+      { name: "Invoices", path: "/admin/invoices", module: "invoices" },
+      { name: "Transactions", path: "/admin/transactions", module: "transactions" },
+      { name: "Job Postings", path: "/admin/jobs", module: "jobs" },
+      { name: "DevignFX", path: "/admin/devignfx", module: "devignfx" },
+      { name: "Settings", path: "/admin/settings", module: "settings" },
+    ],
+  },
 ];
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   const { profile, can, signOut } = useAuth();
   const navigate = useNavigate();
-
-  // Show all items if profile hasn't loaded (table missing, fetch failed, etc.)
-  const visibleItems = profile ? navItems.filter((item) => can(item.module, "read")) : navItems;
   const roleInfo = profile ? ROLE_LABELS[profile.role] : null;
+
+  const canView = (module: AdminModule) => (profile ? can(module, "read") : true);
 
   const handleSignOut = async () => {
     await signOut();
@@ -72,82 +74,78 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="h-full bg-oxford flex flex-col">
-      {/* Logo/Header */}
-      <div className="flex items-center justify-between p-6 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="text-2xl font-black text-white">
-            GR8QM <span className="text-skyblue">Admin</span>
-          </div>
-        </div>
+    <div className="h-full bg-[#0f1729] flex flex-col">
+      {/* Header */}
+      <div className="h-[64px] flex items-center justify-between px-5 border-b border-white/5">
+        <span className="text-[15px] font-bold text-white tracking-tight">
+          GR8QM <span className="text-[#0098da]">Admin</span>
+        </span>
         {onClose && (
-          <button
-            onClick={onClose}
-            className="lg:hidden text-white hover:text-skyblue"
-          >
-            <XIcon size={24} />
+          <button onClick={onClose} className="lg:hidden text-white/50 hover:text-white">
+            <XIcon size={18} />
           </button>
         )}
       </div>
 
-      {/* User info */}
+      {/* User */}
       {profile && (
-        <div className="px-6 py-4 border-b border-white/10">
-          <p className="text-white text-sm font-medium truncate">{profile.display_name}</p>
-          <p className="text-gray-400 text-xs truncate">{profile.email}</p>
+        <div className="px-5 py-3 border-b border-white/5">
+          <p className="text-white/80 text-sm font-medium truncate">{profile.display_name}</p>
+          <p className="text-white/30 text-[11px] truncate">{profile.email}</p>
           {roleInfo && (
-            <span className={`inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-semibold ${roleInfo.color}`}>
+            <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider ${roleInfo.color}`}>
               {roleInfo.label}
             </span>
           )}
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-6">
-        <div className="space-y-1 px-3">
-          {visibleItems.map((item, index) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={onClose}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? "bg-skyblue text-white shadow-lg"
-                    : "text-gray-300 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              {() => (
-                <motion.div
-                  className="flex items-center gap-3 w-full"
-                  initial={{ x: -10, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <item.icon size={20} />
-                  <span className="font-medium">{item.name}</span>
-                </motion.div>
-              )}
-            </NavLink>
-          ))}
-        </div>
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
+        {sections.map((section) => {
+          const visible = section.items.filter((i) => canView(i.module));
+          if (visible.length === 0) return null;
+          return (
+            <div key={section.label}>
+              <p className="text-white/20 text-[10px] uppercase tracking-[0.15em] font-semibold px-3 mb-1">
+                {section.label}
+              </p>
+              <div className="space-y-0.5">
+                {visible.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-lg text-[13px] transition-colors ${
+                        isActive
+                          ? "bg-[#0098da]/10 text-[#0098da] font-medium"
+                          : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </nav>
 
       {/* Footer */}
-      <div className="p-6 border-t border-white/10 space-y-3">
+      <div className="px-5 py-4 border-t border-white/5 space-y-2">
         <NavLink
           to="/"
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          className="block text-[13px] text-white/30 hover:text-white/60 transition-colors"
         >
-          <span className="text-sm">&larr; Back to Website</span>
+          Back to website
         </NavLink>
         <button
           onClick={handleSignOut}
-          className="text-sm text-gray-500 hover:text-red-400 transition-colors"
+          className="block text-[13px] text-white/20 hover:text-red-400 transition-colors"
         >
-          Sign Out
+          Sign out
         </button>
       </div>
     </div>

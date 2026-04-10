@@ -1,37 +1,25 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
+  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import {
-  Globe,
-  Monitor,
-  Smartphone,
-  Tablet,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  MousePointerClick,
-  ArrowUpRight,
-  ExternalLink,
-  AlertCircle,
+  Monitor, Smartphone, Tablet, TrendingUp, TrendingDown, AlertCircle,
 } from "lucide-react";
 import type { AnalyticsData } from "../../lib/analytics";
 import { fetchAnalytics, formatMonthLabel } from "../../lib/analytics";
 import { useGA4Analytics } from "../../hooks/useGA4Analytics";
 
-const CHART_COLORS = ["#3b82f6", "#22c55e", "#f59e0b", "#8b5cf6", "#ef4444", "#14b8a6", "#ec4899", "#6b7280"];
+const COLORS = ["#3b82f6", "#22c55e", "#f59e0b", "#8b5cf6", "#ef4444", "#14b8a6", "#ec4899", "#6b7280"];
+
+const TT_STYLE = {
+  backgroundColor: "#fff",
+  border: "1px solid #e5e7eb",
+  borderRadius: "8px",
+  fontSize: "12px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+};
 
 type Tab = "traffic" | "business";
 
@@ -43,9 +31,7 @@ const AnalyticsPage: React.FC = () => {
   const { stats: ga4, loading: ga4Loading, error: ga4Error, source: ga4Source } = useGA4Analytics(days);
 
   useEffect(() => {
-    fetchAnalytics()
-      .then(setData)
-      .finally(() => setBizLoading(false));
+    fetchAnalytics().then(setData).finally(() => setBizLoading(false));
   }, []);
 
   const loading = tab === "traffic" ? ga4Loading : bizLoading;
@@ -54,38 +40,35 @@ const AnalyticsPage: React.FC = () => {
     return (
       <AdminLayout title="Analytics">
         <div className="flex items-center justify-center py-32">
-          <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />
+          <div className="animate-spin w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full" />
         </div>
       </AdminLayout>
     );
   }
 
-  const ga4HasData = ga4.totalViews > 0 || ga4.sessions30 > 0;
-
   return (
     <AdminLayout title="Analytics" subtitle="Traffic & business insights">
-      <div className="space-y-6 max-w-7xl">
+      <div className="flex flex-col gap-6">
         {/* Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="flex bg-white rounded-lg border border-gray-200 p-1">
+          <div className="flex bg-white rounded-lg p-1 gap-0.5">
             {(["traffic", "business"] as Tab[]).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
                 className={`px-4 py-1.5 rounded-md text-sm font-medium capitalize transition-colors ${
-                  tab === t ? "bg-gray-900 text-white" : "text-gray-500 hover:text-gray-700"
+                  tab === t ? "bg-gray-900 text-white" : "text-gray-400 hover:text-gray-600"
                 }`}
               >
                 {t}
               </button>
             ))}
           </div>
-
           {tab === "traffic" && (
             <select
               value={days}
               onChange={(e) => setDays(parseInt(e.target.value))}
-              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:border-blue-300"
+              className="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-600"
             >
               <option value={7}>Last 7 days</option>
               <option value={30}>Last 30 days</option>
@@ -95,32 +78,29 @@ const AnalyticsPage: React.FC = () => {
           )}
         </div>
 
-        {/* ═══════════ TRAFFIC TAB ═══════════ */}
+        {/* ═══ TRAFFIC ═══ */}
         {tab === "traffic" && (
           <>
-            {/* Data source indicator */}
+            {/* Source indicator */}
             {ga4Source === "ga4" && (
-              <div className="flex items-center gap-2 text-xs text-green-600">
+              <div className="flex items-center gap-2 text-[11px] text-green-600">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                 Live from Google Analytics
               </div>
             )}
-
             {ga4Source === "supabase" && (
-              <div className="flex items-center gap-2 text-xs text-blue-600">
+              <div className="flex items-center gap-2 text-[11px] text-blue-500">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                Internal analytics (from page views)
-                <span className="text-gray-400 ml-1">— connect GA4 for richer data</span>
+                Internal analytics (page views)
               </div>
             )}
-
             {ga4Error && !ga4Source && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle size={18} className="text-amber-500 mt-0.5 shrink-0" />
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                <AlertCircle size={16} className="text-amber-500 mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-amber-800">No analytics data available</p>
-                  <p className="text-xs text-amber-600 mt-1">
-                    Ensure the <code className="bg-amber-100 px-1 rounded">page_views</code> table exists, or deploy the GA4 edge function for live Google Analytics data.
+                  <p className="text-sm font-medium text-amber-800">No analytics data</p>
+                  <p className="text-xs text-amber-600 mt-0.5">
+                    Ensure the <code className="bg-amber-100 px-1 rounded">page_views</code> table exists, or deploy the GA4 edge function.
                   </p>
                 </div>
               </div>
@@ -128,31 +108,29 @@ const AnalyticsPage: React.FC = () => {
 
             {/* Stat cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              <StatCard label="Page Views" value={fmtNum(ga4.totalViews)} trend={ga4.viewsTrend} icon={<Eye size={16} />} color="text-blue-600" bg="bg-blue-50" />
-              <StatCard label="Sessions" value={fmtNum(ga4.sessions30)} trend={ga4.sessionsTrend} icon={<MousePointerClick size={16} />} color="text-green-600" bg="bg-green-50" />
-              <StatCard label="Bounce Rate" value={`${ga4.bounceRate}%`} icon={<ArrowUpRight size={16} />} color="text-amber-600" bg="bg-amber-50" />
-              <StatCard label="Pages/Session" value={ga4.avgPagesPerSession} icon={<Globe size={16} />} color="text-purple-600" bg="bg-purple-50" />
-              <StatCard label="Direct Traffic" value={fmtNum(ga4.directTraffic)} icon={<ExternalLink size={16} />} color="text-teal-600" bg="bg-teal-50" />
+              <Stat label="Page Views" value={fmtNum(ga4.totalViews)} trend={ga4.viewsTrend} />
+              <Stat label="Sessions" value={fmtNum(ga4.sessions30)} trend={ga4.sessionsTrend} />
+              <Stat label="Bounce Rate" value={`${ga4.bounceRate}%`} />
+              <Stat label="Pages / Session" value={ga4.avgPagesPerSession} />
+              <Stat label="Direct Traffic" value={fmtNum(ga4.directTraffic)} />
             </div>
 
-            {/* Daily views chart */}
+            {/* Daily views */}
             <Card title="Daily Page Views">
-              {ga4.dailyViews.length === 0 ? (
-                <Empty />
-              ) : (
-                <ResponsiveContainer width="100%" height={260}>
+              {ga4.dailyViews.length === 0 ? <Empty /> : (
+                <ResponsiveContainer width="100%" height={240}>
                   <AreaChart data={ga4.dailyViews}>
                     <defs>
-                      <linearGradient id="viewsGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
+                      <linearGradient id="vg" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.12} />
                         <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis dataKey="date" tick={{ fill: "#94a3b8", fontSize: 11 }} tickFormatter={(d) => `${new Date(d).getDate()}/${new Date(d).getMonth() + 1}`} />
-                    <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} allowDecimals={false} />
-                    <Tooltip contentStyle={tooltipStyle} labelFormatter={(d) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} />
-                    <Area type="monotone" dataKey="count" name="Views" stroke="#3b82f6" fill="url(#viewsGrad)" strokeWidth={2} />
+                    <XAxis dataKey="date" tick={{ fill: "#94a3b8", fontSize: 10 }} tickFormatter={(d) => `${new Date(d).getDate()}/${new Date(d).getMonth() + 1}`} />
+                    <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} allowDecimals={false} />
+                    <Tooltip contentStyle={TT_STYLE} labelFormatter={(d) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} />
+                    <Area type="monotone" dataKey="count" name="Views" stroke="#3b82f6" fill="url(#vg)" strokeWidth={1.5} />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -168,11 +146,11 @@ const AnalyticsPage: React.FC = () => {
                       return (
                         <div key={i}>
                           <div className="flex justify-between text-sm mb-1">
-                            <span className="text-gray-600 truncate max-w-[220px]" title={p.title}>{p.path}</span>
-                            <span className="text-gray-900 font-medium ml-2 shrink-0">{fmtNum(p.views)}</span>
+                            <span className="text-gray-500 truncate max-w-[220px]">{p.path}</span>
+                            <span className="text-gray-900 font-medium ml-2 shrink-0 tabular-nums">{fmtNum(p.views)}</span>
                           </div>
-                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.round((p.views / max) * 100)}%` }} />
+                          <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-blue-400 rounded-full" style={{ width: `${Math.round((p.views / max) * 100)}%` }} />
                           </div>
                         </div>
                       );
@@ -184,22 +162,20 @@ const AnalyticsPage: React.FC = () => {
               <Card title="Traffic Sources">
                 {ga4.topReferrers.length === 0 && ga4.directTraffic === 0 ? <Empty /> : (
                   <div className="space-y-3">
-                    {ga4.directTraffic > 0 && (
-                      <BarRow label="Direct" value={ga4.directTraffic} max={Math.max(ga4.directTraffic, ga4.topReferrers[0]?.count || 0)} color="bg-green-500" />
-                    )}
+                    {ga4.directTraffic > 0 && <BarRow label="Direct" value={ga4.directTraffic} max={Math.max(ga4.directTraffic, ga4.topReferrers[0]?.count || 0)} color="bg-green-400" />}
                     {ga4.topReferrers.map((r, i) => (
-                      <BarRow key={i} label={r.source} value={r.count} max={Math.max(ga4.directTraffic, ga4.topReferrers[0]?.count || 0)} color={`bg-blue-${400 + (i % 3) * 100}`} />
+                      <BarRow key={i} label={r.source} value={r.count} max={Math.max(ga4.directTraffic, ga4.topReferrers[0]?.count || 0)} color="bg-blue-400" />
                     ))}
                   </div>
                 )}
               </Card>
             </div>
 
-            {/* Device breakdown */}
+            {/* Devices */}
             <Card title="Devices">
               {ga4.devices.desktop + ga4.devices.mobile + ga4.devices.tablet === 0 ? <Empty /> : (
                 <div className="flex flex-col md:flex-row items-center gap-8">
-                  <ResponsiveContainer width={180} height={180}>
+                  <ResponsiveContainer width={160} height={160}>
                     <PieChart>
                       <Pie
                         data={[
@@ -207,19 +183,32 @@ const AnalyticsPage: React.FC = () => {
                           { name: "Mobile", value: ga4.devices.mobile },
                           { name: "Tablet", value: ga4.devices.tablet },
                         ].filter((d) => d.value > 0)}
-                        dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={72} paddingAngle={3}
+                        dataKey="value" cx="50%" cy="50%" innerRadius={45} outerRadius={68} paddingAngle={3}
                       >
                         <Cell fill="#3b82f6" />
                         <Cell fill="#22c55e" />
                         <Cell fill="#f59e0b" />
                       </Pie>
-                      <Tooltip contentStyle={tooltipStyle} />
+                      <Tooltip contentStyle={TT_STYLE} />
                     </PieChart>
                   </ResponsiveContainer>
-                  <div className="space-y-4">
-                    <DeviceRow icon={<Monitor size={18} />} label="Desktop" count={ga4.devices.desktop} total={ga4.devices.desktop + ga4.devices.mobile + ga4.devices.tablet} color="bg-blue-500" />
-                    <DeviceRow icon={<Smartphone size={18} />} label="Mobile" count={ga4.devices.mobile} total={ga4.devices.desktop + ga4.devices.mobile + ga4.devices.tablet} color="bg-green-500" />
-                    <DeviceRow icon={<Tablet size={18} />} label="Tablet" count={ga4.devices.tablet} total={ga4.devices.desktop + ga4.devices.mobile + ga4.devices.tablet} color="bg-amber-500" />
+                  <div className="space-y-3">
+                    {[
+                      { icon: <Monitor size={16} />, label: "Desktop", count: ga4.devices.desktop, color: "#3b82f6" },
+                      { icon: <Smartphone size={16} />, label: "Mobile", count: ga4.devices.mobile, color: "#22c55e" },
+                      { icon: <Tablet size={16} />, label: "Tablet", count: ga4.devices.tablet, color: "#f59e0b" },
+                    ].map((d) => {
+                      const total = ga4.devices.desktop + ga4.devices.mobile + ga4.devices.tablet;
+                      const pct = total > 0 ? Math.round((d.count / total) * 100) : 0;
+                      return (
+                        <div key={d.label} className="flex items-center gap-3">
+                          <div className="text-gray-400">{d.icon}</div>
+                          <span className="text-sm text-gray-600 w-16">{d.label}</span>
+                          <span className="text-sm font-medium text-gray-900 tabular-nums">{fmtNum(d.count)}</span>
+                          <span className="text-xs text-gray-400">{pct}%</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -227,52 +216,49 @@ const AnalyticsPage: React.FC = () => {
           </>
         )}
 
-        {/* ═══════════ BUSINESS TAB ═══════════ */}
+        {/* ═══ BUSINESS ═══ */}
         {tab === "business" && data && (
           <>
-            {/* Stat cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              <BizStat label="Revenue" value={`₦${fmtNum(data.overview.totalRevenue)}`} />
-              <BizStat label="Applications" value={data.overview.totalApplications} />
-              <BizStat label="Invoices" value={data.overview.totalInvoices} />
-              <BizStat label="Certificates" value={data.overview.totalCertificates} />
-              <BizStat label="Alumni" value={data.overview.totalAlumni} />
-              <BizStat label="Events" value={data.overview.totalEvents} />
-              <BizStat label="Registrations" value={data.overview.totalEventRegistrations} />
-              <BizStat label="Contacts" value={data.overview.totalContacts} />
-              <BizStat label="Campaigns" value={data.overview.totalCampaigns} />
-              <BizStat label="Messages" value={data.overview.totalMessages} />
+              <Stat label="Revenue" value={`₦${fmtNum(data.overview.totalRevenue)}`} />
+              <Stat label="Applications" value={String(data.overview.totalApplications)} />
+              <Stat label="Invoices" value={String(data.overview.totalInvoices)} />
+              <Stat label="Certificates" value={String(data.overview.totalCertificates)} />
+              <Stat label="Alumni" value={String(data.overview.totalAlumni)} />
+              <Stat label="Events" value={String(data.overview.totalEvents)} />
+              <Stat label="Registrations" value={String(data.overview.totalEventRegistrations)} />
+              <Stat label="Contacts" value={String(data.overview.totalContacts)} />
+              <Stat label="Campaigns" value={String(data.overview.totalCampaigns)} />
+              <Stat label="Messages" value={String(data.overview.totalMessages)} />
             </div>
 
-            {/* Revenue chart */}
             <Card title="Revenue (12 months)">
-              <ResponsiveContainer width="100%" height={260}>
+              <ResponsiveContainer width="100%" height={240}>
                 <AreaChart data={data.monthlyRevenue}>
                   <defs>
-                    <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.15} />
+                    <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.12} />
                       <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 11 }} />
-                  <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} tickFormatter={(v) => `₦${fmtNum(v)}`} />
-                  <Tooltip contentStyle={tooltipStyle} labelFormatter={formatMonthLabel} formatter={(v: number) => [`₦${fmtNum(v)}`, "Revenue"]} />
-                  <Area type="monotone" dataKey="amount" stroke="#22c55e" fill="url(#revGrad)" strokeWidth={2} />
+                  <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 10 }} />
+                  <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickFormatter={(v) => `₦${fmtNum(v)}`} />
+                  <Tooltip contentStyle={TT_STYLE} labelFormatter={formatMonthLabel} formatter={(v: number) => [`₦${fmtNum(v)}`, "Revenue"]} />
+                  <Area type="monotone" dataKey="amount" stroke="#22c55e" fill="url(#rg)" strokeWidth={1.5} />
                 </AreaChart>
               </ResponsiveContainer>
             </Card>
 
-            {/* Applications */}
             <div className="grid lg:grid-cols-2 gap-4">
               <Card title="Applications by Course">
                 {data.applicationsByCourse.length === 0 ? <Empty /> : (
-                  <ResponsiveContainer width="100%" height={240}>
+                  <ResponsiveContainer width="100%" height={220}>
                     <BarChart data={data.applicationsByCourse} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis type="number" tick={{ fill: "#94a3b8", fontSize: 11 }} />
-                      <YAxis dataKey="course" type="category" width={120} tick={{ fill: "#64748b", fontSize: 10 }} />
-                      <Tooltip contentStyle={tooltipStyle} />
+                      <XAxis type="number" tick={{ fill: "#94a3b8", fontSize: 10 }} />
+                      <YAxis dataKey="course" type="category" width={110} tick={{ fill: "#64748b", fontSize: 10 }} />
+                      <Tooltip contentStyle={TT_STYLE} />
                       <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -281,52 +267,15 @@ const AnalyticsPage: React.FC = () => {
 
               <Card title="Application Status">
                 {data.applicationsByStatus.length === 0 ? <Empty /> : (
-                  <div className="flex items-center justify-center gap-6">
-                    <ResponsiveContainer width={160} height={160}>
-                      <PieChart>
-                        <Pie data={data.applicationsByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3}>
-                          {data.applicationsByStatus.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-                        </Pie>
-                        <Tooltip contentStyle={tooltipStyle} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="space-y-2">
-                      {data.applicationsByStatus.map((item, i) => (
-                        <div key={item.status} className="flex items-center gap-2 text-sm">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
-                          <span className="text-gray-500 capitalize">{item.status}</span>
-                          <span className="text-gray-900 font-medium ml-auto">{item.count}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <PieSection data={data.applicationsByStatus} nameKey="status" />
                 )}
               </Card>
             </div>
 
-            {/* Invoices + Certificates */}
             <div className="grid lg:grid-cols-2 gap-4">
               <Card title="Invoice Status">
                 {data.invoicesByStatus.length === 0 ? <Empty /> : (
-                  <div className="flex items-center justify-center gap-6">
-                    <ResponsiveContainer width={160} height={160}>
-                      <PieChart>
-                        <Pie data={data.invoicesByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={3}>
-                          {data.invoicesByStatus.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-                        </Pie>
-                        <Tooltip contentStyle={tooltipStyle} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="space-y-2">
-                      {data.invoicesByStatus.map((item, i) => (
-                        <div key={item.status} className="flex items-center gap-2 text-sm">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
-                          <span className="text-gray-500 capitalize">{item.status}</span>
-                          <span className="text-gray-900 font-medium ml-auto">{item.count}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <PieSection data={data.invoicesByStatus} nameKey="status" />
                 )}
               </Card>
 
@@ -334,25 +283,38 @@ const AnalyticsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={data.monthlyCertificates}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 11 }} />
-                    <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} allowDecimals={false} />
-                    <Tooltip contentStyle={tooltipStyle} labelFormatter={formatMonthLabel} />
+                    <XAxis dataKey="month" tickFormatter={formatMonthLabel} tick={{ fill: "#94a3b8", fontSize: 10 }} />
+                    <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} allowDecimals={false} />
+                    <Tooltip contentStyle={TT_STYLE} labelFormatter={formatMonthLabel} />
                     <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>
             </div>
 
-            {/* Email + Events */}
             <div className="grid lg:grid-cols-2 gap-4">
               <Card title="Email Campaigns">
-                {data.emailCampaignStats.total === 0 ? <Empty label="No campaigns sent yet" /> : (
-                  <div className="space-y-4">
-                    <ProgressBar label="Delivered" value={data.emailCampaignStats.delivered} total={data.emailCampaignStats.total} color="bg-green-500" />
-                    <ProgressBar label="Opened" value={data.emailCampaignStats.opened} total={data.emailCampaignStats.total} color="bg-blue-500" />
-                    <ProgressBar label="Clicked" value={data.emailCampaignStats.clicked} total={data.emailCampaignStats.total} color="bg-purple-500" />
-                    <ProgressBar label="Bounced" value={data.emailCampaignStats.bounced} total={data.emailCampaignStats.total} color="bg-red-500" />
-                    <p className="text-gray-400 text-xs text-right">{data.emailCampaignStats.total} total</p>
+                {data.emailCampaignStats.total === 0 ? <Empty label="No campaigns sent" /> : (
+                  <div className="space-y-3">
+                    {[
+                      { label: "Delivered", value: data.emailCampaignStats.delivered, color: "bg-green-400" },
+                      { label: "Opened", value: data.emailCampaignStats.opened, color: "bg-blue-400" },
+                      { label: "Clicked", value: data.emailCampaignStats.clicked, color: "bg-purple-400" },
+                      { label: "Bounced", value: data.emailCampaignStats.bounced, color: "bg-red-400" },
+                    ].map((s) => {
+                      const pct = data.emailCampaignStats.total > 0 ? Math.round((s.value / data.emailCampaignStats.total) * 100) : 0;
+                      return (
+                        <div key={s.label}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-gray-500">{s.label}</span>
+                            <span className="text-gray-900 font-medium tabular-nums">{s.value} ({pct}%)</span>
+                          </div>
+                          <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+                            <div className={`h-full ${s.color} rounded-full`} style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </Card>
@@ -367,50 +329,45 @@ const AnalyticsPage: React.FC = () => {
                         <div key={item.status}>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-gray-500 capitalize">{item.status}</span>
-                            <span className="text-gray-900 font-medium">{item.count} ({pct}%)</span>
+                            <span className="text-gray-900 font-medium tabular-nums">{item.count} ({pct}%)</span>
                           </div>
-                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
+                          <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: COLORS[i % COLORS.length] }} />
                           </div>
                         </div>
                       );
                     })}
-                    <div className="pt-2 border-t border-gray-100 flex justify-between text-sm">
-                      <span className="text-gray-400">Total Registrations</span>
-                      <span className="text-gray-900 font-medium">{data.overview.totalEventRegistrations}</span>
-                    </div>
                   </div>
                 )}
               </Card>
             </div>
 
-            {/* Recent Transactions */}
             <Card title="Recent Transactions">
-              {data.recentTransactions.length === 0 ? <Empty label="No transactions yet" /> : (
+              {data.recentTransactions.length === 0 ? <Empty label="No transactions" /> : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-xs text-gray-500 border-b border-gray-100">
-                        <th className="text-left py-2 font-medium">Reference</th>
-                        <th className="text-left py-2 font-medium">Customer</th>
-                        <th className="text-right py-2 font-medium">Amount</th>
-                        <th className="text-right py-2 font-medium">Status</th>
-                        <th className="text-right py-2 font-medium">Date</th>
+                      <tr className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">
+                        <th className="text-left pb-3">Reference</th>
+                        <th className="text-left pb-3">Customer</th>
+                        <th className="text-right pb-3">Amount</th>
+                        <th className="text-right pb-3">Status</th>
+                        <th className="text-right pb-3">Date</th>
                       </tr>
                     </thead>
                     <tbody>
                       {data.recentTransactions.map((tx) => (
-                        <tr key={tx.id} className="border-b border-gray-50 last:border-0">
-                          <td className="py-2.5 font-mono text-xs text-gray-500">{tx.reference?.slice(0, 16) || "—"}</td>
-                          <td className="py-2.5 text-gray-900">{tx.customer_name || "—"}</td>
-                          <td className="py-2.5 text-right font-medium text-gray-900">₦{fmtNum(tx.amount)}</td>
-                          <td className="py-2.5 text-right">
+                        <tr key={tx.id} className="border-t border-gray-100">
+                          <td className="py-3 font-mono text-xs text-gray-400">{tx.reference?.slice(0, 14) || "—"}</td>
+                          <td className="py-3 text-gray-700">{tx.customer_name || "—"}</td>
+                          <td className="py-3 text-right font-medium text-gray-900 tabular-nums">₦{fmtNum(tx.amount)}</td>
+                          <td className="py-3 text-right">
                             <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                              tx.status === "success" || tx.status === "completed" ? "bg-green-50 text-green-700" :
-                              tx.status === "pending" ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-700"
+                              tx.status === "success" || tx.status === "completed" ? "bg-green-50 text-green-600" :
+                              tx.status === "pending" ? "bg-amber-50 text-amber-600" : "bg-red-50 text-red-600"
                             }`}>{tx.status}</span>
                           </td>
-                          <td className="py-2.5 text-gray-400 text-right text-xs">{new Date(tx.created_at).toLocaleDateString()}</td>
+                          <td className="py-3 text-right text-xs text-gray-400">{new Date(tx.created_at).toLocaleDateString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -422,120 +379,72 @@ const AnalyticsPage: React.FC = () => {
         )}
 
         {tab === "business" && !data && (
-          <div className="text-center py-32 text-gray-400">Failed to load business analytics.</div>
+          <div className="text-center py-32 text-gray-400 text-sm">Failed to load.</div>
         )}
       </div>
     </AdminLayout>
   );
 };
 
-// ════════════════════════════════════════════════════════════
-// SUB-COMPONENTS
-// ════════════════════════════════════════════════════════════
+/* ── Shared components ── */
 
-const tooltipStyle = {
-  backgroundColor: "#fff",
-  border: "1px solid #e5e7eb",
-  borderRadius: "8px",
-  color: "#111827",
-  fontSize: "13px",
-  boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
-};
-
-const StatCard: React.FC<{
-  label: string;
-  value: string;
-  trend?: number;
-  icon: React.ReactNode;
-  color: string;
-  bg: string;
-}> = ({ label, value, trend, icon, color, bg }) => (
-  <div className="bg-white rounded-xl border border-gray-200 p-4">
-    <div className="flex items-center justify-between mb-2">
-      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</span>
-      <div className={`${bg} ${color} p-1.5 rounded-lg`}>{icon}</div>
-    </div>
-    <p className="text-xl font-bold text-gray-900">{value}</p>
+const Stat: React.FC<{ label: string; value: string; trend?: number }> = ({ label, value, trend }) => (
+  <div className="bg-white rounded-2xl p-5">
+    <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400">{label}</p>
+    <p className="text-2xl font-bold text-gray-900 mt-1 leading-none tabular-nums">{value}</p>
     {trend !== undefined && trend !== 0 && (
-      <div className={`flex items-center gap-1 mt-1 text-xs ${trend > 0 ? "text-green-600" : "text-red-500"}`}>
-        {trend > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-        <span>{trend > 0 ? "+" : ""}{trend}%</span>
+      <div className={`flex items-center gap-1 mt-1.5 text-[11px] ${trend > 0 ? "text-green-600" : "text-red-500"}`}>
+        {trend > 0 ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+        {trend > 0 ? "+" : ""}{trend}%
       </div>
     )}
   </div>
 );
 
-const BizStat: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
-  <div className="bg-white rounded-xl border border-gray-200 p-4">
-    <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</span>
-    <p className="text-xl font-bold text-gray-900 mt-1">{value}</p>
-  </div>
-);
-
 const Card: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <div className="bg-white rounded-xl border border-gray-200 p-5">
-    <h3 className="text-sm font-semibold text-gray-900 mb-4">{title}</h3>
+  <div className="bg-white rounded-2xl p-6">
+    <h3 className="text-[13px] font-semibold text-gray-900 mb-4">{title}</h3>
     {children}
   </div>
 );
 
 const Empty: React.FC<{ label?: string }> = ({ label }) => (
-  <div className="flex items-center justify-center py-10 text-gray-400 text-sm">{label || "No data yet"}</div>
+  <div className="flex items-center justify-center py-10 text-sm text-gray-300">{label || "No data yet"}</div>
 );
 
-const BarRow: React.FC<{ label: string; value: number; max: number; color: string }> = ({ label, value, max, color }) => {
-  const pct = max > 0 ? Math.round((value / max) * 100) : 0;
-  return (
-    <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-600 truncate max-w-[200px]">{label}</span>
-        <span className="text-gray-900 font-medium ml-2 shrink-0">{fmtNum(value)}</span>
-      </div>
-      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
-      </div>
+const BarRow: React.FC<{ label: string; value: number; max: number; color: string }> = ({ label, value, max, color }) => (
+  <div>
+    <div className="flex justify-between text-sm mb-1">
+      <span className="text-gray-500 truncate max-w-[200px]">{label}</span>
+      <span className="text-gray-900 font-medium ml-2 shrink-0 tabular-nums">{fmtNum(value)}</span>
     </div>
-  );
-};
+    <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+      <div className={`h-full ${color} rounded-full`} style={{ width: `${max > 0 ? Math.round((value / max) * 100) : 0}%` }} />
+    </div>
+  </div>
+);
 
-const DeviceRow: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  count: number;
-  total: number;
-  color: string;
-}> = ({ icon, label, count, total, color }) => {
-  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-  return (
-    <div className="flex items-center gap-3">
-      <div className="text-gray-400">{icon}</div>
-      <div className="flex-1 min-w-[140px]">
-        <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-600">{label}</span>
-          <span className="text-gray-900 font-medium">{fmtNum(count)} ({pct}%)</span>
+const PieSection: React.FC<{ data: { status: string; count: number }[]; nameKey: string }> = ({ data: items }) => (
+  <div className="flex items-center justify-center gap-6">
+    <ResponsiveContainer width={140} height={140}>
+      <PieChart>
+        <Pie data={items} dataKey="count" nameKey="status" cx="50%" cy="50%" innerRadius={38} outerRadius={58} paddingAngle={3}>
+          {items.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+        </Pie>
+        <Tooltip contentStyle={TT_STYLE} />
+      </PieChart>
+    </ResponsiveContainer>
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={item.status} className="flex items-center gap-2 text-sm">
+          <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+          <span className="text-gray-500 capitalize">{item.status}</span>
+          <span className="text-gray-900 font-medium ml-auto tabular-nums">{item.count}</span>
         </div>
-        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
-        </div>
-      </div>
+      ))}
     </div>
-  );
-};
-
-const ProgressBar: React.FC<{ label: string; value: number; total: number; color: string }> = ({ label, value, total, color }) => {
-  const pct = total > 0 ? Math.round((value / total) * 100) : 0;
-  return (
-    <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-500">{label}</span>
-        <span className="text-gray-900 font-medium">{value} ({pct}%)</span>
-      </div>
-      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
-      </div>
-    </div>
-  );
-};
+  </div>
+);
 
 function fmtNum(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;

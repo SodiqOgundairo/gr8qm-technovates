@@ -2,16 +2,8 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
-import {
-  GraduationCap,
-  ClipboardList,
-  Mail,
-  FileText,
-  DollarSign,
-  Users,
-  ArrowRight,
-  TrendingUp,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState({
@@ -67,103 +59,157 @@ const AdminDashboard: React.FC = () => {
     new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(n);
 
   const statCards = [
-    { label: "Applications", value: stats.totalApplications, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Revenue", value: fmt(stats.totalRevenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
-    { label: "Pending Requests", value: stats.pendingRequests, icon: FileText, color: "text-amber-600", bg: "bg-amber-50" },
-    { label: "Messages", value: stats.unreadMessages, icon: Mail, color: "text-purple-600", bg: "bg-purple-50" },
+    { label: "Applications", value: stats.totalApplications, color: "#3b82f6" },
+    { label: "Revenue", value: fmt(stats.totalRevenue), color: "#22c55e" },
+    { label: "Pending Requests", value: stats.pendingRequests, color: "#f59e0b" },
+    { label: "Messages", value: stats.unreadMessages, color: "#8b5cf6" },
   ];
 
   const quickActions = [
-    { name: "Courses", desc: "Manage training courses", icon: GraduationCap, path: "/admin/courses", color: "text-blue-600", bg: "bg-blue-50" },
-    { name: "Applications", desc: "Review applications", icon: ClipboardList, path: "/admin/applications", color: "text-green-600", bg: "bg-green-50" },
-    { name: "Service Requests", desc: "Design & print requests", icon: FileText, path: "/admin/service-requests", color: "text-amber-600", bg: "bg-amber-50" },
-    { name: "Analytics", desc: "Traffic & business data", icon: TrendingUp, path: "/admin/analytics", color: "text-purple-600", bg: "bg-purple-50" },
+    { name: "Courses", path: "/admin/courses" },
+    { name: "Applications", path: "/admin/applications" },
+    { name: "Service Requests", path: "/admin/service-requests" },
+    { name: "Analytics", path: "/admin/analytics" },
+    { name: "Blog", path: "/admin/blog" },
+    { name: "Messages", path: "/admin/messages" },
   ];
 
   return (
     <AdminLayout title="Dashboard">
-      <div className="space-y-6 max-w-7xl">
+      <div className="flex flex-col gap-8">
+        {/* Greeting */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
+          <p className="text-sm text-gray-400 mt-1">Here's what's happening with your business.</p>
+        </div>
+
         {/* Stat cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {statCards.map((s) => (
-            <div key={s.label} className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{s.label}</span>
-                <div className={`${s.bg} ${s.color} p-2 rounded-lg`}>
-                  <s.icon size={16} />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">
-                {loading ? <span className="inline-block w-16 h-7 bg-gray-100 rounded animate-pulse" /> : s.value}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {statCards.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
+              className="relative bg-white rounded-2xl p-6 overflow-hidden"
+            >
+              <div
+                className="absolute top-6 right-6 w-2 h-2 rounded-full"
+                style={{ backgroundColor: s.color }}
+              />
+              <p className="text-[11px] uppercase tracking-wider font-medium text-gray-400">
+                {s.label}
               </p>
-            </div>
+              <p className="text-3xl font-bold text-gray-900 mt-2 leading-none">
+                {loading ? (
+                  <span className="inline-block w-20 h-8 bg-gray-100 rounded animate-pulse" />
+                ) : (
+                  s.value
+                )}
+              </p>
+              {/* Subtle background accent */}
+              <div
+                className="absolute -bottom-6 -right-6 w-20 h-20 rounded-full opacity-[0.06]"
+                style={{ backgroundColor: s.color }}
+              />
+            </motion.div>
           ))}
         </div>
 
-        {/* Quick Actions */}
-        <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Quick Actions</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickActions.map((a) => (
+        {/* Two-column: Transactions + Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Transactions */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
+            className="lg:col-span-2 bg-white rounded-2xl p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-[15px] font-semibold text-gray-900">Recent Transactions</h3>
               <Link
-                key={a.path}
-                to={a.path}
-                className="bg-white rounded-xl border border-gray-200 p-5 group hover:border-gray-300 hover:shadow-sm transition-all"
+                to="/admin/transactions"
+                className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors"
               >
-                <div className={`${a.bg} ${a.color} w-10 h-10 rounded-lg flex items-center justify-center mb-3`}>
-                  <a.icon size={18} />
-                </div>
-                <p className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors">{a.name}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{a.desc}</p>
+                View all <ArrowRight size={12} />
               </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Transactions */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
-            <Link to="/admin/transactions" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
-              View all <ArrowRight size={12} />
-            </Link>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-xs text-gray-500 border-b border-gray-100">
-                  <th className="text-left px-5 py-3 font-medium">Reference</th>
-                  <th className="text-left px-5 py-3 font-medium">Customer</th>
-                  <th className="text-right px-5 py-3 font-medium">Amount</th>
-                  <th className="text-right px-5 py-3 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">Loading...</td></tr>
-                ) : recentTransactions.length === 0 ? (
-                  <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">No transactions yet</td></tr>
-                ) : (
-                  recentTransactions.map((tx) => (
-                    <tr key={tx.id} className="border-b border-gray-50 last:border-0">
-                      <td className="px-5 py-3 font-mono text-xs text-gray-500">{tx.reference?.slice(0, 12) || "—"}</td>
-                      <td className="px-5 py-3 text-gray-900">{tx.customer_name || tx.customer_email || "—"}</td>
-                      <td className="px-5 py-3 text-right font-medium text-gray-900">{fmt(tx.amount)}</td>
-                      <td className="px-5 py-3 text-right">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                          tx.status === "success" ? "bg-green-50 text-green-700" :
-                          tx.status === "pending" ? "bg-amber-50 text-amber-700" :
-                          "bg-red-50 text-red-700"
-                        }`}>
-                          {tx.status}
-                        </span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">
+                    <th className="text-left pb-4">Reference</th>
+                    <th className="text-left pb-4">Customer</th>
+                    <th className="text-right pb-4">Amount</th>
+                    <th className="text-right pb-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={4} className="py-12 text-center text-sm text-gray-300">
+                        Loading...
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                  ) : recentTransactions.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-12 text-center text-sm text-gray-300">
+                        No transactions yet
+                      </td>
+                    </tr>
+                  ) : (
+                    recentTransactions.map((tx) => (
+                      <tr key={tx.id} className="border-t border-gray-100 text-sm">
+                        <td className="py-4 font-mono text-xs text-gray-400">
+                          {tx.reference?.slice(0, 12) || "—"}
+                        </td>
+                        <td className="py-4 text-gray-700">
+                          {tx.customer_name || tx.customer_email || "—"}
+                        </td>
+                        <td className="py-4 text-right font-medium text-gray-900">
+                          {fmt(tx.amount)}
+                        </td>
+                        <td className="py-4 text-right">
+                          <span
+                            className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                              tx.status === "success"
+                                ? "bg-green-50 text-green-600"
+                                : tx.status === "pending"
+                                  ? "bg-amber-50 text-amber-600"
+                                  : "bg-red-50 text-red-600"
+                            }`}
+                          >
+                            {tx.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+
+          {/* Quick Actions */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className="bg-white rounded-2xl p-6"
+          >
+            <h3 className="text-[15px] font-semibold text-gray-900 mb-5">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {quickActions.map((a) => (
+                <Link
+                  key={a.path}
+                  to={a.path}
+                  className="flex items-center justify-center p-4 rounded-xl bg-[#f8f9fb] hover:bg-gray-100 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors text-center"
+                >
+                  {a.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </AdminLayout>
