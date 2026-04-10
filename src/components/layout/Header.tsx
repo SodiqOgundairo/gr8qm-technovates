@@ -17,7 +17,16 @@ const navLinks = [
   },
   { label: "Portfolio", path: "/portfolio" },
   { label: "Blog", path: "/blog" },
-  { label: "Careers", path: "/careers" },
+  { label: "Events", path: "/events" },
+  {
+    label: "Resources",
+    children: [
+      { label: "Glossary", path: "/glossary" },
+      { label: "Alumni", path: "/alumni" },
+      { label: "Verify Certificate", path: "/verify" },
+      { label: "Careers", path: "/careers" },
+    ],
+  },
 ];
 
 const Header: React.FC = () => {
@@ -28,7 +37,7 @@ const Header: React.FC = () => {
   const lastY = useRef(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const { scrollY } = useScroll();
 
@@ -53,7 +62,7 @@ const Header: React.FC = () => {
       }
     };
     const onClick = (e: MouseEvent) => {
-      if (dropdownOpen !== null && dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (dropdownOpen !== null && !dropdownRefs.current.some((ref) => ref?.contains(e.target as Node))) {
         setDropdownOpen(null);
       }
     };
@@ -124,7 +133,7 @@ const Header: React.FC = () => {
                   )}
                 </Link>
               ) : (
-                <div key={item.label} className="relative" ref={dropdownRef}>
+                <div key={item.label} className="relative" ref={(el) => { dropdownRefs.current[i] = el; }}>
                   <button
                     onClick={() => setDropdownOpen(dropdownOpen === i ? null : i)}
                     className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium tracking-wide uppercase text-iceblue/70 hover:text-white transition-colors duration-300"
@@ -181,7 +190,13 @@ const Header: React.FC = () => {
           </div>
 
           {/* CTA */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-3">
+            <Link
+              to="/admin/login"
+              className="px-4 py-2.5 text-[13px] font-medium tracking-wide text-iceblue/50 hover:text-white transition-colors duration-300"
+            >
+              Login
+            </Link>
             <Link
               to="/contact"
               className="group relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium rounded-full overflow-hidden border border-iceblue/20 text-white hover:border-skyblue/40 transition-all duration-300"
@@ -304,11 +319,18 @@ const Header: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="mt-12"
+              className="mt-12 space-y-3"
             >
               <Button variant="primary" size="lg" className="w-full" onClick={() => { setMobileOpen(false); navigate("/contact"); }}>
                 Let's Talk →
               </Button>
+              <Link
+                to="/admin/login"
+                onClick={() => setMobileOpen(false)}
+                className="block text-center py-3 text-sm text-iceblue/50 hover:text-white transition-colors"
+              >
+                Login
+              </Link>
             </motion.div>
           </motion.div>
         )}
