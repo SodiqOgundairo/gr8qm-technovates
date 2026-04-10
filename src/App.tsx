@@ -4,26 +4,43 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import HeaderOld from "./components/layout/HeaderOld";
+import FooterOld from "./components/layout/FooterOld";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import DarkLayout from "./components/layout/DarkLayout";
 
+/* Old design pages */
+import HomeOld from "./pages/HomeOld";
+import AboutOld from "./pages/AboutOld";
+import ContactOld from "./pages/ContactOld";
+import ServicesOld from "./pages/ServicesOld";
+import TrainingsOld from "./pages/TrainingsOld";
+import PortfolioOld from "./pages/PortfolioOld";
+import CareersOld from "./pages/CareersOld";
+import DesignBuildOld from "./pages/services/DesignBuildOld";
+import PrintShopOld from "./pages/services/PrintShopOld";
+import TechTrainingOld from "./pages/services/TechTrainingOld";
+import BlogIndexOld from "./pages/Blog/BlogIndexOld";
+import BlogPostOld from "./pages/Blog/BlogPostOld";
+import NotFoundOld from "./pages/PageNotFoundOld";
+
 /* Pages */
-import HomeNew from "./pages/HomeNew";
-import AboutNew from "./pages/AboutNew";
-import ContactNew from "./pages/ContactNew";
-import ServicesNew from "./pages/ServicesNew";
-import TrainingsNew from "./pages/TrainingsNew";
-import PortfolioNew from "./pages/PortfolioNew";
-import CareersNew from "./pages/CareersNew";
-import DesignBuildNew from "./pages/services/DesignBuildNew";
-import PrintShopNew from "./pages/services/PrintShopNew";
-import TechTrainingNew from "./pages/services/TechTrainingNew";
-import BlogIndexNew from "./pages/Blog/BlogIndexNew";
-import BlogPostNew from "./pages/Blog/BlogPostNew";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Services from "./pages/Services";
+import Trainings from "./pages/Trainings";
+import Portfolio from "./pages/Portfolio";
+import Careers from "./pages/Careers";
+import DesignBuild from "./pages/services/DesignBuild";
+import PrintShop from "./pages/services/PrintShop";
+import TechTraining from "./pages/services/TechTraining";
+import BlogIndex from "./pages/Blog/BlogIndex";
+import BlogPost from "./pages/Blog/BlogPost";
 import PublicForm from "./pages/PublicForm";
 import FormSuccess from "./pages/FormSuccess";
 import Cohort4 from "./pages/Cohort4";
-import NotFoundNew from "./pages/NotFoundNew";
+import NotFound from "./pages/NotFound";
 
 /* Admin pages */
 import AdminLogin from "./pages/AdminLogin";
@@ -57,6 +74,34 @@ function App() {
       <CursorTrail />
       <ChatWidget />
       <Routes>
+        {/* ═══ OLD DESIGN ROUTES ═══ */}
+        <Route
+          path="/old/*"
+          element={
+            <>
+              <HeaderOld />
+              <Routes>
+                <Route path="/" element={<HomeOld />} />
+                <Route path="/about" element={<AboutOld />} />
+                <Route path="/services" element={<ServicesOld />} />
+                <Route path="/services/design-build" element={<DesignBuildOld />} />
+                <Route path="/services/print-shop" element={<PrintShopOld />} />
+                <Route path="/services/tech-training" element={<TechTrainingOld />} />
+                <Route path="/trainings" element={<TrainingsOld />} />
+                <Route path="/portfolio" element={<PortfolioOld />} />
+                <Route path="/careers" element={<CareersOld />} />
+                <Route path="/contact" element={<ContactOld />} />
+                <Route path="/forms/:shortCode" element={<PublicForm />} />
+                <Route path="/forms/:shortCode/success" element={<FormSuccess />} />
+                <Route path="/blog" element={<BlogIndexOld />} />
+                <Route path="/blog/:slug" element={<BlogPostOld />} />
+                <Route path="*" element={<NotFoundOld />} />
+              </Routes>
+              <FooterOld />
+            </>
+          }
+        />
+
         {/* Standalone Pages */}
         <Route path="/cohort4" element={<Cohort4 />} />
 
@@ -116,21 +161,21 @@ function App() {
           element={
             <DarkLayout>
               <Routes>
-                <Route path="/" element={<HomeNew />} />
-                <Route path="/about" element={<AboutNew />} />
-                <Route path="/services" element={<ServicesNew />} />
-                <Route path="/services/design-build" element={<DesignBuildNew />} />
-                <Route path="/services/print-shop" element={<PrintShopNew />} />
-                <Route path="/services/tech-training" element={<TechTrainingNew />} />
-                <Route path="/trainings" element={<TrainingsNew />} />
-                <Route path="/portfolio" element={<PortfolioNew />} />
-                <Route path="/careers" element={<CareersNew />} />
-                <Route path="/contact" element={<ContactNew />} />
-                <Route path="/blog" element={<BlogIndexNew />} />
-                <Route path="/blog/:slug" element={<BlogPostNew />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/services/design-build" element={<DesignBuild />} />
+                <Route path="/services/print-shop" element={<PrintShop />} />
+                <Route path="/services/tech-training" element={<TechTraining />} />
+                <Route path="/trainings" element={<Trainings />} />
+                <Route path="/portfolio" element={<Portfolio />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/blog" element={<BlogIndex />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/forms/:shortCode" element={<PublicForm />} />
                 <Route path="/forms/:shortCode/success" element={<FormSuccess />} />
-                <Route path="*" element={<NotFoundNew />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </DarkLayout>
           }

@@ -1,0 +1,393 @@
+import React, { useState } from "react";
+import Container from "../../components/layout/Container";
+import Button from "../../components/common/Button";
+import CloudinaryImage from "../../utils/cloudinaryImage";
+import { ArrowRightIcon } from "../../components/icons";
+import { CheckCircle } from "lucide-react";
+import ServiceRequestModal from "../../components/services/ServiceRequestModal";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+import { SEO } from "../../components/common/SEO";
+import PageTransition from "../../components/layout/PageTransition";
+import ScrollReveal from "../../components/common/ScrollReveal";
+import { getPageSEO } from "../../utils/seo-config";
+import {
+  generateServiceSchema,
+  generateBreadcrumbSchema,
+} from "../../utils/structured-data";
+import Scene3D from "../../components/animations/Scene3D";
+
+const DesignBuildPage: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const pageSEO = getPageSEO("designBuild");
+
+  // Generate structured data
+  const serviceSchema = generateServiceSchema({
+    name: "UX Design & Product Design Services",
+    description:
+      "Expert UX design and product design services including web development, mobile apps, UI/UX design, and enterprise systems with faith-based excellence.",
+    serviceType: "Design and Development",
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://gr8qm.com/" },
+    { name: "Services", url: "https://gr8qm.com/services" },
+    { name: "Design & Build", url: "https://gr8qm.com/services/design-build" },
+  ]);
+
+  const services = [
+    {
+      title: "Web Development",
+      description:
+        "Responsive, scalable websites built with modern technologies",
+      icon: "🌐",
+    },
+    {
+      title: "Mobile Apps",
+      description: "Native and cross-platform mobile applications",
+      icon: "📱",
+    },
+    {
+      title: "UI/UX Design",
+      description: "User-centered design that delights and converts",
+      icon: "🎨",
+    },
+    {
+      title: "API Development",
+      description: "Robust APIs and backend systems",
+      icon: "⚙️",
+    },
+    {
+      title: "E-Commerce",
+      description: "Complete online store solutions",
+      icon: "🛒",
+    },
+    {
+      title: "Maintenance",
+      description: "Ongoing support and updates",
+      icon: "🔧",
+    },
+  ];
+
+  const process = [
+    {
+      step: "01",
+      title: "Discovery",
+      description:
+        "We start by understanding your vision, goals, and target audience through in-depth consultations.",
+    },
+    {
+      step: "02",
+      title: "Design",
+      description:
+        "Our designers create beautiful, intuitive interfaces that reflect your brand and engage users.",
+    },
+    {
+      step: "03",
+      title: "Development",
+      description:
+        "We build your solution using cutting-edge technologies, ensuring quality and performance.",
+    },
+    {
+      step: "04",
+      title: "Launch & Support",
+      description:
+        "We deploy your project and provide ongoing support to ensure continued success.",
+    },
+  ];
+
+  return (
+    <PageTransition>
+      <SEO
+        title={pageSEO.title}
+        description={pageSEO.description}
+        keywords={pageSEO.keywords}
+        type={pageSEO.type}
+        url="/services/design-build"
+        structuredData={[serviceSchema, breadcrumbSchema]}
+      />
+      <main className="flex flex-col">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden py-12 md:py-28 lg:py-36 xl:py-40 2xl:py-48 bg-linear-to-br from-skyblue/20 to-orange/20">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+            <div className="flex-1 flex flex-col gap-6">
+              <ScrollReveal>
+                <motion.div
+                  className="bg-iceblue/40 border border-skyblue rounded-full px-4 py-2 w-fit"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <p className="text-sm text-oxford font-medium">
+                    DESIGN & BUILD
+                  </p>
+                </motion.div>
+              </ScrollReveal>
+              <ScrollReveal delay={0.2}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
+                  <span className="text-oxford">From Vision to</span>{" "}
+                  <span className="text-skyblue">Reality</span>
+                </h1>
+              </ScrollReveal>
+              <ScrollReveal delay={0.4}>
+                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                  We design and build custom digital solutions that transform
+                  your ideas into powerful, user-friendly applications. From
+                  concept to deployment, we're with you every step of the way.
+                </p>
+              </ScrollReveal>
+              <ScrollReveal delay={0.6}>
+                <div className="flex gap-4 flex-wrap">
+                  <Button variant="pry" onClick={() => setModalOpen(true)}>
+                    Start Your Project
+                    <ArrowRightIcon size={20} />
+                  </Button>
+                  <Button
+                    variant="sec"
+                    onClick={() =>
+                      navigate("/portfolio?category=product-design")
+                    }
+                  >
+                    <div className="button-content">
+                      View Our Work
+                      <ArrowRightIcon size={18} className="arrow" />
+                    </div>
+                  </Button>
+                </div>
+              </ScrollReveal>
+            </div>
+            <div className="flex-1">
+              <ScrollReveal delay={0.8}>
+                <div className="overflow-hidden rounded-2xl">
+                  <motion.div
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <CloudinaryImage
+                      imageKey="ResearchDesignImage"
+                      className="rounded-2xl shadow-2xl"
+                      alt="Design & Build"
+                    />
+                  </motion.div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </Container>
+        </div>
+
+        {/* What We Do Section */}
+        <div className="py-16 md:py-24 bg-white">
+          <Container>
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-oxford mb-4">
+                  What We Build
+                </h2>
+                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                  Comprehensive digital solutions tailored to your unique needs
+                </p>
+              </div>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {services.map((service, index) => (
+                <ScrollReveal key={index} delay={index * 0.1} width="100%">
+                  <motion.div
+                    className="group bg-light border border-gray-200 rounded-xl p-6 h-full cursor-default"
+                    whileHover={{
+                      y: -6,
+                      scale: 1.02,
+                      borderColor: "var(--color-skyblue)",
+                      boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                    }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <motion.div
+                      className="text-4xl mb-4"
+                      whileHover={{ rotate: 15, scale: 1.2 }}
+                      whileTap={{ rotate: -10, scale: 0.9 }}
+                    >
+                      {service.icon}
+                    </motion.div>
+                    <h3 className="text-xl font-bold text-oxford mb-2 group-hover:text-skyblue transition-colors duration-300">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600">{service.description}</p>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </Container>
+        </div>
+
+        {/* Our Process Section */}
+        <div className="py-16 md:py-24 bg-light">
+          <Container>
+            <ScrollReveal>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-oxford mb-4">
+                  Our Process
+                </h2>
+                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                  A proven approach that delivers exceptional results
+                </p>
+              </div>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {process.map((item, index) => (
+                <ScrollReveal key={index} delay={index * 0.2} width="100%">
+                  <div className="relative h-full">
+                    <motion.div
+                      className="group bg-white rounded-xl p-6 shadow-md h-full cursor-default"
+                      whileHover={{
+                        y: -6,
+                        scale: 1.02,
+                        boxShadow: "0 20px 40px rgba(0,152,218,0.1)",
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    >
+                      <div className="text-5xl font-black text-skyblue/20 mb-4">
+                        {item.step}
+                      </div>
+                      <h3 className="text-xl font-bold text-oxford mb-3 group-hover:text-skyblue transition-colors duration-300">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600">{item.description}</p>
+                    </motion.div>
+                    {index < process.length - 1 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                        <ArrowRightIcon size={32} className="text-skyblue" />
+                      </div>
+                    )}
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </Container>
+        </div>
+
+        {/* Why Choose Us Section */}
+        <div className="relative overflow-hidden py-16 md:py-24 bg-oxford text-white">
+          <Scene3D variant="minimal" className="opacity-30" />
+          <Container className="relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <ScrollReveal>
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                    Why Choose <span className="text-iceblue">Gr8QM</span>?
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      "Kingdom-rooted approach to technology",
+                      "Experienced team of designers and developers",
+                      "Agile methodology for faster delivery",
+                      "Transparent communication throughout",
+                      "Post-launch support and maintenance",
+                      "Competitive pricing with no hidden costs",
+                    ].map((item, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex items-start gap-3"
+                        whileHover={{ x: 6 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.2 }}
+                          whileTap={{ rotate: -10, scale: 0.9 }}
+                        >
+                          <CheckCircle className="text-iceblue w-5 h-5 mt-1 shrink-0" />
+                        </motion.div>
+                        <p className="text-lg text-gray-200">{item}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal delay={0.3}>
+                <motion.div
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+                  whileHover={{
+                    boxShadow: "0 20px 40px rgba(0,152,218,0.15)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                >
+                  <h3 className="text-2xl font-bold mb-4 text-iceblue">
+                    Technologies We Use
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      "React & Next.js",
+                      "Node.js & Python",
+                      "PostgreSQL & MongoDB",
+                      "AWS & Azure",
+                      "React Native",
+                      "Tailwind CSS",
+                      "GraphQL & REST",
+                      "Docker & Kubernetes",
+                    ].map((tech, index) => (
+                      <motion.div
+                        key={index}
+                        className="bg-white/10 rounded-lg p-3 text-center text-sm font-medium cursor-default"
+                        whileHover={{
+                          scale: 1.05,
+                          backgroundColor: "rgba(255, 255, 255, 0.2)",
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      >
+                        {tech}
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </ScrollReveal>
+            </div>
+          </Container>
+        </div>
+
+        {/* CTA Section */}
+        <div className="py-16 md:py-24 bg-linear-to-r from-skyblue to-iceblue">
+          <Container className="text-center">
+            <ScrollReveal>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Ready to Build Something Amazing?
+              </h2>
+              <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+                Let's discuss your project and create a solution that exceeds
+                your expectations.
+              </p>
+              <div className="flex gap-4 justify-center flex-wrap">
+                <Button variant="inverted" onClick={() => setModalOpen(true)}>
+                  Get Started
+                  <ArrowRightIcon size={20} />
+                </Button>
+                <Button
+                  variant="sec"
+                  onClick={() => navigate("/portfolio?category=product-design")}
+                >
+                  <div className="button-content">
+                    View Portfolio
+                    <ArrowRightIcon size={18} className="arrow" />
+                  </div>
+                </Button>
+              </div>
+            </ScrollReveal>
+          </Container>
+        </div>
+
+        {/* Service Request Modal */}
+        <ServiceRequestModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          serviceType="design-build"
+          serviceName="Design & Build"
+        />
+      </main>
+    </PageTransition>
+  );
+};
+
+export default DesignBuildPage;
