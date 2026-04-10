@@ -158,9 +158,20 @@ export default function Glossary() {
         <section className="py-16">
           <Container>
             {loading ? (
-              <div className="text-center py-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-skyblue mx-auto mb-4" />
-                <p className="text-iceblue/40">Loading glossary...</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="h-5 bg-white/[0.04] rounded w-1/3 animate-pulse" />
+                      <div className="h-5 bg-white/[0.04] rounded-full w-16 animate-pulse" />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-white/[0.04] rounded w-full animate-pulse" />
+                      <div className="h-3 bg-white/[0.04] rounded w-4/5 animate-pulse" />
+                      <div className="h-3 bg-white/[0.04] rounded w-2/3 animate-pulse" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : grouped.length === 0 ? (
               <div className="text-center py-20">
