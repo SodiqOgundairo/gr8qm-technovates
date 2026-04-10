@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import type { AnalyticsData } from "../../lib/analytics";
 import { fetchAnalytics, formatMonthLabel } from "../../lib/analytics";
-import { useGA4Analytics, type GA4TrafficStats } from "../../hooks/useGA4Analytics";
+import { useGA4Analytics } from "../../hooks/useGA4Analytics";
 
 const COLORS = {
   blue: "#0098da",

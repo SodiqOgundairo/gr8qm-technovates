@@ -3,11 +3,13 @@ import AdminSidebar from "./AdminSidebar";
 import { Menu, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface AdminLayoutProps {
+export interface AdminLayoutProps {
   children: ReactNode;
+  title?: string;
+  subtitle?: string;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, subtitle }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -53,7 +55,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               )}
             </button>
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-oxford">Admin Dashboard</h1>
+              <h1 className="text-xl font-bold text-oxford">{title || "Admin Dashboard"}</h1>
+              {subtitle && <p className="text-sm text-gray-500 ml-2 hidden sm:block">{subtitle}</p>}
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600 hidden sm:block">

@@ -129,7 +129,7 @@ export async function fetchAnalytics(): Promise<AnalyticsData> {
   const monthlyRevenue = last12.map((m) => ({ month: m, amount: monthlyMap.get(m) || 0 }));
 
   // Applications by status
-  const appList = (applications || []) as { id: string; status: string; course_id: string; created_at: string; courses: { title: string } | null }[];
+  const appList = (applications || []) as unknown as { id: string; status: string; course_id: string; created_at: string; courses: { title: string } | null }[];
   const statusCounts = new Map<string, number>();
   for (const a of appList) {
     statusCounts.set(a.status, (statusCounts.get(a.status) || 0) + 1);

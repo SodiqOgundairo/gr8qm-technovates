@@ -145,7 +145,7 @@ const CouponFormModal: React.FC<{
   const [code, setCode] = useState(c?.code || "");
   const [discountType, setDiscountType] = useState<"percentage" | "fixed">(c?.discount_type || "percentage");
   const [discountValue, setDiscountValue] = useState(c?.discount_value || 10);
-  const [appliesTo, setAppliesTo] = useState<"all" | "courses" | "invoices">(c?.applies_to || "all");
+  const [appliesTo, setAppliesTo] = useState<"all" | "courses" | "invoices">(c?.applies_to === "devignfx" ? "all" : c?.applies_to || "all");
   const [maxUses, setMaxUses] = useState<string>(c?.max_uses?.toString() || "");
   const [expiresAt, setExpiresAt] = useState(
     c?.expires_at ? new Date(c.expires_at).toISOString().split("T")[0] : ""
