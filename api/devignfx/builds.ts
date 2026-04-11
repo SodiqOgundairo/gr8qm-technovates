@@ -361,15 +361,17 @@ async function handleCheckUpdate(req: VercelRequest, res: VercelResponse) {
 // MAIN HANDLER — routes by ?action=
 // ═══════════════════════════════════════════════════════════
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  if (req.method === "OPTIONS") return res.status(200).end();
-
-  const action = (req.query.action as string) || "";
-
   try {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    if (req.method === "OPTIONS") return res.status(200).end();
+
+    const action = (req.query.action as string) || "";
+
     switch (action) {
+      case "ping":
+        return res.status(200).json({ ok: true, env: { url: !!process.env.VITE_SUPABASE_URL, key: !!process.env.SUPABASE_SERVICE_ROLE_KEY } });
       case "register": return await handleRegister(req, res);
       case "publish": return await handlePublish(req, res);
       case "token": return await handleGenerateToken(req, res);
@@ -380,7 +382,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   } catch (err: any) {
     console.error("Builds API error:", err);
-    return res.status(500).json({ error: err.message || "Internal server error" });
+    return res.status(500).json({ error: err.message || "Internal server error", stack: err.stack?.slice(0, 500) });
   }
 }
 
