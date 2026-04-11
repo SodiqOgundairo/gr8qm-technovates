@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
-import crypto from "crypto";
+import { randomBytes } from "crypto";
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
@@ -53,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: "storagePath and version required" });
       }
 
-      const buildId = "BLD-" + crypto.randomBytes(4).toString("hex").toUpperCase();
+      const buildId = "BLD-" + randomBytes(4).toString("hex").toUpperCase();
       const fileName = (body.storagePath as string).split("/").pop() || "build.zip";
 
       const { data: row, error: err } = await supabase
@@ -130,7 +130,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 headers: { "Content-Type": "application/json", Authorization: "Bearer " + sbKey },
                 body: JSON.stringify({
                   to: lic.email,
-                  subject: "DevignFX v" + build.version + " — New Update Available",
+                  subject: "DevignFX v" + build.version + " - New Update Available",
                   html: buildUpdateEmail(lic.name || lic.email.split("@")[0], build.version, build.release_notes || "", lic.license_key, dlUrl),
                   text: "Hi " + lic.name + ",\n\nDevignFX v" + build.version + " is now available.\n\nDownload: " + dlUrl + "\nLicense key: " + lic.license_key + "\n\nDevignFX by GR8QM",
                 }),
@@ -173,7 +173,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .update({ consumed: true, consumed_at: new Date().toISOString() })
         .eq("license_key", licKey).eq("build_id", bId).eq("consumed", false);
 
-      const tok = crypto.randomBytes(32).toString("hex");
+      const tok = randomBytes(32).toString("hex");
       const exp = new Date(Date.now() + 3600000).toISOString();
 
       const { error: ie } = await supabase
@@ -266,5 +266,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 
 function buildUpdateEmail(name: string, version: string, notes: string, licenseKey: string, downloadPageUrl: string): string {
-  return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;line-height:1.6;color:#e0e0e0;margin:0;padding:0;background:#0a0a0a}.c{max-width:600px;margin:20px auto;background:#1a1a2e;border-radius:12px;overflow:hidden;border:1px solid #2a2a4a}.h{background:linear-gradient(135deg,#00c853,#00897b);padding:40px 20px;text-align:center;color:#fff}.h h1{margin:0;font-size:28px;font-weight:700}.ct{padding:40px 30px}.vb{display:inline-block;background:#00c853;color:#0a0a0a;padding:6px 16px;border-radius:20px;font-weight:700;font-size:18px;margin-bottom:20px}.n{background:#0d1117;border-radius:8px;padding:20px;margin:20px 0;border-left:3px solid #00c853}.f{background:#0d1117;padding:30px;text-align:center;color:#666;font-size:14px}.f a{color:#00c853;text-decoration:none}</style></head><body><div class=\"c\"><div class=\"h\"><h1>DevignFX Update</h1><p style=\"margin:10px 0 0;font-size:16px\">A new version is available</p></div><div class=\"ct\"><p>Hi " + name + ",</p><div class=\"vb\">v" + version + "</div>" + (notes ? "<div class=\"n\"><h3 style=\"margin:0 0 10px;color:#00c853;font-size:14px\">What's New</h3><p style=\"margin:0;color:#ccc;font-size:14px;white-space:pre-wrap\">" + notes + "</p></div>" : "") + "<p style=\"color:#888\">Your license key: <code style=\"background:#0d1117;color:#00c853;padding:2px 8px;border-radius:4px\">" + licenseKey + "</code></p><div style=\"text-align:center;margin:30px 0\"><a href=\"" + downloadPageUrl + "\" style=\"display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#00c853,#00897b);color:#fff;font-size:16px;font-weight:700;text-decoration:none;border-radius:8px\">Download Update</a></div><p style=\"color:#888;font-size:13px\">Visit the download page and enter your license key to get the latest version.</p></div><div class=\"f\"><p style=\"margin:0 0 10px;font-weight:600;color:#e0e0e0\">DevignFX by GR8QM</p><p style=\"margin:0\">Need help? <a href=\"mailto:hello@gr8qm.com\">hello@gr8qm.com</a></p></div></div></body></html>";
+  var css = "body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.6;color:#e0e0e0;margin:0;padding:0;background:#0a0a0a}";
+  css += ".c{max-width:600px;margin:20px auto;background:#1a1a2e;border-radius:12px;overflow:hidden;border:1px solid #2a2a4a}";
+  css += ".h{background:linear-gradient(135deg,#00c853,#00897b);padding:40px 20px;text-align:center;color:#fff}";
+  css += ".h h1{margin:0;font-size:28px;font-weight:700}";
+  css += ".ct{padding:40px 30px}";
+  css += ".vb{display:inline-block;background:#00c853;color:#0a0a0a;padding:6px 16px;border-radius:20px;font-weight:700;font-size:18px;margin-bottom:20px}";
+  css += ".n{background:#0d1117;border-radius:8px;padding:20px;margin:20px 0;border-left:3px solid #00c853}";
+  css += ".f{background:#0d1117;padding:30px;text-align:center;color:#666;font-size:14px}";
+  css += ".f a{color:#00c853;text-decoration:none}";
+
+  var html = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">";
+  html += "<style>" + css + "</style></head><body><div class=\"c\">";
+  html += "<div class=\"h\"><h1>DevignFX Update</h1>";
+  html += "<p style=\"margin:10px 0 0;font-size:16px\">A new version is available</p></div>";
+  html += "<div class=\"ct\"><p>Hi " + name + ",</p>";
+  html += "<div class=\"vb\">v" + version + "</div>";
+  if (notes) {
+    html += "<div class=\"n\"><h3 style=\"margin:0 0 10px;color:#00c853;font-size:14px\">What's New</h3>";
+    html += "<p style=\"margin:0;color:#ccc;font-size:14px;white-space:pre-wrap\">" + notes + "</p></div>";
+  }
+  html += "<p style=\"color:#888\">Your license key: <code style=\"background:#0d1117;color:#00c853;padding:2px 8px;border-radius:4px\">" + licenseKey + "</code></p>";
+  html += "<div style=\"text-align:center;margin:30px 0\">";
+  html += "<a href=\"" + downloadPageUrl + "\" style=\"display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#00c853,#00897b);color:#fff;font-size:16px;font-weight:700;text-decoration:none;border-radius:8px\">Download Update</a></div>";
+  html += "<p style=\"color:#888;font-size:13px\">Visit the download page and enter your license key to get the latest version.</p></div>";
+  html += "<div class=\"f\"><p style=\"margin:0 0 10px;font-weight:600;color:#e0e0e0\">DevignFX by GR8QM</p>";
+  html += "<p style=\"margin:0\">Need help? <a href=\"mailto:hello@gr8qm.com\">hello@gr8qm.com</a></p></div></div></body></html>";
+  return html;
 }
