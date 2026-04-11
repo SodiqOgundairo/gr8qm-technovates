@@ -69,6 +69,7 @@ import AdminSettings from "./pages/admin/Settings";
 import AdminDevignFX from "./pages/admin/DevignFX";
 import AdminDevignFXTransactions from "./pages/admin/devignfx/Transactions";
 import AdminDevignFXCoupons from "./pages/admin/devignfx/Coupons";
+import AdminDevignFXBuilds from "./pages/admin/devignfx/Builds";
 import AdminGlossary from "./pages/admin/Glossary";
 import CertificateDesigner from "./pages/admin/CertificateDesigner";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -208,6 +209,7 @@ function App() {
                 <Route path="devignfx" element={<AdminDevignFX />} />
                 <Route path="devignfx/transactions" element={<AdminDevignFXTransactions />} />
                 <Route path="devignfx/coupons" element={<AdminDevignFXCoupons />} />
+                <Route path="devignfx/builds" element={<AdminDevignFXBuilds />} />
                 <Route path="glossary" element={<AdminGlossary />} />
                 <Route path="settings" element={<AdminSettings />} />
                 {/* Future admin routes go here */}

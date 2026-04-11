@@ -55,6 +55,7 @@ const sections: NavSection[] = [
       { name: "Licenses", path: "/admin/devignfx", module: "devignfx" },
       { name: "Transactions", path: "/admin/devignfx/transactions", module: "devignfx" },
       { name: "Coupons", path: "/admin/devignfx/coupons", module: "devignfx" },
+      { name: "Builds", path: "/admin/devignfx/builds", module: "devignfx" },
     ],
   },
   {
