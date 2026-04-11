@@ -64,24 +64,10 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
     }
 
     const buildId = "BLD-" + crypto.randomBytes(4).toString("hex").toUpperCase();
-    const buildFileName = `DevignFX-${buildId}.zip`;
 
-    // Rename: copy to new path, delete old — uses Supabase move (no memory needed)
-    const newPath = tier === "root" ? buildFileName : `${tier}/${buildFileName}`;
+    // Use the file at its uploaded path — no rename, no download needed
+    const fileName = storagePath.split("/").pop() || `DevignFX-${buildId}.zip`;
 
-    const { error: moveError } = await supabase.storage
-      .from(BUCKET)
-      .move(storagePath, newPath);
-
-    if (moveError) {
-      // If move fails, keep original path
-      console.error("Move failed, using original path:", moveError.message);
-    }
-
-    const finalPath = moveError ? storagePath : newPath;
-    const finalFileName = moveError ? storagePath.split("/").pop() || storagePath : buildFileName;
-
-    // Register in DB — no file download needed (signing is done separately if needed)
     const { data: buildRow, error: insertError } = await supabase
       .from("devignfx_builds")
       .insert({
@@ -90,8 +76,8 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
         channel: channel || "stable",
         status: "draft",
         tier: tier || "standard",
-        storage_path: finalPath,
-        file_name: finalFileName,
+        storage_path: storagePath,
+        file_name: fileName,
         file_size: fileSize || 0,
         sha256: null,
         signature: null,
