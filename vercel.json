@@ -4,7 +4,7 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/devignfx/upload-build.ts": {
+    "api/devignfx/builds.ts": {
       "maxDuration": 30
     }
   },

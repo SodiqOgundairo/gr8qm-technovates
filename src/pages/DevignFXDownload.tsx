@@ -23,7 +23,7 @@ const DevignFXDownload = () => {
     setError("");
 
     try {
-      const resp = await fetch(`${SITE_URL}/api/devignfx/customer-builds?key=${encodeURIComponent(key)}`);
+      const resp = await fetch(`${SITE_URL}/api/devignfx/builds?action=list&key=${encodeURIComponent(key)}`);
       const data = await resp.json();
 
       if (!resp.ok) {
@@ -48,7 +48,7 @@ const DevignFXDownload = () => {
     setError("");
 
     try {
-      const resp = await fetch(`${SITE_URL}/api/devignfx/generate-download-token`, {
+      const resp = await fetch(`${SITE_URL}/api/devignfx/builds?action=token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

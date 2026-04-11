@@ -43,7 +43,7 @@ const DevignFXBuilds: React.FC = () => {
     setPublishing(build.build_id);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const resp = await fetch("/api/devignfx/publish-build", {
+      const resp = await fetch("/api/devignfx/builds?action=publish", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -312,7 +312,7 @@ const UploadModal: React.FC<{
       setProgress("Signing & registering build...");
 
       // Step 2: Call lightweight API to sign + register metadata
-      const resp = await fetch("/api/devignfx/register-build", {
+      const resp = await fetch("/api/devignfx/builds?action=register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
