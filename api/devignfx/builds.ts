@@ -57,94 +57,59 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   if (!(await requireAuth(req, res))) return;
 
-  const { storagePath, tier, version, channel, releaseNotes, fileSize } = req.body || {};
-  if (!storagePath || !version) {
-    return res.status(400).json({ error: "storagePath and version are required" });
-  }
-
-  const buildId = "BLD-" + crypto.randomBytes(4).toString("hex").toUpperCase();
-  const buildFileName = `DevignFX-${buildId}.zip`;
-  const newPath = tier === "root" ? buildFileName : `${tier}/${buildFileName}`;
-
-  // Download file from storage for signing + renaming
-  const { data: fileData, error: dlError } = await supabase.storage
-    .from(BUCKET)
-    .download(storagePath);
-
-  if (dlError || !fileData) {
-    return res.status(400).json({ error: `File not found: ${dlError?.message}` });
-  }
-
-  const buffer = Buffer.from(await fileData.arrayBuffer());
-
-  // Upload with new name
-  const { error: uploadError } = await supabase.storage
-    .from(BUCKET)
-    .upload(newPath, buffer, { contentType: "application/zip", upsert: true });
-
-  if (uploadError) {
-    return res.status(500).json({ error: `Rename failed: ${uploadError.message}` });
-  }
-
-  if (newPath !== storagePath) {
-    await supabase.storage.from(BUCKET).remove([storagePath]);
-  }
-
-  // Sign with Ed25519 if key available
-  let sha256: string | null = crypto.createHash("sha256").update(buffer).digest("hex");
-  let signature: string | null = null;
-  let signed = false;
-
-  const signingKeyB64 = process.env.DEVIGNFX_SIGNING_KEY;
-  if (signingKeyB64) {
-    try {
-      const pemKey = Buffer.from(signingKeyB64, "base64").toString("utf-8");
-      const privateKey = crypto.createPrivateKey(pemKey);
-      const sig = crypto.sign(null, buffer, privateKey);
-      signature = sig.toString("base64");
-      signed = true;
-
-      const sigContent = [
-        "-----BEGIN DEVIGNFX SIGNATURE-----",
-        `File: ${buildFileName}`,
-        `Build: ${buildId}`,
-        `SHA256: ${sha256}`,
-        `Signature: ${signature}`,
-        "-----END DEVIGNFX SIGNATURE-----",
-      ].join("\n");
-
-      await supabase.storage
-        .from(BUCKET)
-        .upload(newPath + ".sig", Buffer.from(sigContent), { contentType: "text/plain", upsert: true });
-    } catch (err) {
-      console.error("Signing failed:", err);
+  try {
+    const { storagePath, tier, version, channel, releaseNotes, fileSize } = req.body || {};
+    if (!storagePath || !version) {
+      return res.status(400).json({ error: "storagePath and version are required" });
     }
+
+    const buildId = "BLD-" + crypto.randomBytes(4).toString("hex").toUpperCase();
+    const buildFileName = `DevignFX-${buildId}.zip`;
+
+    // Rename: copy to new path, delete old — uses Supabase move (no memory needed)
+    const newPath = tier === "root" ? buildFileName : `${tier}/${buildFileName}`;
+
+    const { error: moveError } = await supabase.storage
+      .from(BUCKET)
+      .move(storagePath, newPath);
+
+    if (moveError) {
+      // If move fails, keep original path
+      console.error("Move failed, using original path:", moveError.message);
+    }
+
+    const finalPath = moveError ? storagePath : newPath;
+    const finalFileName = moveError ? storagePath.split("/").pop() || storagePath : buildFileName;
+
+    // Register in DB — no file download needed (signing is done separately if needed)
+    const { data: buildRow, error: insertError } = await supabase
+      .from("devignfx_builds")
+      .insert({
+        build_id: buildId,
+        version: version || "0.0.0",
+        channel: channel || "stable",
+        status: "draft",
+        tier: tier || "standard",
+        storage_path: finalPath,
+        file_name: finalFileName,
+        file_size: fileSize || 0,
+        sha256: null,
+        signature: null,
+        signed: false,
+        release_notes: releaseNotes || "",
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      return res.status(500).json({ error: `DB insert failed: ${insertError.message}` });
+    }
+
+    return res.status(200).json({ success: true, build: buildRow });
+  } catch (err: any) {
+    console.error("Register error:", err);
+    return res.status(500).json({ error: err.message || "Registration failed" });
   }
-
-  const { data: buildRow, error: insertError } = await supabase
-    .from("devignfx_builds")
-    .insert({
-      build_id: buildId,
-      version: version || "0.0.0",
-      channel: channel || "stable",
-      status: "draft",
-      tier: tier || "standard",
-      storage_path: newPath,
-      file_name: buildFileName,
-      file_size: fileSize || buffer.length,
-      sha256,
-      signature,
-      signed,
-      release_notes: releaseNotes || "",
-    })
-    .select()
-    .single();
-
-  if (insertError) {
-    return res.status(500).json({ error: `DB insert failed: ${insertError.message}` });
-  }
-
-  return res.status(200).json({ success: true, build: buildRow });
 }
 
 // ═══════════════════════════════════════════════════════════
