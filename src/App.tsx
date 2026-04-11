@@ -112,7 +112,7 @@ function App() {
     );
   }
 
-  const isDevignFXPath = window.location.pathname === "/devignfx";
+  const isDevignFXPath = window.location.pathname.startsWith("/devignfx");
 
   return (
     <Router>
@@ -152,8 +152,8 @@ function App() {
         {/* Standalone Pages */}
         <Route path="/cohort4" element={<Cohort4 />} />
         <Route path="/devignfx" element={<DevignFXPage />} />
-        <Route path="/download" element={<DevignFXDownload />} />
-        <Route path="/download-expired" element={<DownloadExpired />} />
+        <Route path="/devignfx/download" element={<DevignFXDownload />} />
+        <Route path="/devignfx/download-expired" element={<DownloadExpired />} />
 
         {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />

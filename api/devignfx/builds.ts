@@ -120,7 +120,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (licenses && licenses.length > 0) {
           const sbUrl = process.env.VITE_SUPABASE_URL!;
           const sbKey = process.env.VITE_SUPABASE_ANON_KEY!;
-          const dlUrl = SITE_URL + "/download";
+          const dlUrl = SITE_URL + "/devignfx/download";
 
           for (const lic of licenses) {
             try {
@@ -129,6 +129,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 headers: { "Content-Type": "application/json", Authorization: "Bearer " + sbKey },
                 body: JSON.stringify({
                   to: lic.email,
+                  from: "DevignBot <no-reply@gr8qm.com>",
                   subject: "DevignFX v" + build.version + " - New Update Available",
                   html: buildUpdateEmail(lic.name || lic.email.split("@")[0], build.version, build.release_notes || "", lic.license_key, dlUrl),
                   text: "Hi " + lic.name + ",\n\nDevignFX v" + build.version + " is now available.\n\nDownload: " + dlUrl + "\nLicense key: " + lic.license_key + "\n\nDevignFX by GR8QM",
@@ -253,7 +254,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         latest_build_id: latest.build_id,
         latest_version: latest.version,
         release_notes: latest.release_notes || "",
-        download_url: SITE_URL + "/download",
+        download_url: SITE_URL + "/devignfx/download",
       });
     }
 

@@ -1,8 +1,16 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShieldX, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const DownloadExpired = () => (
+const DownloadExpired = () => {
+  useEffect(() => {
+    document.title = "Download Expired - DevignFX";
+    const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
+    if (favicon) favicon.href = "/assets/devignfx-logo.svg";
+  }, []);
+
+  return (
   <div className="min-h-screen bg-[#060d06] flex items-center justify-center px-4">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -40,6 +48,7 @@ const DownloadExpired = () => (
       </Link>
     </motion.div>
   </div>
-);
+  );
+};
 
 export default DownloadExpired;

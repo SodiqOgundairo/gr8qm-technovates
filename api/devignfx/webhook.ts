@@ -112,9 +112,10 @@ export async function handleDevignFXPayment(
       },
       body: JSON.stringify({
         to: email,
+        from: "DevignBot <no-reply@gr8qm.com>",
         subject: `Your DevignFX License Key — ${licenseKey}`,
         html: buildLicenseEmail(name, licenseKey, tier, expires, amount, reference),
-        text: `DevignFX License Delivery\n\nHi ${name},\n\nYour license key: ${licenseKey}\nTier: ${tier}\n${expires ? `Expires: ${expires}\n` : ""}\nDownload your bot: ${SITE_URL}/download\nEnter your license key to access all available builds.\n\nSetup:\n1. Go to ${SITE_URL}/download and enter your license key\n2. Download the latest stable build\n3. Create a .env file with your MT5 credentials\n4. Set LICENSE_KEY=${licenseKey}\n5. Set LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${licenseKey}\n6. Run the bot\n\nEach version can be downloaded once. Contact hello@gr8qm.com if you need help.\n\nDevignFX by GR8QM`,
+        text: `DevignFX License Delivery\n\nHi ${name},\n\nYour license key: ${licenseKey}\nTier: ${tier}\n${expires ? `Expires: ${expires}\n` : ""}\nDownload your bot: ${SITE_URL}/devignfx/download\nEnter your license key to access all available builds.\n\nSetup:\n1. Go to ${SITE_URL}/devignfx/download and enter your license key\n2. Download the latest stable build\n3. Create a .env file with your MT5 credentials\n4. Set LICENSE_KEY=${licenseKey}\n5. Set LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${licenseKey}\n6. Run the bot\n\nEach version can be downloaded once. Contact hello@gr8qm.com if you need help.\n\nDevignFX by GR8QM`,
       }),
     });
 
@@ -184,7 +185,7 @@ function buildLicenseEmail(
   amount: number,
   reference: string
 ): string {
-  const downloadPageUrl = `${SITE_URL}/download`;
+  const downloadPageUrl = `${SITE_URL}/devignfx/download`;
   return `
 <!DOCTYPE html>
 <html>
@@ -250,15 +251,15 @@ function buildLicenseEmail(
         </p>
       </div>
 
-      <div class="setup-box">
-        <h3>Quick Setup</h3>
-        <ol>
-          <li>Visit the download page and enter your license key</li>
-          <li>Open MetaTrader 5 and log in to your account</li>
-          <li>Create a <code>.env</code> file next to the bot with your credentials</li>
-          <li>Set <code>LICENSE_KEY=${key}</code></li>
-          <li>Set <code>LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${key}</code></li>
-          <li>Run the bot — it will auto-activate on your machine</li>
+      <div class="setup-box" style="background: #0d1117; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h3 style="color: #00c853; margin-top: 0; font-size: 16px;">Quick Setup</h3>
+        <ol style="padding-left: 20px; color: #000;">
+          <li style="margin-bottom: 8px; color: #000;">Visit the download page and enter your license key</li>
+          <li style="margin-bottom: 8px; color: #000;">Open MetaTrader 5 and log in to your account</li>
+          <li style="margin-bottom: 8px; color: #000;">Create a <code style="background: #1a1a2e; padding: 2px 6px; border-radius: 4px; color: #00c853; font-size: 13px;">.env</code> file next to the bot with your credentials</li>
+          <li style="margin-bottom: 8px; color: #000;">Set <code style="background: #1a1a2e; padding: 2px 6px; border-radius: 4px; color: #00c853; font-size: 13px;">LICENSE_KEY=${key}</code></li>
+          <li style="margin-bottom: 8px; color: #000;">Set <code style="background: #1a1a2e; padding: 2px 6px; border-radius: 4px; color: #00c853; font-size: 13px;">LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${key}</code></li>
+          <li style="margin-bottom: 8px; color: #000;">Run the bot — it will auto-activate on your machine</li>
         </ol>
       </div>
 

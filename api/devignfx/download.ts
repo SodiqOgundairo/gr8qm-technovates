@@ -87,10 +87,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!tokenErr && tokenRow) {
         // New token system
         if (tokenRow.consumed) {
-          return res.redirect(302, `${SITE_URL}/download-expired`);
+          return res.redirect(302, `${SITE_URL}/devignfx/download-expired`);
         }
         if (new Date(tokenRow.expires_at) < new Date()) {
-          return res.redirect(302, `${SITE_URL}/download-expired`);
+          return res.redirect(302, `${SITE_URL}/devignfx/download-expired`);
         }
 
         // Get the build
@@ -142,10 +142,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .single();
 
       if (legacyErr || !license) {
-        return res.redirect(302, `${SITE_URL}/download-expired`);
+        return res.redirect(302, `${SITE_URL}/devignfx/download-expired`);
       }
       if (license.status !== "active") {
-        return res.redirect(302, `${SITE_URL}/download-expired`);
+        return res.redirect(302, `${SITE_URL}/devignfx/download-expired`);
       }
 
       const signedUrl = await findLatestBuild(license.tier);

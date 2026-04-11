@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Shield, Clock, CheckCircle2, Lock, AlertCircle, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,17 @@ import type { CustomerBuildInfo } from "../types/devignfx";
 const SITE_URL = import.meta.env.VITE_SITE_URL || "https://devignfx.gr8qm.com";
 
 const DevignFXDownload = () => {
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = "DevignFX Downloads";
+    const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
+    const prevFavicon = favicon?.href || "";
+    if (favicon) favicon.href = "/assets/devignfx-logo.svg";
+    return () => {
+      document.title = prevTitle;
+      if (favicon) favicon.href = prevFavicon;
+    };
+  }, []);
   const [licenseKey, setLicenseKey] = useState("");
   const [builds, setBuilds] = useState<CustomerBuildInfo[]>([]);
   const [licenseName, setLicenseName] = useState("");
@@ -171,10 +182,17 @@ const DevignFXDownload = () => {
               )}
 
               {builds.length === 0 ? (
-                <div className="text-center py-16 text-gray-500">
-                  <Download size={48} className="mx-auto mb-4 opacity-30" />
-                  <p className="text-lg">No builds available yet</p>
-                  <p className="text-sm mt-1">Check back soon for new releases.</p>
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="text-emerald-400" size={28} />
+                  </div>
+                  <p className="text-white text-lg font-medium mb-2">Your license is active</p>
+                  <p className="text-gray-400 text-sm max-w-xs mx-auto">
+                    A new build is being prepared. You'll receive an email when it's ready to download.
+                  </p>
+                  <a href="mailto:hello@gr8qm.com" className="inline-block mt-4 text-emerald-400 text-sm hover:underline">
+                    Need help? Contact support
+                  </a>
                 </div>
               ) : (
                 <div className="space-y-3">

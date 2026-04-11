@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import { verifyPayment, formatAmount } from "../utils/paystack";
-import { CheckCircle, Printer, ArrowRight, AlertCircle } from "lucide-react";
+import { CheckCircle, Printer, ArrowRight, AlertCircle, Mail, Download } from "lucide-react";
 import Container from "../components/layout/Container";
 import { useReactToPrint } from "react-to-print";
 import { sendReceiptEmail } from "../utils/email";
@@ -30,10 +30,10 @@ export default function PaymentSuccess() {
   if (!type && ref) {
     if (ref.startsWith("COURSE-")) {
       type = "course";
-      console.log("🔍 Auto-detected type from reference:", type);
     } else if (ref.startsWith("INV-PAY-")) {
       type = "invoice";
-      console.log("🔍 Auto-detected type from reference:", type);
+    } else if (ref.startsWith("DEVFX-")) {
+      type = "devignfx";
     }
   }
 
@@ -294,6 +294,20 @@ export default function PaymentSuccess() {
             date: new Date().toLocaleDateString(),
             type: "service", // Use 'service' or 'invoice'
           });
+        } else if (type === "devignfx") {
+          // DevignFX payments are handled by the webhook (license created + email sent)
+          // Just show a confirmation — no DB lookup needed here
+          setStatus("success");
+          setMessage("Payment confirmed! Your license key has been sent to your email.");
+          setDetails({
+            reference: ref,
+            amount: 0,
+            date: new Date().toLocaleDateString(),
+            customerName: "",
+            customerEmail: "",
+            itemName: "DevignFX License",
+            type: "service",
+          });
         } else {
           setStatus("success");
           setMessage("Payment recorded.");
@@ -365,6 +379,79 @@ export default function PaymentSuccess() {
     );
   }
 
+  // DevignFX-branded success page
+  if (type === "devignfx") {
+    return (
+      <div className="min-h-screen bg-[#060d06] flex items-center justify-center px-4 py-20">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6">
+              <CheckCircle className="w-10 h-10 text-emerald-400" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Payment Successful!
+            </h1>
+            <p className="text-gray-400">
+              Your DevignFX license is on its way.
+            </p>
+          </div>
+
+          <div className="bg-[#0a1a0a] border border-emerald-500/10 rounded-2xl p-8 mb-6">
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-emerald-500/10">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <Mail className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-white font-medium">Check your email</p>
+                <p className="text-gray-500 text-sm">Your license key and setup instructions have been sent.</p>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm">
+              <div className="flex items-start gap-3">
+                <span className="text-emerald-400 font-bold mt-0.5">1</span>
+                <p className="text-gray-300">Open the email and copy your license key</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-emerald-400 font-bold mt-0.5">2</span>
+                <p className="text-gray-300">Go to the download page and enter your key</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-emerald-400 font-bold mt-0.5">3</span>
+                <p className="text-gray-300">Download the bot and follow the setup instructions</p>
+              </div>
+            </div>
+
+            {details?.reference && (
+              <div className="mt-6 pt-6 border-t border-emerald-500/10">
+                <p className="text-gray-500 text-xs">
+                  Reference: <span className="text-gray-400 font-mono">{details.reference}</span>
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate("/devignfx/download")}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-medium transition-colors"
+            >
+              <Download size={18} />
+              Go to Downloads
+            </button>
+            <button
+              onClick={() => navigate("/devignfx")}
+              className="px-4 py-3 bg-white/5 border border-white/10 text-gray-400 hover:text-white rounded-xl font-medium transition-colors"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default GR8QM receipt
   return (
     <div className="min-h-screen bg-gray-50 py-20">
       <Container>
@@ -460,8 +547,8 @@ export default function PaymentSuccess() {
                   ) : (
                     <>
                       <li>• We have received your payment.</li>
+                      <li>• You will receive a receipt email shortly.</li>
                       <li>• Your service request is now being processed.</li>
-                      <li>• Check your email for the invoice copy.</li>
                     </>
                   )}
                 </ul>
