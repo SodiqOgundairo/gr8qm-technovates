@@ -407,6 +407,36 @@ async function handleCheckUpdate(req: VercelRequest, res: VercelResponse) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// ACTION: upload-url — generate signed upload URL (bypasses RLS)
+// ═══════════════════════════════════════════════════════════
+async function handleUploadUrl(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (!(await requireAuth(req, res))) return;
+
+  const { fileName, tier } = req.body || {};
+  if (!fileName) return res.status(400).json({ error: "fileName required" });
+
+  const tempName = `_temp_${Date.now()}_${fileName}`;
+  const storagePath = tier === "root" ? tempName : `${tier || "standard"}/${tempName}`;
+
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUploadUrl(storagePath);
+
+  if (error || !data) {
+    return res.status(500).json({ error: `Failed to create upload URL: ${error?.message}` });
+  }
+
+  return res.status(200).json({
+    success: true,
+    signedUrl: data.signedUrl,
+    token: data.token,
+    path: data.path,
+    storagePath,
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
 // MAIN HANDLER — routes by ?action=
 // ═══════════════════════════════════════════════════════════
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -419,13 +449,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     switch (action) {
+      case "upload-url": return await handleUploadUrl(req, res);
       case "register": return await handleRegister(req, res);
       case "publish": return await handlePublish(req, res);
       case "token": return await handleGenerateToken(req, res);
       case "list": return await handleList(req, res);
       case "check-update": return await handleCheckUpdate(req, res);
       default:
-        return res.status(400).json({ error: `Unknown action: ${action}. Use: register, publish, token, list, check-update` });
+        return res.status(400).json({ error: `Unknown action: ${action}. Use: upload-url, register, publish, token, list, check-update` });
     }
   } catch (err: any) {
     console.error("Builds API error:", err);

@@ -291,19 +291,35 @@ const UploadModal: React.FC<{
         return;
       }
 
-      // Step 1: Upload directly to Supabase Storage (no Vercel body limit)
-      const tempName = `_temp_${Date.now()}_${file.name}`;
-      const storagePath = tier === "root" ? tempName : `${tier}/${tempName}`;
+      // Step 1: Get a signed upload URL from the API (uses service role, bypasses RLS)
+      const urlResp = await fetch("/api/devignfx/builds?action=upload-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ fileName: file.name, tier }),
+      });
 
-      const { error: storageErr } = await supabase.storage
-        .from(BUCKET)
-        .upload(storagePath, file, {
-          contentType: "application/zip",
-          upsert: true,
-        });
+      const urlData = await urlResp.json();
+      if (!urlResp.ok) {
+        setError(urlData.error || "Failed to get upload URL");
+        setUploading(false);
+        setProgress("");
+        return;
+      }
 
-      if (storageErr) {
-        setError(`Storage upload failed: ${storageErr.message}`);
+      const { signedUrl, storagePath } = urlData;
+
+      // Step 1b: Upload file directly to the signed URL (no size limit, no RLS)
+      const uploadResp = await fetch(signedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": "application/zip" },
+        body: file,
+      });
+
+      if (!uploadResp.ok) {
+        setError(`Storage upload failed: ${uploadResp.status} ${uploadResp.statusText}`);
         setUploading(false);
         setProgress("");
         return;
