@@ -291,42 +291,20 @@ const UploadModal: React.FC<{
         return;
       }
 
-      // Step 1: Get a signed upload URL from the API (uses service role, bypasses RLS)
-      const urlResp = await fetch("/api/devignfx/builds?action=upload-url", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({ fileName: file.name, tier }),
-      });
+      // Step 1: Upload directly to Supabase Storage
+      // Requires Storage RLS policy: authenticated users can INSERT into devignfx-builds
+      const tempName = `_temp_${Date.now()}_${file.name}`;
+      const storagePath = tier === "root" ? tempName : `${tier}/${tempName}`;
 
-      const urlText = await urlResp.text();
-      let urlData: any;
-      try { urlData = JSON.parse(urlText); } catch {
-        setError(`Server error (${urlResp.status}): ${urlText.slice(0, 200)}`);
-        setUploading(false);
-        setProgress("");
-        return;
-      }
-      if (!urlResp.ok) {
-        setError(urlData.error || "Failed to get upload URL");
-        setUploading(false);
-        setProgress("");
-        return;
-      }
-
-      const { storagePath, token: uploadToken } = urlData;
-
-      // Step 1b: Upload using Supabase's uploadToSignedUrl (bypasses RLS, no size limit)
       const { error: storageErr } = await supabase.storage
         .from(BUCKET)
-        .uploadToSignedUrl(storagePath, uploadToken, file, {
+        .upload(storagePath, file, {
           contentType: "application/zip",
+          upsert: true,
         });
 
       if (storageErr) {
-        setError(`Storage upload failed: ${storageErr.message}`);
+        setError(`Storage upload failed: ${storageErr.message}. Make sure the Storage bucket has an INSERT policy for authenticated users.`);
         setUploading(false);
         setProgress("");
         return;

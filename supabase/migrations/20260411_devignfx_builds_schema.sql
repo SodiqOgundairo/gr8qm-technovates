@@ -73,3 +73,25 @@ ALTER TABLE devignfx_download_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Authenticated users can manage devignfx_download_log"
   ON devignfx_download_log FOR ALL
   USING (auth.role() = 'authenticated');
+
+-- ═══ Storage RLS policies for devignfx-builds bucket ═══
+-- Allow authenticated users (admins) to upload, read, and delete builds
+INSERT INTO storage.buckets (id, name, public)
+  VALUES ('devignfx-builds', 'devignfx-builds', false)
+  ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Authenticated users can upload to devignfx-builds"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'devignfx-builds' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can read devignfx-builds"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'devignfx-builds' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can update devignfx-builds"
+  ON storage.objects FOR UPDATE
+  USING (bucket_id = 'devignfx-builds' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can delete devignfx-builds"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'devignfx-builds' AND auth.role() = 'authenticated');
