@@ -3,6 +3,11 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
+  "functions": {
+    "api/devignfx/upload-build.ts": {
+      "maxDuration": 30
+    }
+  },
   "buildCommand": "npm run build",
   "installCommand": "npm ci --legacy-peer-deps || npm install --legacy-peer-deps"
 }

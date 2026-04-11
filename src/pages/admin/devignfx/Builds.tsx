@@ -265,7 +265,16 @@ const UploadModal: React.FC<{
         body: formData,
       });
 
-      const result = await resp.json();
+      const text = await resp.text();
+      let result: any;
+      try {
+        result = JSON.parse(text);
+      } catch {
+        setError(`Server error (${resp.status}): ${text.slice(0, 200)}`);
+        setUploading(false);
+        setProgress("");
+        return;
+      }
 
       if (!resp.ok) {
         setError(result.error || "Upload failed");
