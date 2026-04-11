@@ -184,17 +184,23 @@ function DevignFXPage() {
         ? couponResult.finalAmount!
         : selectedTier.price;
 
-    initializePayment({
-      email: checkoutEmail,
-      amount: finalAmount,
-      reference: generateReference("DEVFX"),
-      metadata: {
-        type: "devignfx",
-        tier: selectedTier.id,
-        customer_name: checkoutName,
-        coupon_code: couponResult?.valid ? couponCode : undefined,
-      },
-    });
+    // Close the dialog first so it doesn't block the Paystack iframe
+    setShowCheckout(false);
+
+    // Small delay to let the dialog unmount before Paystack opens its iframe
+    setTimeout(() => {
+      initializePayment({
+        email: checkoutEmail,
+        amount: finalAmount,
+        reference: generateReference("DEVFX"),
+        metadata: {
+          type: "devignfx",
+          tier: selectedTier.id,
+          customer_name: checkoutName,
+          coupon_code: couponResult?.valid ? couponCode : undefined,
+        },
+      });
+    }, 150);
   };
 
   const getDisplayPrice = (tier: (typeof TIERS)[0]) => {
