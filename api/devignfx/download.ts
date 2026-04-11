@@ -43,22 +43,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Find the latest build in storage
-    // Convention: builds are stored as devignfx-builds/latest.zip
-    // or devignfx-builds/{tier}/latest.zip
-    const paths = [
-      `${license.tier}/latest.zip`,
-      "latest.zip",
-    ];
-
+    // First check tier-specific folder, then root. Picks the most recent .zip.
     let signedUrl = null;
-    for (const path of paths) {
-      const { data } = await supabase.storage
-        .from("devignfx-builds")
-        .createSignedUrl(path, 3600); // 1 hour expiry
 
-      if (data?.signedUrl) {
-        signedUrl = data.signedUrl;
-        break;
+    for (const folder of [license.tier, ""]) {
+      const { data: files } = await supabase.storage
+        .from("devignfx-builds")
+        .list(folder || undefined, { sortBy: { column: "created_at", order: "desc" }, limit: 10 });
+
+      const zip = files?.find((f) => f.name.endsWith(".zip"));
+      if (zip) {
+        const path = folder ? `${folder}/${zip.name}` : zip.name;
+        const { data } = await supabase.storage
+          .from("devignfx-builds")
+          .createSignedUrl(path, 3600); // 1 hour expiry
+        if (data?.signedUrl) {
+          signedUrl = data.signedUrl;
+          break;
+        }
       }
     }
 

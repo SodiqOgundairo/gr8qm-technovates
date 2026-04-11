@@ -10,6 +10,7 @@ import {
   IoMdRefresh,
 } from "react-icons/io";
 import { FaEye } from "react-icons/fa";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "devign";
 
 interface ServiceRequest {
   id: string;
@@ -339,21 +340,13 @@ export default function ServiceRequests() {
         </div>
 
         {/* Detail Modal */}
-        {selectedRequest && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-oxford">
-                  Request Details
-                </h2>
-                <button
-                  onClick={() => setSelectedRequest(null)}
-                  className="text-gray-500 hover:text-oxford"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="p-6 space-y-4">
+        <Dialog open={!!selectedRequest} onOpenChange={(v) => { if (!v) setSelectedRequest(null); }}>
+          <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-white">Request Details</DialogTitle>
+            </DialogHeader>
+            {selectedRequest && (
+              <div className="space-y-4">
                 <div>
                   <h3 className="text-sm font-semibold text-gray-500 uppercase">
                     Client Information
@@ -402,12 +395,15 @@ export default function ServiceRequests() {
                   <h3 className="text-sm font-semibold text-gray-500 uppercase">
                     Description
                   </h3>
-                  <p className="mt-2 text-gray-700 whitespace-pre-wrap">
+                  <p className="mt-2 text-gray-300 whitespace-pre-wrap">
                     {selectedRequest.project_description}
                   </p>
                 </div>
-
-                <div className="flex flex-col gap-4 pt-4 border-t border-gray-200">
+              </div>
+            )}
+            <DialogFooter>
+              {selectedRequest && (
+                <div className="flex flex-col gap-4 w-full">
                   <div className="flex items-center gap-3">
                     <label className="text-sm font-semibold text-gray-500">
                       Update Status:
@@ -428,13 +424,13 @@ export default function ServiceRequests() {
                           alert(`Error: ${err.message}`);
                         }
                       }}
-                      className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-skyblue focus:outline-none"
+                      className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-white focus:border-skyblue focus:outline-none"
                     >
-                      <option value="pending">Pending</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="in-progress">In Progress</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
+                      <option value="pending" className="text-black">Pending</option>
+                      <option value="contacted" className="text-black">Contacted</option>
+                      <option value="in-progress" className="text-black">In Progress</option>
+                      <option value="completed" className="text-black">Completed</option>
+                      <option value="cancelled" className="text-black">Cancelled</option>
                     </select>
                   </div>
                   <Button
@@ -444,10 +440,10 @@ export default function ServiceRequests() {
                     Close
                   </Button>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminLayout>
   );

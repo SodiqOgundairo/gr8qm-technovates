@@ -34,6 +34,15 @@ const footerSections = [
       { label: "Careers", path: "/careers" },
     ],
   },
+  {
+    title: "RESOURCES",
+    links: [
+      { label: "Alumni", path: "/alumni" },
+      { label: "Events", path: "/events" },
+      { label: "Glossary", path: "/glossary" },
+      { label: "Blog", path: "/blog" },
+    ],
+  },
 ];
 
 const socialLinks = [
@@ -201,7 +210,7 @@ const Footer: React.FC = () => {
 
           {/* Links Section */}
           <div className="lg:col-span-4 flex flex-col justify-between">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-3 gap-8">
               {footerSections.map((section, index) => (
                 <Reveal key={index} direction="up" delay={index * 0.1}>
                   <div>

@@ -6,6 +6,7 @@ import { SEO } from "../components/common/SEO";
 import PageTransition from "../components/layout/PageTransition";
 import Container from "../components/layout/Container";
 import { BookIcon } from "../components/icons";
+import { Input } from "devign";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -105,17 +106,13 @@ export default function Glossary() {
           <Container>
             <div className="flex flex-col md:flex-row items-center gap-4">
               {/* Search */}
-              <div className="relative w-full md:w-80">
-                <Search
-                  size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-iceblue/30"
-                />
-                <input
+              <div className="w-full md:w-80">
+                <Input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search terms..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder:text-iceblue/30 outline-none focus:border-skyblue/40 transition-colors text-sm"
+                  leftIcon={<Search size={18} />}
                 />
               </div>
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Container from "../components/layout/Container";
 import RevealOnScroll from "../components/animations/RevealOnScroll";
@@ -7,6 +7,7 @@ import GlowCard from "../components/animations/GlowCard";
 import MagneticButton from "../components/animations/MagneticButton";
 import { initializePayment, generateReference, formatAmount } from "../utils/paystack";
 import { validateCoupon } from "../lib/coupons";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "devign";
 
 /* ═══════════════════════════════════════════════════════════
    DEVIGNFX — Automated Forex Trading Bot Landing Page
@@ -18,8 +19,9 @@ const TIERS = [
   {
     id: "standard",
     name: "Standard",
-    price: 50_000,
+    price: 20_000,
     period: "30 days",
+    available: true,
     features: [
       "Full automated trading",
       "All available MT5 pairs",
@@ -27,13 +29,14 @@ const TIERS = [
       "Telegram trade alerts",
       "Email support",
     ],
-    popular: false,
+    popular: true,
   },
   {
     id: "premium",
     name: "Premium",
-    price: 120_000,
+    price: null,
     period: "90 days",
+    available: false,
     features: [
       "Everything in Standard",
       "All 350+ MT5 instruments",
@@ -42,13 +45,14 @@ const TIERS = [
       "Dedicated Telegram support",
       "Free updates during license",
     ],
-    popular: true,
+    popular: false,
   },
   {
     id: "enterprise",
     name: "Enterprise",
-    price: 350_000,
+    price: null,
     period: "365 days",
+    available: false,
     features: [
       "Everything in Premium",
       "Custom pair configuration",
@@ -98,6 +102,33 @@ const FEATURES = [
 const ease = [0.16, 1, 0.3, 1] as const;
 
 function DevignFXPage() {
+  /* ── SEO ────────────────────────────────────────────── */
+  useEffect(() => {
+    const prev = document.title;
+    document.title = "DevignFX — Automated Forex Trading Bot";
+
+    const setMeta = (name: string, content: string, attr = "name") => {
+      let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+
+    setMeta("description", "DevignFX is an AI-powered MetaTrader 5 bot that scans 350+ instruments, confirms multi-confluence signals, and executes trades automatically.");
+    setMeta("og:title", "DevignFX — Automated Forex Trading Bot", "property");
+    setMeta("og:description", "Trade smarter, sleep better. Fully automated multi-confluence forex trading.", "property");
+    setMeta("og:type", "website", "property");
+    setMeta("og:url", "https://devignfx.gr8qm.com", "property");
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", "DevignFX — Automated Forex Trading Bot");
+    setMeta("twitter:description", "AI-powered MetaTrader 5 bot. 350+ instruments. Multi-confluence signals. Fully autonomous.");
+
+    return () => { document.title = prev; };
+  }, []);
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -146,7 +177,7 @@ function DevignFXPage() {
   };
 
   const handleCheckout = () => {
-    if (!selectedTier || !checkoutEmail || !checkoutName) return;
+    if (!selectedTier || !selectedTier.available || !selectedTier.price || !checkoutEmail || !checkoutName) return;
 
     const finalAmount =
       couponResult?.valid && couponResult.tierId === activeTier
@@ -167,6 +198,7 @@ function DevignFXPage() {
   };
 
   const getDisplayPrice = (tier: (typeof TIERS)[0]) => {
+    if (!tier.price) return 0;
     if (couponResult?.valid && couponResult.tierId === tier.id) {
       return couponResult.finalAmount!;
     }
@@ -180,12 +212,7 @@ function DevignFXPage() {
         <Container>
           <div className="flex items-center justify-between h-16">
             <a href="#top" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-sm font-black">
-                FX
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                Devign<span className="text-emerald-400">FX</span>
-              </span>
+              <img src="/assets/devignfx-logo.svg" alt="DevignFX" className="h-8 w-auto" />
             </a>
             <div className="hidden md:flex items-center gap-8 text-sm text-gray-400">
               <a href="#features" className="hover:text-emerald-400 transition-colors">Features</a>
@@ -312,7 +339,7 @@ function DevignFXPage() {
       <section id="features" className="py-32 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
         <Container>
-          <RevealOnScroll direction="up" delay={0}>
+          <RevealOnScroll direction="up" delay={0} once={false}>
             <div className="text-center mb-16">
               <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-3">
                 Built for Serious Traders
@@ -325,7 +352,7 @@ function DevignFXPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f, i) => (
-              <RevealOnScroll key={f.title} direction="up" delay={i * 0.08}>
+              <RevealOnScroll key={f.title} direction="up" delay={i * 0.08} once={false}>
                 <GlowCard
                   className="group rounded-2xl bg-white/[0.03] border border-white/[0.08] p-8 h-full hover:border-emerald-500/20 transition-colors"
                   glowColor="rgba(16,185,129,0.12)"
@@ -344,7 +371,7 @@ function DevignFXPage() {
       <section id="stats" className="py-28 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/[0.03] to-transparent" />
         <Container>
-          <RevealOnScroll direction="up">
+          <RevealOnScroll direction="up" once={false}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
                 { target: 350, suffix: "+", label: "MT5 Instruments" },
@@ -367,7 +394,7 @@ function DevignFXPage() {
       {/* ════════ HOW IT WORKS ════════ */}
       <section className="py-28">
         <Container>
-          <RevealOnScroll direction="up">
+          <RevealOnScroll direction="up" once={false}>
             <div className="text-center mb-16">
               <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-3">
                 Simple Setup
@@ -396,7 +423,7 @@ function DevignFXPage() {
                 desc: "The bot auto-activates, binds to your machine, and starts scanning for high-probability setups.",
               },
             ].map((item, i) => (
-              <RevealOnScroll key={item.step} direction="up" delay={i * 0.12}>
+              <RevealOnScroll key={item.step} direction="up" delay={i * 0.12} once={false}>
                 <div className="relative p-8 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                   <span className="text-6xl font-black text-emerald-500/10 absolute top-4 right-6">
                     {item.step}
@@ -414,7 +441,7 @@ function DevignFXPage() {
       <section id="pricing" className="py-32 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
         <Container>
-          <RevealOnScroll direction="up">
+          <RevealOnScroll direction="up" once={false}>
             <div className="text-center mb-6">
               <p className="text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-3">
                 Pricing
@@ -426,7 +453,7 @@ function DevignFXPage() {
           </RevealOnScroll>
 
           {/* Coupon input */}
-          <RevealOnScroll direction="up" delay={0.1}>
+          <RevealOnScroll direction="up" delay={0.1} once={false}>
             <div className="max-w-sm mx-auto mb-12">
               <label className="block text-xs text-gray-500 mb-1.5 text-center">Have a coupon code?</label>
               <div className="flex gap-2">
@@ -454,7 +481,7 @@ function DevignFXPage() {
 
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {TIERS.map((tier, i) => (
-              <RevealOnScroll key={tier.id} direction="up" delay={i * 0.1}>
+              <RevealOnScroll key={tier.id} direction="up" delay={i * 0.1} once={false}>
                 <GlowCard
                   className={`group relative rounded-2xl p-8 h-full transition-colors ${
                     tier.popular
@@ -465,28 +492,39 @@ function DevignFXPage() {
                 >
                   {tier.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-emerald-500 text-black text-[10px] font-bold tracking-wider uppercase">
-                      Most Popular
+                      {tier.available ? "Available Now" : "Coming Soon"}
+                    </div>
+                  )}
+                  {!tier.available && !tier.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white/10 text-gray-400 text-[10px] font-bold tracking-wider uppercase">
+                      Coming Soon
                     </div>
                   )}
                   <h3 className="text-lg font-bold mb-1">{tier.name}</h3>
                   <p className="text-gray-500 text-xs mb-6">{tier.period} license</p>
 
                   <div className="mb-6">
-                    {couponResult?.valid && couponResult.tierId === tier.id && (
-                      <span className="text-gray-500 text-sm line-through mr-2">
-                        {formatAmount(tier.price)}
-                      </span>
+                    {tier.available && tier.price ? (
+                      <>
+                        {couponResult?.valid && couponResult.tierId === tier.id && (
+                          <span className="text-gray-500 text-sm line-through mr-2">
+                            {formatAmount(tier.price)}
+                          </span>
+                        )}
+                        <span className="text-3xl font-black">
+                          {formatAmount(getDisplayPrice(tier))}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-2xl font-black text-gray-500">--</span>
                     )}
-                    <span className="text-3xl font-black">
-                      {formatAmount(getDisplayPrice(tier))}
-                    </span>
                   </div>
 
                   <ul className="space-y-3 mb-8">
                     {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
+                      <li key={f} className={`flex items-start gap-2 text-sm ${tier.available ? "text-gray-300" : "text-gray-500"}`}>
                         <svg
-                          className="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"
+                          className={`w-4 h-4 mt-0.5 shrink-0 ${tier.available ? "text-emerald-400" : "text-gray-600"}`}
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -499,24 +537,29 @@ function DevignFXPage() {
                     ))}
                   </ul>
 
-                  <MagneticButton strength={15} className="w-full">
-                    <button
-                      onClick={() => {
-                        setActiveTier(tier.id);
-                        setShowCheckout(true);
-                        if (couponCode.trim()) {
-                          applyCoupon(tier.id, tier.price);
-                        }
-                      }}
-                      className={`w-full py-3.5 rounded-xl font-bold text-sm transition-colors ${
-                        tier.popular
-                          ? "bg-emerald-500 text-black hover:bg-emerald-400"
-                          : "bg-white/[0.08] text-white hover:bg-white/[0.14]"
-                      }`}
+                  {tier.available ? (
+                    <MagneticButton strength={15} className="w-full">
+                      <button
+                        onClick={() => {
+                          setActiveTier(tier.id);
+                          setShowCheckout(true);
+                          if (couponCode.trim() && tier.price) {
+                            applyCoupon(tier.id, tier.price);
+                          }
+                        }}
+                        className="w-full py-3.5 rounded-xl font-bold text-sm transition-colors bg-emerald-500 text-black hover:bg-emerald-400"
+                      >
+                        Get {tier.name}
+                      </button>
+                    </MagneticButton>
+                  ) : (
+                    <a
+                      href="mailto:hello@gr8qm.com?subject=DevignFX%20—%20Interest%20in%20${tier.name}%20plan"
+                      className="block w-full py-3.5 rounded-xl font-bold text-sm text-center transition-colors bg-white/[0.05] text-gray-400 hover:bg-white/[0.1] hover:text-white"
                     >
-                      Get {tier.name}
-                    </button>
-                  </MagneticButton>
+                      Contact for Early Access
+                    </a>
+                  )}
                 </GlowCard>
               </RevealOnScroll>
             ))}
@@ -525,111 +568,95 @@ function DevignFXPage() {
       </section>
 
       {/* ════════ CHECKOUT MODAL ════════ */}
-      {showCheckout && selectedTier && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-            onClick={() => setShowCheckout(false)}
-          />
-          <motion.div
-            className="relative w-full max-w-md rounded-2xl bg-[#111611] border border-emerald-500/20 p-8"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.3, ease }}
-          >
-            <button
-              onClick={() => setShowCheckout(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-white"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+      <Dialog open={showCheckout && !!selectedTier} onOpenChange={(v) => { if (!v) setShowCheckout(false); }}>
+        <DialogContent className="!bg-gradient-to-br !from-[#0f1f0f] !via-[#0a1a0a] !to-[#0f1f0f] !border-emerald-500/10 !text-white sm:!max-w-md">
+          {selectedTier && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-white">Complete Purchase — {selectedTier.name}</DialogTitle>
+                <DialogDescription className="text-gray-500">
+                  {selectedTier.period} license •{" "}
+                  <span className="text-emerald-400 font-semibold">
+                    {formatAmount(getDisplayPrice(selectedTier))}
+                  </span>
+                </DialogDescription>
+              </DialogHeader>
 
-            <h3 className="text-xl font-bold mb-1">
-              Complete Purchase — {selectedTier.name}
-            </h3>
-            <p className="text-gray-500 text-sm mb-6">
-              {selectedTier.period} license •{" "}
-              <span className="text-emerald-400 font-semibold">
-                {formatAmount(getDisplayPrice(selectedTier))}
-              </span>
-            </p>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Full Name</label>
-                <input
-                  type="text"
-                  value={checkoutName}
-                  onChange={(e) => setCheckoutName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Email Address</label>
-                <input
-                  type="email"
-                  value={checkoutEmail}
-                  onChange={(e) => setCheckoutEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
-                />
-              </div>
-
-              {/* Coupon in modal */}
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Coupon Code (optional)</label>
-                <div className="flex gap-2">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Full Name</label>
                   <input
                     type="text"
-                    value={couponCode}
-                    onChange={(e) => {
-                      setCouponCode(e.target.value.toUpperCase());
-                      setCouponResult(null);
-                    }}
-                    placeholder="ENTER CODE"
-                    className="flex-1 px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
+                    value={checkoutName}
+                    onChange={(e) => setCheckoutName(e.target.value)}
+                    placeholder="John Doe"
+                    className="w-full px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
                   />
-                  <button
-                    onClick={() => applyCoupon(selectedTier.id, selectedTier.price)}
-                    disabled={validatingCoupon || !couponCode.trim()}
-                    className="px-4 py-3 rounded-lg bg-white/[0.08] text-sm font-medium hover:bg-white/[0.14] transition-colors disabled:opacity-40"
-                  >
-                    {validatingCoupon ? "..." : "Apply"}
-                  </button>
                 </div>
-                {couponResult && !couponResult.valid && (
-                  <p className="text-red-400 text-xs mt-1">{couponResult.error}</p>
-                )}
-                {couponResult?.valid && couponResult.tierId === selectedTier.id && (
-                  <p className="text-emerald-400 text-xs mt-1">
-                    -{formatAmount(couponResult.discountAmount!)} discount applied
-                  </p>
-                )}
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    value={checkoutEmail}
+                    onChange={(e) => setCheckoutEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
+                  />
+                </div>
+
+                {/* Coupon in modal */}
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">Coupon Code (optional)</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value.toUpperCase());
+                        setCouponResult(null);
+                      }}
+                      placeholder="ENTER CODE"
+                      className="flex-1 px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/40"
+                    />
+                    <button
+                      onClick={() => selectedTier.price && applyCoupon(selectedTier.id, selectedTier.price)}
+                      disabled={validatingCoupon || !couponCode.trim()}
+                      className="px-4 py-3 rounded-lg bg-white/[0.08] text-sm font-medium hover:bg-white/[0.14] transition-colors disabled:opacity-40"
+                    >
+                      {validatingCoupon ? "..." : "Apply"}
+                    </button>
+                  </div>
+                  {couponResult && !couponResult.valid && (
+                    <p className="text-red-400 text-xs mt-1">{couponResult.error}</p>
+                  )}
+                  {couponResult?.valid && couponResult.tierId === selectedTier.id && (
+                    <p className="text-emerald-400 text-xs mt-1">
+                      -{formatAmount(couponResult.discountAmount!)} discount applied
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <button
-              onClick={handleCheckout}
-              disabled={!checkoutEmail || !checkoutName}
-              className="w-full mt-6 py-4 rounded-xl bg-emerald-500 text-black font-bold text-sm hover:bg-emerald-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Pay {formatAmount(getDisplayPrice(selectedTier))}
-            </button>
+              <button
+                onClick={handleCheckout}
+                disabled={!checkoutEmail || !checkoutName}
+                className="w-full mt-6 py-4 rounded-xl bg-emerald-500 text-black font-bold text-sm hover:bg-emerald-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Pay {formatAmount(getDisplayPrice(selectedTier))}
+              </button>
 
-            <p className="text-[10px] text-gray-600 text-center mt-3">
-              Secured by Paystack. Your license key will be emailed instantly after payment.
-            </p>
-          </motion.div>
-        </div>
-      )}
+              <p className="text-[10px] text-gray-600 text-center mt-3">
+                Secured by Paystack. Your license key will be emailed instantly after payment.
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* ════════ FAQ ════════ */}
       <section className="py-28">
         <Container>
-          <RevealOnScroll direction="up">
+          <RevealOnScroll direction="up" once={false}>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-black tracking-tight">
                 Frequently Asked Questions
@@ -649,7 +676,7 @@ function DevignFXPage() {
               },
               {
                 q: "What if I need to change machines?",
-                a: "Contact us and we'll unbind your license so you can reactivate on a new machine. Enterprise plans include self-service unbinding.",
+                a: "Email hello@gr8qm.com and we'll unbind your license so you can reactivate on a new machine.",
               },
               {
                 q: "Is the bot profitable?",
@@ -657,10 +684,10 @@ function DevignFXPage() {
               },
               {
                 q: "How do I get support?",
-                a: "Standard plans get email support. Premium and Enterprise plans include dedicated Telegram support with priority response times.",
+                a: "Reach us anytime at hello@gr8qm.com. We also provide Telegram support for quick responses.",
               },
             ].map((faq, i) => (
-              <RevealOnScroll key={i} direction="up" delay={i * 0.05}>
+              <RevealOnScroll key={i} direction="up" delay={i * 0.05} once={false}>
                 <details className="group rounded-2xl bg-white/[0.03] border border-white/[0.08] overflow-hidden">
                   <summary className="cursor-pointer px-6 py-5 text-sm font-semibold flex items-center justify-between hover:text-emerald-400 transition-colors list-none">
                     {faq.q}
@@ -686,7 +713,7 @@ function DevignFXPage() {
       <section className="py-28 relative">
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/[0.04] to-transparent" />
         <Container>
-          <RevealOnScroll direction="up">
+          <RevealOnScroll direction="up" once={false}>
             <div className="text-center max-w-2xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6">
                 Ready to Automate
@@ -715,15 +742,9 @@ function DevignFXPage() {
         <Container>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[8px] font-black">
-                FX
-              </div>
+              <img src="/assets/devignfx-logo.svg" alt="DevignFX" className="h-5 w-auto" />
               <span className="text-sm text-gray-500">
-                DevignFX &copy; {new Date().getFullYear()}. A{" "}
-                <a href="https://gr8qm.com" className="text-emerald-400 hover:underline">
-                  GR8QM
-                </a>{" "}
-                product.
+                &copy; {new Date().getFullYear()} DevignFX. All rights reserved.
               </span>
             </div>
             <p className="text-[10px] text-gray-600 max-w-xs text-center md:text-right">

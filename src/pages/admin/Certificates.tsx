@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/admin/AdminLayout";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "devign";
 import type {
   CertificateTemplate,
   Alumni,
@@ -315,16 +316,14 @@ const IssueCertificateModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-lg">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">Issue Certificate</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">
-            &times;
-          </button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-lg !max-h-[85vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">Issue Certificate</DialogTitle>
+          <DialogDescription className="text-gray-400">Select an alumni and course to issue a new certificate.</DialogDescription>
+        </DialogHeader>
 
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Alumni *</label>
             <select
@@ -401,7 +400,7 @@ const IssueCertificateModal: React.FC<{
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter>
           <button onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white text-sm">
             Cancel
           </button>
@@ -412,9 +411,9 @@ const IssueCertificateModal: React.FC<{
           >
             {saving ? "Issuing..." : "Issue Certificate"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -581,14 +580,16 @@ const AlumniFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">{a ? "Edit" : "Add"} Alumni</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">&times;</button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-lg !max-h-[90vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">{a ? "Edit" : "Add"} Alumni</DialogTitle>
+          <DialogDescription className="text-gray-400">
+            {a ? "Update alumni details below." : "Add a new alumni to the directory."}
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <InputField label="First Name *" value={firstName} onChange={setFirstName} />
             <InputField label="Last Name *" value={lastName} onChange={setLastName} />
@@ -611,7 +612,7 @@ const AlumniFormModal: React.FC<{
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter className="flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white text-sm">Cancel</button>
           <button
             onClick={handleSave}
@@ -620,9 +621,9 @@ const AlumniFormModal: React.FC<{
           >
             {saving ? "Saving..." : a ? "Update" : "Add Alumni"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -1,15 +1,23 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Search, X, ChevronRight } from "lucide-react";
-import type { AlumniWithCerts } from "../types/certificates";
-import { getAlumniWithCertificates } from "../lib/certificates";
+import { Search, X } from "lucide-react";
+import type { AlumniWithCerts, CertificateWithAlumni } from "../types/certificates";
+import { getAlumniWithCertificates, verifyCertificate } from "../lib/certificates";
 import { generateCertificatePdf } from "../lib/certificatePdf";
 import { supabase } from "../utils/supabase";
 import type { CertificateTemplate } from "../types/certificates";
 import { SEO } from "../components/common/SEO";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
+import {
+  Button,
+  Input,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "devign";
 
 /* ─── constants ─── */
 const EASE_SMOOTH: [number, number, number, number] = [0.22, 0.6, 0.36, 1];
@@ -28,6 +36,14 @@ const AlumniPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [filterCohort, setFilterCohort] = useState("");
   const heroRef = useRef<HTMLDivElement>(null);
+
+  /* Certificate verification modal */
+  const [verifyOpen, setVerifyOpen] = useState(false);
+  const [certInput, setCertInput] = useState("");
+  const [certResult, setCertResult] = useState<CertificateWithAlumni | null>(null);
+  const [certSearched, setCertSearched] = useState(false);
+  const [certLoading, setCertLoading] = useState(false);
+  const [certGenerating, setCertGenerating] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -79,6 +95,40 @@ const AlumniPage: React.FC = () => {
     return { multi, single, none };
   }, [filtered]);
 
+  /* Certificate verification handlers */
+  const handleVerify = async () => {
+    const query = certInput.trim();
+    if (!query) return;
+    setCertLoading(true);
+    setCertSearched(false);
+    try {
+      const data = await verifyCertificate(query);
+      setCertResult(data);
+    } catch {
+      setCertResult(null);
+    } finally {
+      setCertSearched(true);
+      setCertLoading(false);
+    }
+  };
+
+  const handleCertDownload = async () => {
+    if (!certResult) return;
+    setCertGenerating(true);
+    try {
+      const url = await generateCertificatePdf(
+        certResult,
+        certResult.alumni,
+        certResult.template
+      );
+      window.open(url, "_blank");
+    } catch {
+      alert("Failed to generate certificate PDF");
+    } finally {
+      setCertGenerating(false);
+    }
+  };
+
   return (
     <PageTransition>
       <SEO
@@ -127,14 +177,14 @@ const AlumniPage: React.FC = () => {
               Technovates. Sorted by achievements.
             </motion.p>
 
-            {/* Verify link */}
+            {/* Verify button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: EASE_SMOOTH }}
             >
-              <Link
-                to="/verify"
+              <button
+                onClick={() => setVerifyOpen(true)}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/[0.04] border border-white/[0.08] hover:border-skyblue/30 text-white/40 hover:text-skyblue rounded-full text-sm transition-all duration-300 font-mono"
               >
                 <svg
@@ -151,10 +201,121 @@ const AlumniPage: React.FC = () => {
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
                 Verify a Certificate
-              </Link>
+              </button>
             </motion.div>
           </motion.div>
         </section>
+
+        {/* ════════════════ VERIFY CERTIFICATE MODAL ════════════════ */}
+        <Dialog open={verifyOpen} onOpenChange={(v) => !v && setVerifyOpen(false)}>
+          <DialogContent className="!bg-gradient-to-br !from-[#0a0a0f]/95 !via-[#0a0a0f]/90 !to-[#0a0a0f]/85 !border-white/[0.08] !text-white sm:!max-w-lg">
+            <DialogHeader>
+              <DialogDescription className="font-mono text-[10px] uppercase tracking-[0.35em] text-white/30">
+                Certificate Authentication
+              </DialogDescription>
+              <DialogTitle className="text-white">
+                Verify <span className="text-skyblue">Certificate</span>
+              </DialogTitle>
+            </DialogHeader>
+
+            <div>
+              <p className="text-white/35 text-sm mb-4">
+                Enter a certificate number to verify its authenticity.
+              </p>
+
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  value={certInput}
+                  onChange={(e) => setCertInput(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => e.key === "Enter" && handleVerify()}
+                  placeholder="e.g. GR8QM-2026-0001"
+                  className="flex-1 font-mono"
+                />
+                <Button
+                  variant="primary"
+                  size="default"
+                  onClick={handleVerify}
+                  disabled={certLoading || !certInput.trim()}
+                >
+                  {certLoading ? "..." : "Verify"}
+                </Button>
+              </div>
+
+              {/* Result */}
+              {certSearched && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: EASE_SMOOTH }}
+                  className="mt-5"
+                >
+                  {certResult ? (
+                    <div className="border border-green-500/20 rounded-xl overflow-hidden">
+                      <div className="bg-green-500/10 border-b border-green-500/15 px-5 py-3 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-green-400 font-bold text-sm">Valid Certificate</h3>
+                          <p className="text-green-400/60 text-xs">Authentic and active.</p>
+                        </div>
+                      </div>
+
+                      <div className="p-5 space-y-3">
+                        <DetailRow label="Certificate Number" value={certResult.certificate_number} mono />
+                        <DetailRow label="Issued To" value={`${certResult.alumni.first_name} ${certResult.alumni.last_name}`} />
+                        <DetailRow label="Course" value={certResult.course_name} />
+                        <DetailRow
+                          label="Issue Date"
+                          value={new Date(certResult.issue_date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                        />
+                        {certResult.expiry_date && (
+                          <DetailRow
+                            label="Expiry Date"
+                            value={new Date(certResult.expiry_date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                          />
+                        )}
+                        <Button
+                          variant="primary"
+                          size="default"
+                          onClick={handleCertDownload}
+                          disabled={certGenerating}
+                          className="w-full mt-3"
+                        >
+                          {certGenerating ? "Generating PDF..." : "Download Certificate PDF"}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="border border-red-500/20 rounded-xl overflow-hidden">
+                      <div className="bg-red-500/10 border-b border-red-500/15 px-5 py-3 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="15" y1="9" x2="9" y2="15" />
+                            <line x1="9" y1="9" x2="15" y2="15" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-red-400 font-bold text-sm">Not Found</h3>
+                          <p className="text-red-400/60 text-xs">No active certificate matches this number.</p>
+                        </div>
+                      </div>
+                      <div className="p-5 text-white/35 text-sm">
+                        Double-check the certificate number and try again. If you believe this is an error, contact{" "}
+                        <a href="mailto:hello@gr8qm.com" className="text-skyblue hover:underline">hello@gr8qm.com</a>.
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* ════════════════ FILTERS + CONTENT ════════════════ */}
         <section className="relative overflow-hidden">
@@ -302,6 +463,20 @@ const AlumniPage: React.FC = () => {
     </PageTransition>
   );
 };
+
+// ── Detail Row (for cert verification) ────────────────────
+const DetailRow: React.FC<{
+  label: string;
+  value: string;
+  mono?: boolean;
+}> = ({ label, value, mono }) => (
+  <div className="flex justify-between items-center py-2 border-b border-white/[0.06] last:border-0">
+    <span className="text-white/25 text-sm">{label}</span>
+    <span className={`text-white text-sm font-medium ${mono ? "font-mono" : ""}`}>
+      {value}
+    </span>
+  </div>
+);
 
 // ── Tier Section ───────────────────────────────────────────
 

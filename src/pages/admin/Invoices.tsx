@@ -225,7 +225,7 @@ export default function Invoices() {
         <head>
           <title>Invoice ${invoice.invoice_number}</title>
           <style>
-            body { font-family: 'Epilogue', Arial, sans-serif; padding: 40px; }
+            body { font-family: 'Urbanist', Arial, sans-serif; padding: 40px; }
             .header { text-align: center; margin-bottom: 40px; }
             .logo { font-size: 24px; font-weight: bold; color: #0098da; }
             .invoice-details { display: flex; justify-content: space-between; margin-bottom: 30px; }

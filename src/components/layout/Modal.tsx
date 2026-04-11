@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { XIcon } from "../icons";
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "devign";
 
 interface BaseModalProps {
   open: boolean;
@@ -20,63 +26,29 @@ const BaseModal: React.FC<BaseModalProps> = ({
   description,
   children,
   width = "max-w-md",
-  showCloseButton = true,
   closeOnOutsideClick = true,
   closeOnEscape = true,
 }) => {
-  useEffect(() => {
-    if (!open || !closeOnEscape) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose, closeOnEscape]);
-
-  if (!open) return null;
+  const handleOpenChange = (v: boolean) => {
+    if (!v) onClose();
+  };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
-      onClick={() => {
-        if (closeOnOutsideClick) onClose();
-      }}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <div
-        className={`w-full ${width} bg-white rounded-xl shadow-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto`}
-        onClick={(e) => e.stopPropagation()}
-        role="document"
+    <Dialog open={open} onOpenChange={closeOnOutsideClick || closeOnEscape ? handleOpenChange : undefined}>
+      <DialogContent
+        className={`${width}`}
+        onPointerDownOutside={closeOnOutsideClick ? undefined : (e) => e.preventDefault()}
+        onEscapeKeyDown={closeOnEscape ? undefined : (e) => e.preventDefault()}
       >
-        {showCloseButton && (
-          <button
-            onClick={onClose}
-            className="sticky top-0 right-0 float-right p-2 z-10 rounded-full hover:bg-gray-100 transition-colors text-neutral-500 hover:text-neutral-800 cursor-pointer"
-            aria-label="Close modal"
-          >
-            <XIcon size={20} />
-          </button>
+        {(title || description) && (
+          <DialogHeader>
+            {title && <DialogTitle>{title}</DialogTitle>}
+            {description && <DialogDescription>{description}</DialogDescription>}
+          </DialogHeader>
         )}
-
-        <div className="">
-          {title && (
-            <h2 id="modal-title" className="text-lg font-semibold mb-1">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p id="modal-description" className="text-sm text-neutral-600 mb-4">
-              {description}
-            </p>
-          )}
-
-          <div className="space-y-3">{children}</div>
-        </div>
-      </div>
-    </div>
+        <div className="space-y-3">{children}</div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

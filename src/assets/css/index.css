@@ -1,39 +1,112 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 @import "tailwindcss";
 @source "../../../node_modules/devign/dist";
-@import "./devign.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Devign Layer 1 — brand palette overrides
+ * Only override the raw palette; semantic tokens cascade automatically.
+ * See: https://www.npmjs.com/package/devign#theming
+ */
+:root {
+  /* Brand = skyblue */
+  --brand-50: #e6f4fb;
+  --brand-100: #c9ebfb;
+  --brand-200: #7dcbf0;
+  --brand-300: #33abe5;
+  --brand-400: #0098da;
+  --brand-500: #0098da;
+  --brand-600: #007ab0;
+  --brand-700: #005c84;
+  --brand-800: #003e59;
+  --brand-900: #000000;
+
+  /* Accent = orange */
+  --accent-50: #fef3e8;
+  --accent-300: #f9b06a;
+  --accent-500: #f58634;
+  --accent-700: #c45e10;
+
+  /* Neutrals — oxford-deep palette */
+  --neutral-0: #ffffff;
+  --neutral-50: #c9ebfb;
+  --neutral-100: #e8eef4;
+  --neutral-200: #1e3a6a;
+  --neutral-300: #143a7a;
+  --neutral-400: #7bacc9;
+  --neutral-500: #5a8aab;
+  --neutral-600: #0d2d66;
+  --neutral-700: #0a2558;
+  --neutral-800: #031842;
+  --neutral-900: #000000;
+
+  /* Shape */
+  --radius: 12px;
+
+  /* Typography — project fonts */
+  --font-sans: "Urbanist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-card-bg: rgba(255, 255, 255, 0.75);
+  --glass-card-border: rgba(0, 0, 0, 0.06);
+  --glass-input-bg: rgba(255, 255, 255, 0.55);
+  --glass-shadow: 0 8px 32px 0 rgba(3, 24, 66, 0.1);
+  --glass-card-shadow: 0 8px 32px 0 rgba(3, 24, 66, 0.12);
+  --glass-blur: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px 0 rgba(0, 152, 218, 0.06);
+  --shadow-md: 0 4px 16px 0 rgba(0, 152, 218, 0.1);
+  --shadow-lg: 0 8px 32px 0 rgba(0, 152, 218, 0.14);
+  --shadow-xl: 0 12px 48px 0 rgba(0, 152, 218, 0.18);
+
+  /* Transitions */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 350ms;
+}
+
+/* Dark mode — devign token overrides */
+.dark {
+  --color-background: #000000;
+  --color-card: #031842;
+  --color-popover: #031842;
+  --color-input: #031842;
+  --color-muted: #0a2558;
+  --color-foreground: #c9ebfb;
+  --color-card-foreground: #c9ebfb;
+  --color-popover-foreground: #c9ebfb;
+  --color-muted-foreground: #5a8aab;
+  --color-border: #143a7a;
+
+  --glass-bg: rgba(3, 24, 66, 0.65);
+  --glass-bg-strong: rgba(3, 24, 66, 0.85);
+  --glass-border: rgba(201, 235, 251, 0.08);
+  --glass-card-bg: rgba(10, 37, 88, 0.75);
+  --glass-card-border: rgba(201, 235, 251, 0.1);
+  --glass-input-bg: rgba(10, 37, 88, 0.55);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
+  --shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 12px 48px 0 rgba(0, 0, 0, 0.6);
+}
+
+/*
+ * Tailwind v4 @theme — project-specific design tokens
+ * These generate utility classes like bg-skyblue, text-oxford, etc.
+ */
 @theme {
-  --family-font-body: "Epilogue";
-  --family-font-header: "Epilogue";
-
-  --numbers-0: 0px;
-  --numbers-half: 0.5px;
-  --numbers-1: 1px;
-  --numbers-2: 4px;
-  --numbers-3: 8px;
-  --numbers-4: 12px;
-  --numbers-5: 16px;
-  --numbers-6: 20px;
-  --numbers-7: 24px;
-  --numbers-8: 28px;
-  --numbers-9: 32px;
-  --numbers-10: 40px;
-  --numbers-11: 50px;
-  --numbers-12: 100px;
-  --numbers-13: 150px;
-  --numbers-full: 9999999px;
-  --numbers-4-half: 14px;
-  --numbers-48: 48px;
-  --numbers-60: 60px;
-  --numbers-96: 96px;
-  --numbers-70: 70px;
-
-  --text--font-family-base: "Epilogue", Montserrat;
+  --text--font-family-base: "Urbanist", "Space Grotesk";
   --color-skyblue: #0098da;
   --color-iceblue: #c9ebfb;
   --color-oxford: #05235a;
@@ -44,13 +117,12 @@
   --color-gray-2: #6f6d66;
   --color-gray-3: #282826;
 
-  /* Oxford deep palette for /new dark pages */
   --color-oxford-deep: #000000;
   --color-oxford-card: #031842;
   --color-oxford-elevated: #0a2558;
   --color-oxford-border: #143a7a;
 
-  /* Devign semantic tokens — required for Tailwind v4 utility generation */
+  /* Semantic tokens for Tailwind v4 utility generation */
   --color-primary: #0098da;
   --color-primary-foreground: #ffffff;
   --color-secondary: #000000;
@@ -77,6 +149,8 @@
   --shadow-accent: 0 4px 16px 0 rgba(245, 134, 52, 0.25);
 }
 
+/* ═══ Base styles ═══ */
+
 html,
 body {
   font-family: var(--text--font-family-base);
@@ -88,7 +162,7 @@ body {
     color 0.3s ease;
 }
 
-/* Dark mode overrides */
+/* Dark mode — project token overrides */
 .dark {
   --color-light: #000000;
   --color-dark: #f0f0f0;
@@ -103,112 +177,12 @@ body {
   color: #e5e7eb;
 }
 
-.dark .bg-white {
-  background-color: #031842;
-}
-
-.dark .bg-light {
-  background-color: #000000;
-}
-
-.dark .text-oxford {
-  color: #a8c4e6;
-}
-
-.dark .text-dark {
-  color: #e5e7eb;
-}
-
-.dark .text-gray-2 {
-  color: #9ca3af;
-}
-
-.dark .text-gray-3 {
-  color: #d1d5db;
-}
-
-.dark .border-gray-100 {
-  border-color: #143a7a;
-}
-
-.dark .bg-gray-50,
-.dark .bg-gray-100 {
-  background-color: #031842;
-}
-
-.dark .shadow,
-.dark .shadow-sm,
-.dark .shadow-lg {
-  --tw-shadow-color: rgba(0, 0, 0, 0.3);
-}
-
-.dark .bg-iceblue {
-  background-color: #0a1628;
-}
-
-.dark .text-iceblue {
-  color: #7cc4ed;
-}
-
-.dark .bg-oxford {
-  background-color: #000000;
-}
-
-.dark input,
-.dark textarea,
-.dark select {
-  background-color: #031842;
-  border-color: #143a7a;
-  color: #e5e7eb;
-}
-
-.dark input:focus,
-.dark textarea:focus {
-  background-color: #0a2558;
-  border-color: #0098da;
-}
-
-.dark .input-field {
-  background-color: #031842;
-  border-color: #143a7a;
-  color: #9ca3af;
-}
-
-.dark .input-field:focus-visible {
-  background-color: #0a2558;
-  color: #e5e7eb;
-}
-
-/* Make devign buttons pill-shaped in /new dark pages */
-.dark button[class*="rounded-xl"] {
-  border-radius: 9999px;
-}
-
-.dark .bg-linear-to-br {
-  background-image: none;
-  background-color: #000000;
-}
-
-/* Dark scrollbar */
-.dark ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background-color: #143a7a;
-}
-
-/* Keep header backdrop in dark mode */
 .dark nav.sticky {
   background-color: rgba(0, 0, 0, 0.85);
 }
 
-/* Link defaults: let components decide color (use inherit) */
-/* a, a:visited {
-  color: inherit; */
-/* } */
+/* ═══ Scrollbar ═══ */
 
-/* SCROLL BAR */
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -224,9 +198,14 @@ body {
   background-color: #fff;
 }
 
-/* SCROLL BAR ENDS*/
+.dark ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+}
 
-/* Hide scrollbar for horizontal swipe strips */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #143a7a;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -234,6 +213,9 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* ═══ Custom components ═══ */
+
 @layer components {
   .btn-sec {
     @apply relative inline-flex items-center justify-start overflow-hidden rounded-md px-6 py-3 font-medium text-[var(--color-dark)] bg-transparent cursor-pointer;
@@ -286,82 +268,10 @@ body {
   .btn-sec:hover .arrow {
     transform: translateX(4px);
   }
-
-  /* ═══ /new Button System ═══ */
-
-  /* 4. Disabled — muted, non-interactive */
-  .btn-disabled {
-    @apply inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full
-           bg-white/[0.06] text-white/25 border border-white/[0.06]
-           cursor-not-allowed select-none;
-  }
-  .btn-disabled:hover {
-    /* no hover effect */
-    background-color: rgba(255, 255, 255, 0.06);
-  }
-
-  /* 5. Error / Destructive — red glow */
-  .btn-error {
-    @apply relative inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full
-           bg-red-500 text-white overflow-hidden
-           transition-all duration-300;
-    box-shadow: 0 2px 20px rgba(239, 68, 68, 0.25);
-  }
-  .btn-error:hover {
-    box-shadow: 0 4px 30px rgba(239, 68, 68, 0.4);
-  }
-  .btn-error::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s cubic-bezier(0.22, 0.6, 0.36, 1);
-  }
-  .btn-error:hover::after {
-    transform: scaleX(1);
-  }
-  .btn-error > * {
-    position: relative;
-    z-index: 1;
-  }
 }
 
-/* input field */
+/* ═══ Ripple effect ═══ */
 
-.input-field {
-  border-radius: 4px;
-
-  padding: 10px 30px;
-
-  font-weight: 400;
-
-  height: 47px;
-
-  border: 1.167px solid var(--color-gray-1);
-
-  width: 100%;
-
-  color: var(--color-gray-1);
-}
-
-.input-field:focus-visible {
-  background-color: var(--color-iceblue);
-
-  color: var(--color-oxford);
-
-  border: none;
-
-  outline-color: var(--color-dark);
-}
-
-/* Ripple Effect Styles */
 .ripple-container {
   position: relative;
   overflow: hidden;
@@ -386,86 +296,41 @@ body {
   }
 }
 
-/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .ripple-effect {
     animation-duration: 0.01ms !important;
   }
 }
 
-/* ═══ Orbital Background Keyframes ═══ */
+/* ═══ Orbital background keyframes ═══ */
+
 @keyframes orbit1 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(60px, -40px) scale(1.05);
-  }
-  50% {
-    transform: translate(-30px, 50px) scale(0.95);
-  }
-  75% {
-    transform: translate(-60px, -20px) scale(1.02);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, -40px) scale(1.05); }
+  50% { transform: translate(-30px, 50px) scale(0.95); }
+  75% { transform: translate(-60px, -20px) scale(1.02); }
 }
 @keyframes orbit2 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(-50px, 30px) scale(0.97);
-  }
-  50% {
-    transform: translate(40px, -60px) scale(1.04);
-  }
-  75% {
-    transform: translate(20px, 40px) scale(0.98);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-50px, 30px) scale(0.97); }
+  50% { transform: translate(40px, -60px) scale(1.04); }
+  75% { transform: translate(20px, 40px) scale(0.98); }
 }
 @keyframes orbit3 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(70px, 30px) scale(1.03);
-  }
-  66% {
-    transform: translate(-40px, -50px) scale(0.96);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(70px, 30px) scale(1.03); }
+  66% { transform: translate(-40px, -50px) scale(0.96); }
 }
 @keyframes orbit4 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  20% {
-    transform: translate(-30px, -60px) scale(1.06);
-  }
-  40% {
-    transform: translate(50px, 20px) scale(0.94);
-  }
-  60% {
-    transform: translate(-20px, 40px) scale(1.02);
-  }
-  80% {
-    transform: translate(40px, -30px) scale(0.98);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  20% { transform: translate(-30px, -60px) scale(1.06); }
+  40% { transform: translate(50px, 20px) scale(0.94); }
+  60% { transform: translate(-20px, 40px) scale(1.02); }
+  80% { transform: translate(40px, -30px) scale(0.98); }
 }
 @keyframes orbit5 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(40px, 50px) scale(0.97);
-  }
-  50% {
-    transform: translate(-60px, -20px) scale(1.05);
-  }
-  75% {
-    transform: translate(30px, -40px) scale(1.01);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, 50px) scale(0.97); }
+  50% { transform: translate(-60px, -20px) scale(1.05); }
+  75% { transform: translate(30px, -40px) scale(1.01); }
 }

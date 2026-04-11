@@ -90,7 +90,7 @@ export const emailTemplates = {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style>
             body { 
-              font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+              font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
               line-height: 1.6;
               color: #333;
               margin: 0;
@@ -217,7 +217,7 @@ export const emailTemplates = {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style>
             body { 
-              font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+              font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
               line-height: 1.6;
               color: #333;
               margin: 0;
@@ -332,7 +332,7 @@ export const emailTemplates = {
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: 'Epilogue', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+            body { font-family: 'Urbanist', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { background: linear-gradient(135deg, #0098da, #f58634); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { background: white; padding: 30px; border: 1px solid #e5e5e5; }
@@ -392,7 +392,7 @@ export const emailTemplates = {
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: 'Epilogue', Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: 'Urbanist', Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; background: white; }
             .header { background: #0098da; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { padding: 30px; border: 1px solid #e5e5e5; border-top: none; }
@@ -435,7 +435,7 @@ export const emailTemplates = {
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: 'Epilogue', Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: 'Urbanist', Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; background: white; }
             .header { background: #0098da; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { padding: 30px; border: 1px solid #e5e5e5; border-top: none; }

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Tag, Check, AlertCircle, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
+import { Tag, Check, AlertCircle, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
+import { Dialog, DialogContent } from "devign";
 import { validateCoupon, useCoupon } from "../../lib/coupons";
 import { initializePayment, generateReference, formatAmount } from "../../utils/paystack";
 import type { CouponValidationResult } from "../../types/checkout";
@@ -115,13 +116,6 @@ const CheckoutModal: React.FC<CheckoutConfig> = ({
   const selectedPlan = installmentPlans.find((p) => p.months === installmentMonths) || installmentPlans[0];
   const payNowAmount = selectedPlan.perMonth;
 
-  // Lock body scroll
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
 
   // Validate coupon
   const handleValidateCoupon = useCallback(async () => {
@@ -218,35 +212,14 @@ const CheckoutModal: React.FC<CheckoutConfig> = ({
   // ── Render ──────────────────────────────────────────────
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-      {/* Backdrop */}
-      <motion.div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={processing ? undefined : onClose}
-      />
-
-      {/* Modal */}
-      <motion.div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto"
-        initial={{ scale: 0.95, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.95, opacity: 0, y: 20 }}
-        transition={{ type: "spring", duration: 0.4 }}
-      >
+    <Dialog open={true} onOpenChange={(v) => { if (!v && !processing) onClose(); }}>
+      <DialogContent className="sm:!max-w-lg !max-h-[90vh] !overflow-y-auto !p-0">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div>
             <h2 className="text-lg font-bold text-gray-900">Checkout</h2>
             <p className="text-sm text-gray-500 truncate max-w-[280px]">{item.name}</p>
           </div>
-          {!processing && (
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-              <X size={20} className="text-gray-500" />
-            </button>
-          )}
         </div>
 
         {/* Step indicator */}
@@ -539,8 +512,8 @@ const CheckoutModal: React.FC<CheckoutConfig> = ({
             )}
           </div>
         )}
-      </motion.div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

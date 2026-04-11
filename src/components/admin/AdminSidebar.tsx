@@ -50,12 +50,19 @@ const sections: NavSection[] = [
     ],
   },
   {
+    label: "DevignFX",
+    items: [
+      { name: "Licenses", path: "/admin/devignfx", module: "devignfx" },
+      { name: "Transactions", path: "/admin/devignfx/transactions", module: "devignfx" },
+      { name: "Coupons", path: "/admin/devignfx/coupons", module: "devignfx" },
+    ],
+  },
+  {
     label: "Management",
     items: [
       { name: "Invoices", path: "/admin/invoices", module: "invoices" },
       { name: "Transactions", path: "/admin/transactions", module: "transactions" },
       { name: "Job Postings", path: "/admin/jobs", module: "jobs" },
-      { name: "DevignFX", path: "/admin/devignfx", module: "devignfx" },
       { name: "Settings", path: "/admin/settings", module: "settings" },
     ],
   },
@@ -105,9 +112,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
         {sections.map((section) => {
           const visible = section.items.filter((i) => canView(i.module));
           if (visible.length === 0) return null;
+          const isDevignFX = section.label === "DevignFX";
           return (
             <div key={section.label}>
-              <p className="text-white/20 text-[10px] uppercase tracking-[0.15em] font-semibold px-3 mb-1">
+              <p className={`text-[10px] uppercase tracking-[0.15em] font-semibold px-3 mb-1 ${
+                isDevignFX ? "text-emerald-500/50" : "text-white/20"
+              }`}>
                 {section.label}
               </p>
               <div className="space-y-0.5">
@@ -115,11 +125,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
                   <NavLink
                     key={item.path}
                     to={item.path}
+                    end={item.path === "/admin/devignfx"}
                     onClick={onClose}
                     className={({ isActive }) =>
                       `block px-3 py-2 rounded-lg text-[13px] transition-colors ${
                         isActive
-                          ? "bg-[#0098da]/10 text-[#0098da] font-medium"
+                          ? isDevignFX
+                            ? "bg-emerald-500/10 text-emerald-400 font-medium"
+                            : "bg-[#0098da]/10 text-[#0098da] font-medium"
                           : "text-white/50 hover:text-white/80 hover:bg-white/5"
                       }`
                     }

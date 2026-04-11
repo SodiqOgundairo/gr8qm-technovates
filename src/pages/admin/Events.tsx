@@ -20,6 +20,7 @@ import {
   getEventRegistrations,
   deleteRegistration,
 } from "../../lib/events";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "devign";
 
 type Filter = "all" | EventStatus;
 
@@ -332,14 +333,14 @@ const EventFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">{e ? "Edit" : "Create"} Event</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">&times;</button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-2xl !max-h-[85vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">{e ? "Edit" : "Create"} Event</DialogTitle>
+          <DialogDescription className="text-gray-400">Fill in the event details below.</DialogDescription>
+        </DialogHeader>
 
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           <Field label="Title *">
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} placeholder="Event title" />
           </Field>
@@ -418,7 +419,7 @@ const EventFormModal: React.FC<{
           )}
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter>
           <button onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white text-sm">Cancel</button>
           <button
             onClick={handleSave}
@@ -427,9 +428,9 @@ const EventFormModal: React.FC<{
           >
             {saving ? "Saving..." : e ? "Update Event" : "Create Event"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -475,24 +476,22 @@ const AttendeesModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <div>
-            <h2 className="text-lg font-bold text-white">Attendees</h2>
-            <p className="text-gray-500 text-xs mt-0.5">{event.title} — {regs.length} registered</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {regs.length > 0 && (
-              <button onClick={handleExportCsv} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-300 rounded text-xs transition-colors">
-                Export CSV
-              </button>
-            )}
-            <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">&times;</button>
-          </div>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-2xl !max-h-[80vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">Attendees</DialogTitle>
+          <DialogDescription className="text-gray-400">{event.title} — {regs.length} registered</DialogDescription>
+        </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto p-5">
+        {regs.length > 0 && (
+          <div className="flex justify-end">
+            <button onClick={handleExportCsv} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-300 rounded text-xs transition-colors">
+              Export CSV
+            </button>
+          </div>
+        )}
+
+        <div>
           {loading ? (
             <div className="text-center py-10">
               <div className="animate-spin w-6 h-6 border-2 border-skyblue border-t-transparent rounded-full mx-auto" />
@@ -523,8 +522,8 @@ const AttendeesModal: React.FC<{
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

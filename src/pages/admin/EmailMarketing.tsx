@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "devign";
 import AdminLayout from "../../components/admin/AdminLayout";
 import type {
   EmailTemplate,
@@ -392,19 +393,13 @@ const NewCampaignModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">New Campaign</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl"
-          >
-            &times;
-          </button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-2xl !max-h-[85vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">New Campaign</DialogTitle>
+        </DialogHeader>
 
-        <div className="p-5 space-y-5">
+        <div className="space-y-5">
           {/* Template selection */}
           {templates.length > 0 && (
             <div>
@@ -564,7 +559,7 @@ const NewCampaignModal: React.FC<{
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter>
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors"
@@ -585,9 +580,9 @@ const NewCampaignModal: React.FC<{
           >
             {saving ? "Sending..." : "Send Now"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -969,21 +964,16 @@ const ContactFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">
-            {contact ? "Edit Contact" : "Add Contact"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl"
-          >
-            &times;
-          </button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-white">{contact ? "Edit Contact" : "Add Contact"}</DialogTitle>
+          <DialogDescription className="text-gray-400">
+            {contact ? "Update the contact details." : "Add a new contact to the list."}
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -1055,7 +1045,7 @@ const ContactFormModal: React.FC<{
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter className="flex justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors"
@@ -1069,9 +1059,9 @@ const ContactFormModal: React.FC<{
           >
             {saving ? "Saving..." : contact ? "Update" : "Add Contact"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -1237,21 +1227,16 @@ const TemplateEditorModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-oxford-card border border-oxford-border rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-oxford-border">
-          <h2 className="text-lg font-bold text-white">
-            {template ? "Edit Template" : "New Template"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl"
-          >
-            &times;
-          </button>
-        </div>
+    <Dialog open={true} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="!bg-gradient-to-br !from-[#0f1729] !via-[#111d35] !to-[#0f1729] !border-white/[0.08] !text-white sm:!max-w-2xl !max-h-[90vh] !overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-white">{template ? "Edit Template" : "New Template"}</DialogTitle>
+          <DialogDescription className="text-gray-400">
+            {template ? "Update your email template." : "Create a new email template."}
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="p-5 space-y-4">
+        <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -1332,7 +1317,7 @@ const TemplateEditorModal: React.FC<{
           )}
         </div>
 
-        <div className="flex justify-end gap-3 p-5 border-t border-oxford-border">
+        <DialogFooter className="flex justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors"
@@ -1346,9 +1331,9 @@ const TemplateEditorModal: React.FC<{
           >
             {saving ? "Saving..." : template ? "Update" : "Create Template"}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

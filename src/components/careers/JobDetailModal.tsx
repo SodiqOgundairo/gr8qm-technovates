@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
-import { motion, AnimatePresence } from "framer-motion";
+import { Dialog, DialogContent } from "devign";
 import {
-  HiX,
   HiLocationMarker,
   HiBriefcase,
   HiClock,
@@ -291,216 +290,184 @@ const JobDetailModal: React.FC<JobDetailModalProps> = ({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-          />
-
-          {/* Modal */}
-          <div className="flex min-h-screen items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-            >
-              {/* Close Button */}
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors"
+    <Dialog open={isOpen} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent className="sm:!max-w-4xl !max-h-[90vh] !overflow-y-auto !p-0">
+        {submitted ? (
+          /* Success Message */
+          <div className="p-12 text-center">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <HiX className="h-6 w-6 text-gray-600" />
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-oxford mb-4">
+              Application Submitted!
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Thank you for applying to {job.title}. We'll review your
+              application and get back to you soon.
+            </p>
+            <button
+              onClick={onClose}
+              className="px-6 py-3 bg-skyblue text-white rounded-lg font-medium hover:bg-oxford transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Job Details */}
+            <div className="p-8 border-b border-gray-200">
+              <h2 className="text-4xl font-bold text-oxford mb-4">
+                {job.title}
+              </h2>
 
-              {/* Content */}
-              <div className="overflow-y-auto max-h-[90vh]">
-                {submitted ? (
-                  /* Success Message */
-                  <div className="p-12 text-center">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <svg
-                        className="w-10 h-10 text-green-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
-                    <h2 className="text-3xl font-bold text-oxford mb-4">
-                      Application Submitted!
-                    </h2>
-                    <p className="text-gray-600 mb-8">
-                      Thank you for applying to {job.title}. We'll review your
-                      application and get back to you soon.
-                    </p>
-                    <button
-                      onClick={onClose}
-                      className="px-6 py-3 bg-skyblue text-white rounded-lg font-medium hover:bg-oxford transition-colors"
-                    >
-                      Close
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Job Details */}
-                    <div className="p-8 border-b border-gray-200">
-                      <h2 className="text-4xl font-bold text-oxford mb-4">
-                        {job.title}
-                      </h2>
-
-                      <div className="flex flex-wrap gap-4 mb-6">
-                        {job.department && (
-                          <span className="px-4 py-2 bg-skyblue/10 text-skyblue rounded-lg font-medium">
-                            {job.department}
-                          </span>
-                        )}
-                        {job.employment_type && (
-                          <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg font-medium">
-                            {job.employment_type
-                              .split("-")
-                              .map(
-                                (word) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1),
-                              )
-                              .join(" ")}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-4 text-gray-600">
-                        {job.location && (
-                          <div className="flex items-center gap-2">
-                            <HiLocationMarker className="text-skyblue text-xl" />
-                            <span>{job.location}</span>
-                          </div>
-                        )}
-                        {job.salary_range && (
-                          <div className="flex items-center gap-2">
-                            <HiCurrencyDollar className="text-skyblue text-xl" />
-                            <span>{job.salary_range}</span>
-                          </div>
-                        )}
-                        {job.posted_date && (
-                          <div className="flex items-center gap-2">
-                            <HiClock className="text-skyblue text-xl" />
-                            <span>
-                              Posted{" "}
-                              {new Date(job.posted_date).toLocaleDateString()}
-                            </span>
-                          </div>
-                        )}
-                        {job.closing_date && (
-                          <div className="flex items-center gap-2">
-                            <HiBriefcase className="text-skyblue text-xl" />
-                            <span>
-                              Closes{" "}
-                              {new Date(job.closing_date).toLocaleDateString()}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {!showForm ? (
-                      <div className="p-8 space-y-6">
-                        {/* Description */}
-                        <div>
-                          <h3 className="text-2xl font-bold text-oxford mb-3">
-                            About the Role
-                          </h3>
-                          <p className="text-gray-700 whitespace-pre-line">
-                            {job.description}
-                          </p>
-                        </div>
-
-                        {/* Requirements */}
-                        {job.requirements && (
-                          <div>
-                            <h3 className="text-2xl font-bold text-oxford mb-3">
-                              Requirements
-                            </h3>
-                            <p className="text-gray-700 whitespace-pre-line">
-                              {job.requirements}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Responsibilities */}
-                        {job.responsibilities && (
-                          <div>
-                            <h3 className="text-2xl font-bold text-oxford mb-3">
-                              Responsibilities
-                            </h3>
-                            <p className="text-gray-700 whitespace-pre-line">
-                              {job.responsibilities}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Apply Button */}
-                        <div className="pt-6">
-                          <button
-                            onClick={() => setShowForm(true)}
-                            className="w-full py-4 bg-gradient-to-r from-skyblue to-oxford text-white text-lg font-bold rounded-lg hover:shadow-xl transition-all transform hover:scale-[1.02]"
-                          >
-                            Apply for this Position
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      /* Application Form */
-                      <div className="p-8">
-                        <div className="mb-6">
-                          <button
-                            onClick={() => setShowForm(false)}
-                            className="text-skyblue hover:text-oxford font-medium"
-                          >
-                            ← Back to Job Details
-                          </button>
-                        </div>
-
-                        <h3 className="text-2xl font-bold text-oxford mb-6">
-                          Application Form
-                        </h3>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                          {fields.map((field) => renderField(field))}
-
-                          <div className="pt-6">
-                            <button
-                              type="submit"
-                              disabled={submitting}
-                              className="w-full py-4 bg-gradient-to-r from-skyblue to-oxford text-white text-lg font-bold rounded-lg hover:shadow-xl transition-all disabled:opacity-50"
-                            >
-                              {submitting
-                                ? "Submitting..."
-                                : "Submit Application"}
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    )}
-                  </>
+              <div className="flex flex-wrap gap-4 mb-6">
+                {job.department && (
+                  <span className="px-4 py-2 bg-skyblue/10 text-skyblue rounded-lg font-medium">
+                    {job.department}
+                  </span>
+                )}
+                {job.employment_type && (
+                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg font-medium">
+                    {job.employment_type
+                      .split("-")
+                      .map(
+                        (word) =>
+                          word.charAt(0).toUpperCase() + word.slice(1),
+                      )
+                      .join(" ")}
+                  </span>
                 )}
               </div>
-            </motion.div>
-          </div>
-        </div>
-      )}
-    </AnimatePresence>
+
+              <div className="grid md:grid-cols-2 gap-4 text-gray-600">
+                {job.location && (
+                  <div className="flex items-center gap-2">
+                    <HiLocationMarker className="text-skyblue text-xl" />
+                    <span>{job.location}</span>
+                  </div>
+                )}
+                {job.salary_range && (
+                  <div className="flex items-center gap-2">
+                    <HiCurrencyDollar className="text-skyblue text-xl" />
+                    <span>{job.salary_range}</span>
+                  </div>
+                )}
+                {job.posted_date && (
+                  <div className="flex items-center gap-2">
+                    <HiClock className="text-skyblue text-xl" />
+                    <span>
+                      Posted{" "}
+                      {new Date(job.posted_date).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+                {job.closing_date && (
+                  <div className="flex items-center gap-2">
+                    <HiBriefcase className="text-skyblue text-xl" />
+                    <span>
+                      Closes{" "}
+                      {new Date(job.closing_date).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {!showForm ? (
+              <div className="p-8 space-y-6">
+                {/* Description */}
+                <div>
+                  <h3 className="text-2xl font-bold text-oxford mb-3">
+                    About the Role
+                  </h3>
+                  <p className="text-gray-700 whitespace-pre-line">
+                    {job.description}
+                  </p>
+                </div>
+
+                {/* Requirements */}
+                {job.requirements && (
+                  <div>
+                    <h3 className="text-2xl font-bold text-oxford mb-3">
+                      Requirements
+                    </h3>
+                    <p className="text-gray-700 whitespace-pre-line">
+                      {job.requirements}
+                    </p>
+                  </div>
+                )}
+
+                {/* Responsibilities */}
+                {job.responsibilities && (
+                  <div>
+                    <h3 className="text-2xl font-bold text-oxford mb-3">
+                      Responsibilities
+                    </h3>
+                    <p className="text-gray-700 whitespace-pre-line">
+                      {job.responsibilities}
+                    </p>
+                  </div>
+                )}
+
+                {/* Apply Button */}
+                <div className="pt-6">
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="w-full py-4 bg-gradient-to-r from-skyblue to-oxford text-white text-lg font-bold rounded-lg hover:shadow-xl transition-all transform hover:scale-[1.02]"
+                  >
+                    Apply for this Position
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* Application Form */
+              <div className="p-8">
+                <div className="mb-6">
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="text-skyblue hover:text-oxford font-medium"
+                  >
+                    ← Back to Job Details
+                  </button>
+                </div>
+
+                <h3 className="text-2xl font-bold text-oxford mb-6">
+                  Application Form
+                </h3>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {fields.map((field) => renderField(field))}
+
+                  <div className="pt-6">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full py-4 bg-gradient-to-r from-skyblue to-oxford text-white text-lg font-bold rounded-lg hover:shadow-xl transition-all disabled:opacity-50"
+                    >
+                      {submitting
+                        ? "Submitting..."
+                        : "Submit Application"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

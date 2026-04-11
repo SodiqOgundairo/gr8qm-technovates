@@ -67,6 +67,8 @@ import AdminCertificates from "./pages/admin/Certificates";
 import AdminEvents from "./pages/admin/Events";
 import AdminSettings from "./pages/admin/Settings";
 import AdminDevignFX from "./pages/admin/DevignFX";
+import AdminDevignFXTransactions from "./pages/admin/devignfx/Transactions";
+import AdminDevignFXCoupons from "./pages/admin/devignfx/Coupons";
 import AdminGlossary from "./pages/admin/Glossary";
 import CertificateDesigner from "./pages/admin/CertificateDesigner";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -74,7 +76,6 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PayInvoice from "./pages/PayInvoice";
 import Unsubscribe from "./pages/Unsubscribe";
 import AlumniPage from "./pages/Alumni";
-import CertificateVerify from "./pages/CertificateVerify";
 import EventsPage from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import Glossary from "./pages/Glossary";
@@ -106,12 +107,14 @@ function App() {
     );
   }
 
+  const isDevignFXPath = window.location.pathname === "/devignfx";
+
   return (
     <Router>
       <ScrollToTop />
       <PageTracker />
-      <CursorTrail />
-      <ChatWidget />
+      {!isDevignFXPath && <CursorTrail />}
+      {!isDevignFXPath && <ChatWidget />}
       <Routes>
         {/* ═══ OLD DESIGN ROUTES ═══ */}
         <Route
@@ -143,6 +146,7 @@ function App() {
 
         {/* Standalone Pages */}
         <Route path="/cohort4" element={<Cohort4 />} />
+        <Route path="/devignfx" element={<DevignFXPage />} />
 
         {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -202,6 +206,8 @@ function App() {
                   element={<CertificateDesigner />}
                 />
                 <Route path="devignfx" element={<AdminDevignFX />} />
+                <Route path="devignfx/transactions" element={<AdminDevignFXTransactions />} />
+                <Route path="devignfx/coupons" element={<AdminDevignFXCoupons />} />
                 <Route path="glossary" element={<AdminGlossary />} />
                 <Route path="settings" element={<AdminSettings />} />
                 {/* Future admin routes go here */}
@@ -241,11 +247,10 @@ function App() {
                 <Route path="/events/:slug" element={<EventDetail />} />
                 <Route path="/alumni" element={<AlumniPage />} />
                 <Route path="/glossary" element={<Glossary />} />
-                <Route path="/verify" element={<CertificateVerify />} />
-                <Route path="/verify/:certNumber" element={<CertificateVerify />} />
+                <Route path="/verify" element={<Navigate to="/alumni" replace />} />
+                <Route path="/verify/:certNumber" element={<Navigate to="/alumni" replace />} />
                 <Route path="/forms/:shortCode" element={<PublicForm />} />
                 <Route path="/forms/:shortCode/success" element={<FormSuccess />} />
-                <Route path="/devignfx" element={<DevignFXPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </DarkLayout>

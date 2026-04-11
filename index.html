@@ -132,6 +132,16 @@
 
     <!-- Paystack Inline Script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <!-- DevignFX subdomain overrides -->
+    <script>
+      if (window.location.hostname === 'devignfx.gr8qm.com' || window.location.pathname === '/devignfx') {
+        document.title = 'DevignFX — Automated Forex Trading Bot';
+        document.querySelector('link[rel="icon"]').href = '/assets/devignfx-logo.svg';
+        document.querySelector('link[rel="apple-touch-icon"]').href = '/assets/devignfx-logo.svg';
+        document.querySelector('meta[name="theme-color"]').content = '#10B981';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -67,7 +67,7 @@ export const starterTemplates: Omit<EmailTemplate, "id" | "created_at" | "update
     subject: "Welcome to GR8QM Technovates!",
     preview_text: "We're excited to have you on board",
     category: "general",
-    html: `<div style="font-family:'Epilogue',Arial,sans-serif;max-width:600px;margin:0 auto;">
+    html: `<div style="font-family:'Urbanist',Arial,sans-serif;max-width:600px;margin:0 auto;">
   <div style="background:linear-gradient(135deg,#0098da,#f58634);padding:40px 20px;text-align:center;color:#fff;border-radius:8px 8px 0 0;">
     <h1 style="margin:0;font-size:28px;">Welcome to GR8QM!</h1>
   </div>
@@ -93,7 +93,7 @@ export const starterTemplates: Omit<EmailTemplate, "id" | "created_at" | "update
     subject: "Your training starts soon!",
     preview_text: "Don't miss your upcoming class",
     category: "training",
-    html: `<div style="font-family:'Epilogue',Arial,sans-serif;max-width:600px;margin:0 auto;">
+    html: `<div style="font-family:'Urbanist',Arial,sans-serif;max-width:600px;margin:0 auto;">
   <div style="background:#0098da;padding:40px 20px;text-align:center;color:#fff;border-radius:8px 8px 0 0;">
     <h1 style="margin:0;font-size:28px;">Training Reminder</h1>
   </div>
@@ -118,7 +118,7 @@ export const starterTemplates: Omit<EmailTemplate, "id" | "created_at" | "update
     subject: "What's New at GR8QM",
     preview_text: "Monthly updates from the team",
     category: "general",
-    html: `<div style="font-family:'Epilogue',Arial,sans-serif;max-width:600px;margin:0 auto;">
+    html: `<div style="font-family:'Urbanist',Arial,sans-serif;max-width:600px;margin:0 auto;">
   <div style="background:linear-gradient(135deg,#05235a,#0098da);padding:40px 20px;text-align:center;color:#fff;border-radius:8px 8px 0 0;">
     <h1 style="margin:0;font-size:28px;">GR8QM Newsletter</h1>
     <p style="margin:10px 0 0;opacity:0.9;">Monthly updates &middot; {{month}} Edition</p>

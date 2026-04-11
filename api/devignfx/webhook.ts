@@ -1,9 +1,8 @@
 /**
- * DevignFX Paystack Webhook — auto-provisions licenses on payment.
+ * DevignFX payment handler — called by the central Paystack webhook router.
  *
- * POST /api/devignfx/webhook
- *
- * Flow: Paystack payment success → webhook fires → license created → email sent
+ * Also still works as a standalone endpoint at POST /api/devignfx/webhook
+ * (verifies signature itself when called directly).
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
@@ -22,9 +21,9 @@ const ADMIN_TG_CHAT = process.env.ADMIN_TG_CHAT || "";
 const TIER_CONFIG: Record<string, {
   max_days: number | null;
   max_profit_pct: number | null;
-  expires_days: number | null; // days from now
+  expires_days: number | null;
 }> = {
-  standard: { max_days: 30, max_profit_pct: null, expires_days: 30 },
+  standard: { max_days: 30, max_profit_pct: null, expires_days: 30 }, // ₦20,000
   premium: { max_days: 90, max_profit_pct: null, expires_days: 90 },
   enterprise: { max_days: null, max_profit_pct: null, expires_days: 365 },
 };
@@ -49,60 +48,33 @@ async function notifyAdmin(message: string) {
 function addDays(days: number): string {
   const d = new Date();
   d.setDate(d.getDate() + days);
-  return d.toISOString().split("T")[0]; // YYYY-MM-DD
+  return d.toISOString().split("T")[0];
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  // Verify Paystack signature
-  if (PAYSTACK_SECRET) {
-    const hash = crypto
-      .createHmac("sha512", PAYSTACK_SECRET)
-      .update(JSON.stringify(req.body))
-      .digest("hex");
-
-    if (hash !== req.headers["x-paystack-signature"]) {
-      return res.status(401).json({ error: "Invalid signature" });
-    }
-  }
-
-  const { event, data } = req.body || {};
-
-  // Only handle successful charges
-  if (event !== "charge.success") {
-    return res.status(200).json({ message: "Event ignored" });
-  }
-
+/**
+ * Core DevignFX payment handler.
+ * Called by the central router (signature already verified) or directly.
+ */
+export async function handleDevignFXPayment(
+  data: Record<string, any>,
+  res: VercelResponse
+) {
   const metadata = data?.metadata || {};
-
-  // Only handle devignfx payments
-  if (metadata.type !== "devignfx") {
-    return res.status(200).json({ message: "Not a DevignFX payment" });
-  }
-
   const email = data?.customer?.email || metadata.email || "";
   const name = metadata.customer_name || email.split("@")[0] || "";
   const tier = metadata.tier || "standard";
   const reference = data?.reference || "";
-  const amount = (data?.amount || 0) / 100; // Paystack sends in kobo
+  const amount = (data?.amount || 0) / 100;
   const couponCode = metadata.coupon_code || null;
 
   try {
-    // Generate license key
     const { data: keyData, error: keyError } = await supabase.rpc("generate_devignfx_key");
     if (keyError) throw keyError;
     const licenseKey = keyData as string;
 
-    // Get tier config
     const config = TIER_CONFIG[tier] || TIER_CONFIG.standard;
-
-    // Calculate expiry
     const expires = config.expires_days ? addDays(config.expires_days) : null;
 
-    // Create the license
     const { error: insertError } = await supabase
       .from("devignfx_licenses")
       .insert({
@@ -121,18 +93,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (insertError) throw insertError;
 
-    // Log the activation
     await supabase.from("devignfx_activation_log").insert({
       license_key: licenseKey,
       event: "purchase",
-      details: {
-        email,
-        name,
-        tier,
-        amount,
-        reference,
-        coupon_code: couponCode,
-      },
+      details: { email, name, tier, amount, reference, coupon_code: couponCode },
     });
 
     // Send license delivery email
@@ -153,7 +117,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }),
     });
 
-    // Notify admin
     await notifyAdmin(
       `<b>NEW SALE</b>\n` +
       `Key: <code>${licenseKey}</code>\n` +
@@ -178,6 +141,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
     return res.status(500).json({ error: "Failed to provision license" });
   }
+}
+
+/**
+ * Standalone Vercel handler — verifies signature + dispatches.
+ * Kept so /api/devignfx/webhook still works independently.
+ */
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  if (PAYSTACK_SECRET) {
+    const hash = crypto
+      .createHmac("sha512", PAYSTACK_SECRET)
+      .update(JSON.stringify(req.body))
+      .digest("hex");
+
+    if (hash !== req.headers["x-paystack-signature"]) {
+      return res.status(401).json({ error: "Invalid signature" });
+    }
+  }
+
+  const { event, data } = req.body || {};
+  if (event !== "charge.success") {
+    return res.status(200).json({ message: "Event ignored" });
+  }
+
+  if (data?.metadata?.type !== "devignfx") {
+    return res.status(200).json({ message: "Not a DevignFX payment" });
+  }
+
+  return handleDevignFXPayment(data, res);
 }
 
 function buildLicenseEmail(

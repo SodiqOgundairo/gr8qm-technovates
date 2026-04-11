@@ -17,13 +17,12 @@ const navLinks = [
   },
   { label: "Portfolio", path: "/portfolio" },
   { label: "Blog", path: "/blog" },
-  { label: "Events", path: "/events" },
+  { label: "Alumni", path: "/alumni" },
   {
     label: "Resources",
     children: [
+      { label: "Events", path: "/events" },
       { label: "Glossary", path: "/glossary" },
-      { label: "Alumni", path: "/alumni" },
-      { label: "Verify Certificate", path: "/verify" },
       { label: "Careers", path: "/careers" },
     ],
   },

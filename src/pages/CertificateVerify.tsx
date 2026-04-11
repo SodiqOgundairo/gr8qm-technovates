@@ -8,7 +8,7 @@ import { generateCertificatePdf } from "../lib/certificatePdf";
 import { SEO } from "../components/common/SEO";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
-import { Button } from "devign";
+import { Button, Input } from "devign";
 
 /* ─── constants ─── */
 const EASE_SMOOTH: [number, number, number, number] = [0.22, 0.6, 0.36, 1];
@@ -109,17 +109,17 @@ const CertificateVerify: React.FC = () => {
               className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-6"
             >
               <div className="flex gap-2">
-                <input
+                <Input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value.toUpperCase())}
                   onKeyDown={(e) => e.key === "Enter" && handleVerify()}
                   placeholder="e.g. GR8QM-2026-0001"
-                  className="flex-1 bg-white/[0.04] border border-white/[0.08] text-white rounded-xl px-4 py-3 text-sm font-mono placeholder:text-white/15 focus:border-skyblue/40 focus:outline-none transition-colors"
+                  className="flex-1 font-mono"
                 />
                 <Button
                   variant="primary"
-                  size="md"
+                  size="default"
                   onClick={() => handleVerify()}
                   disabled={loading || !input.trim()}
                 >
@@ -202,7 +202,7 @@ const CertificateVerify: React.FC = () => {
 
                       <Button
                         variant="primary"
-                        size="md"
+                        size="default"
                         onClick={handleDownload}
                         disabled={generating}
                         className="w-full mt-4"

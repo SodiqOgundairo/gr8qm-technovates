@@ -14,7 +14,7 @@ import {
 import { SEO } from "../components/common/SEO";
 import Container from "../components/layout/Container";
 import PageTransition from "../components/layout/PageTransition";
-import { Button } from "devign";
+import { Button, Input } from "devign";
 import { ArrowLeft } from "lucide-react";
 
 /* ─── constants ─── */
@@ -391,35 +391,32 @@ const EventDetail: React.FC = () => {
                         onSubmit={handleRegister}
                         className="space-y-3"
                       >
-                        <input
+                        <Input
                           type="text"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Your name *"
                           required
-                          className="w-full bg-white/[0.04] border border-white/[0.08] text-white rounded-xl px-4 py-2.5 text-sm placeholder:text-white/20 focus:border-skyblue/40 focus:outline-none transition-colors"
                         />
-                        <input
+                        <Input
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Email address *"
                           required
-                          className="w-full bg-white/[0.04] border border-white/[0.08] text-white rounded-xl px-4 py-2.5 text-sm placeholder:text-white/20 focus:border-skyblue/40 focus:outline-none transition-colors"
                         />
-                        <input
+                        <Input
                           type="tel"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Phone (optional)"
-                          className="w-full bg-white/[0.04] border border-white/[0.08] text-white rounded-xl px-4 py-2.5 text-sm placeholder:text-white/20 focus:border-skyblue/40 focus:outline-none transition-colors"
                         />
                         {regError && (
                           <p className="text-red-400 text-xs">{regError}</p>
                         )}
                         <Button
                           variant="primary"
-                          size="md"
+                          size="default"
                           type="submit"
                           disabled={submitting}
                           className="w-full"
