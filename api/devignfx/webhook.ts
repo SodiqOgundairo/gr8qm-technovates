@@ -45,10 +45,16 @@ async function notifyAdmin(message: string) {
   }
 }
 
+const SITE_URL = process.env.VITE_SITE_URL || "https://devignfx.gr8qm.com";
+
 function addDays(days: number): string {
   const d = new Date();
   d.setDate(d.getDate() + days);
   return d.toISOString().split("T")[0];
+}
+
+function generateDownloadToken(): string {
+  return crypto.randomBytes(32).toString("hex");
 }
 
 /**
@@ -74,6 +80,7 @@ export async function handleDevignFXPayment(
 
     const config = TIER_CONFIG[tier] || TIER_CONFIG.standard;
     const expires = config.expires_days ? addDays(config.expires_days) : null;
+    const downloadToken = generateDownloadToken();
 
     const { error: insertError } = await supabase
       .from("devignfx_licenses")
@@ -89,6 +96,7 @@ export async function handleDevignFXPayment(
         payment_reference: reference,
         amount_paid: amount,
         coupon_code: couponCode,
+        download_token: downloadToken,
       });
 
     if (insertError) throw insertError;
@@ -112,8 +120,8 @@ export async function handleDevignFXPayment(
       body: JSON.stringify({
         to: email,
         subject: `Your DevignFX License Key — ${licenseKey}`,
-        html: buildLicenseEmail(name, licenseKey, tier, expires, amount, reference),
-        text: `DevignFX License Delivery\n\nHi ${name},\n\nYour license key: ${licenseKey}\nTier: ${tier}\n${expires ? `Expires: ${expires}\n` : ""}\nSetup:\n1. Download DevignFXBot from the link provided\n2. Create a .env file with your MT5 credentials\n3. Set LICENSE_KEY=${licenseKey}\n4. Set LICENSE_URL=https://devignfx.gr8qm.com/api/devignfx/licenses?key=${licenseKey}\n5. Run the bot\n\nContact hello@gr8qm.com for help.\n\nDevignFX by GR8QM`,
+        html: buildLicenseEmail(name, licenseKey, tier, expires, amount, reference, downloadToken),
+        text: `DevignFX License Delivery\n\nHi ${name},\n\nYour license key: ${licenseKey}\nTier: ${tier}\n${expires ? `Expires: ${expires}\n` : ""}\nDownload your bot (one-time link): ${SITE_URL}/api/devignfx/download?token=${downloadToken}\n\nSetup:\n1. Download DevignFXBot from the link above\n2. Create a .env file with your MT5 credentials\n3. Set LICENSE_KEY=${licenseKey}\n4. Set LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${licenseKey}\n5. Run the bot\n\nThis download link can only be used once. Contact hello@gr8qm.com if you need a new link.\n\nDevignFX by GR8QM`,
       }),
     });
 
@@ -181,8 +189,10 @@ function buildLicenseEmail(
   tier: string,
   expires: string | null,
   amount: number,
-  reference: string
+  reference: string,
+  downloadToken: string
 ): string {
+  const downloadUrl = `${SITE_URL}/api/devignfx/download?token=${downloadToken}`;
   return `
 <!DOCTYPE html>
 <html>
@@ -238,14 +248,24 @@ function buildLicenseEmail(
         ${expires ? `<div class="info-row"><span class="label">Expires:</span><span class="value">${expires}</span></div>` : ""}
       </div>
 
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${downloadUrl}" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #00c853, #00897b); color: white; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 8px;">
+          Download DevignFXBot
+        </a>
+        <p style="color: #ff9800; font-size: 12px; margin-top: 12px;">
+          ⚠ This download link can only be used <strong>once</strong>. Save the file after downloading.<br>
+          Contact hello@gr8qm.com if you need a new download link.
+        </p>
+      </div>
+
       <div class="setup-box">
         <h3>Quick Setup</h3>
         <ol>
-          <li>Download DevignFXBot from the link provided to you</li>
+          <li>Click the download button above to get DevignFXBot</li>
           <li>Open MetaTrader 5 and log in to your account</li>
           <li>Create a <code>.env</code> file next to the bot with your credentials</li>
           <li>Set <code>LICENSE_KEY=${key}</code></li>
-          <li>Set <code>LICENSE_URL=https://devignfx.gr8qm.com/api/devignfx/licenses?key=${key}</code></li>
+          <li>Set <code>LICENSE_URL=${SITE_URL}/api/devignfx/licenses?key=${key}</code></li>
           <li>Run the bot — it will auto-activate on your machine</li>
         </ol>
       </div>

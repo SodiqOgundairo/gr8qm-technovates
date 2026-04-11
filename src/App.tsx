@@ -81,6 +81,7 @@ import EventsPage from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import Glossary from "./pages/Glossary";
 import DevignFXPage from "./pages/DevignFX";
+import DownloadExpired from "./pages/DownloadExpired";
 import CursorTrail from "./components/animations/CursorTrail";
 
 import ChatWidget from "./components/common/ChatWidget";
@@ -102,6 +103,7 @@ function App() {
         <PageTracker />
         <Routes>
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/download-expired" element={<DownloadExpired />} />
           <Route path="*" element={<DevignFXPage />} />
         </Routes>
       </Router>
@@ -148,6 +150,7 @@ function App() {
         {/* Standalone Pages */}
         <Route path="/cohort4" element={<Cohort4 />} />
         <Route path="/devignfx" element={<DevignFXPage />} />
+        <Route path="/download-expired" element={<DownloadExpired />} />
 
         {/* Admin login – no layout */}
         <Route path="/admin/login" element={<AdminLogin />} />
