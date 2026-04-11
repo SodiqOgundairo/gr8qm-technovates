@@ -10,6 +10,7 @@ export interface PaystackConfig {
   callback_url?: string;
   metadata?: Record<string, any>;
   currency?: string;
+  channels?: Array<"card" | "bank" | "ussd" | "qr" | "mobile_money" | "bank_transfer" | "eft">;
   onClose?: () => void;
 }
 
@@ -49,6 +50,7 @@ export const initializePayment = (config: PaystackConfig): void => {
     amount: config.amount * 100, // Convert to kobo
     currency: config.currency || "NGN",
     ref: config.reference,
+    channels: config.channels || ["card", "bank", "ussd", "bank_transfer"],
     metadata: config.metadata,
     callback: function (response: any) {
       // Read metadata from Paystack response (they return what we sent)
