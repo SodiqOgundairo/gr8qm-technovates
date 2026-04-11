@@ -301,7 +301,14 @@ const UploadModal: React.FC<{
         body: JSON.stringify({ fileName: file.name, tier }),
       });
 
-      const urlData = await urlResp.json();
+      const urlText = await urlResp.text();
+      let urlData: any;
+      try { urlData = JSON.parse(urlText); } catch {
+        setError(`Server error (${urlResp.status}): ${urlText.slice(0, 200)}`);
+        setUploading(false);
+        setProgress("");
+        return;
+      }
       if (!urlResp.ok) {
         setError(urlData.error || "Failed to get upload URL");
         setUploading(false);
@@ -309,17 +316,17 @@ const UploadModal: React.FC<{
         return;
       }
 
-      const { signedUrl, storagePath } = urlData;
+      const { storagePath, token: uploadToken } = urlData;
 
-      // Step 1b: Upload file directly to the signed URL (no size limit, no RLS)
-      const uploadResp = await fetch(signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": "application/zip" },
-        body: file,
-      });
+      // Step 1b: Upload using Supabase's uploadToSignedUrl (bypasses RLS, no size limit)
+      const { error: storageErr } = await supabase.storage
+        .from(BUCKET)
+        .uploadToSignedUrl(storagePath, uploadToken, file, {
+          contentType: "application/zip",
+        });
 
-      if (!uploadResp.ok) {
-        setError(`Storage upload failed: ${uploadResp.status} ${uploadResp.statusText}`);
+      if (storageErr) {
+        setError(`Storage upload failed: ${storageErr.message}`);
         setUploading(false);
         setProgress("");
         return;
