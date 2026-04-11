@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, Shield, Clock, CheckCircle2, Lock, Tag, AlertCircle, ArrowLeft } from "lucide-react";
+import { Download, Shield, Clock, CheckCircle2, Lock, AlertCircle, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { CustomerBuildInfo } from "../types/devignfx";
 
@@ -180,7 +180,6 @@ const DevignFXDownload = () => {
                 <div className="space-y-3">
                   {builds.map((build) => {
                     const style = labelStyles[build.label] || labelStyles.Archived;
-                    const isDisabled = !build.downloadable || build.already_downloaded;
                     const isDownloading = downloading === build.build_id;
 
                     return (
