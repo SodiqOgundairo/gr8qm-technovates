@@ -9,7 +9,7 @@
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import crypto from "crypto";
-import { handleDevignFXPayment } from "./devignfx/webhook";
+import { handleDevignFXPayment } from "./devignfx/webhook.js";
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY || "";
 
