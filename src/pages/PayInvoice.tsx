@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
-import { initializePayment } from "../utils/paystack";
-import { formatAmount } from "../utils/paystack";
+import { initializePayment, formatAmount } from "../utils/paystack";
+import { validateCoupon, useCoupon } from "../lib/coupons";
+import type { CouponValidationResult } from "../types/checkout";
+import { Tag, Check, AlertCircle, Loader2 } from "lucide-react";
 import Button from "../components/common/Button";
 
 interface Invoice {
@@ -24,6 +26,11 @@ export default function PayInvoice() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
+
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [couponResult, setCouponResult] = useState<CouponValidationResult | null>(null);
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   useEffect(() => {
     if (invoiceNumber) {
@@ -60,22 +67,53 @@ export default function PayInvoice() {
     }
   };
 
+  // Coupon helpers
+  const discountAmount = couponResult?.valid ? couponResult.discountAmount || 0 : 0;
+  const finalAmount = invoice ? Math.max(0, invoice.amount - discountAmount) : 0;
+
+  const handleValidateCoupon = useCallback(async () => {
+    if (!couponCode.trim() || !invoice) return;
+    setValidatingCoupon(true);
+    setCouponResult(null);
+    try {
+      const result = await validateCoupon(couponCode.trim(), invoice.amount, "invoices");
+      setCouponResult(result);
+    } catch {
+      setCouponResult({ valid: false, error: "Failed to validate coupon." });
+    } finally {
+      setValidatingCoupon(false);
+    }
+  }, [couponCode, invoice]);
+
+  const removeCoupon = () => {
+    setCouponCode("");
+    setCouponResult(null);
+  };
+
   const handlePayment = async () => {
     if (!invoice) return;
 
     setPaying(true);
     try {
+      // Mark coupon as used before payment
+      if (couponResult?.valid && couponCode.trim()) {
+        await useCoupon(couponCode.trim());
+      }
+
       const reference = `INV-PAY-${invoice.invoice_number}-${Date.now()}`;
 
       await initializePayment({
         email: invoice.client_email,
-        amount: invoice.amount,
+        amount: finalAmount,
         reference,
         metadata: {
           type: "invoice",
           invoice_id: invoice.id,
           invoice_number: invoice.invoice_number,
           client_name: invoice.client_name,
+          original_amount: invoice.amount,
+          discount_amount: discountAmount,
+          coupon_code: couponResult?.valid ? couponCode.trim() : null,
         },
         callback_url: `${window.location.origin}/payment-success?reference=${reference}&type=invoice`,
         onClose: () => {
@@ -184,16 +222,74 @@ export default function PayInvoice() {
               </div>
             )}
 
+            {/* Coupon Code */}
+            {invoice.payment_status !== "paid" && (
+              <div>
+                <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 uppercase mb-2">
+                  <Tag size={14} /> Coupon Code
+                </label>
+                {couponResult?.valid ? (
+                  <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <Check size={16} className="text-green-600" />
+                      <span className="text-sm font-medium text-green-700">
+                        {couponCode.toUpperCase()} — {couponResult.coupon?.discount_type === "percentage"
+                          ? `${couponResult.coupon.discount_value}% off`
+                          : `${formatAmount(couponResult.coupon?.discount_value || 0)} off`}
+                      </span>
+                    </div>
+                    <button onClick={removeCoupon} className="text-green-600 hover:text-green-800 text-sm underline">
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => { setCouponCode(e.target.value); setCouponResult(null); }}
+                      placeholder="Enter coupon code"
+                      className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:border-skyblue focus:ring-2 focus:ring-skyblue/20 outline-none transition-all uppercase"
+                    />
+                    <button
+                      onClick={handleValidateCoupon}
+                      disabled={!couponCode.trim() || validatingCoupon}
+                      className="px-4 py-3 bg-gray-900 text-white rounded-lg font-medium text-sm hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {validatingCoupon ? <Loader2 size={16} className="animate-spin" /> : "Apply"}
+                    </button>
+                  </div>
+                )}
+                {couponResult && !couponResult.valid && (
+                  <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                    <AlertCircle size={12} /> {couponResult.error}
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* Amount */}
-            <div className="bg-gray-50 rounded-lg p-6">
+            <div className="bg-gray-50 rounded-lg p-6 space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-semibold text-gray-700">
                   Total Amount:
                 </span>
-                <span className="text-3xl font-bold text-oxford">
+                <span className={`text-3xl font-bold text-oxford ${discountAmount > 0 ? "line-through text-gray-400 text-xl" : ""}`}>
                   {formatAmount(invoice.amount)}
                 </span>
               </div>
+              {discountAmount > 0 && (
+                <>
+                  <div className="flex justify-between items-center text-green-600 text-sm">
+                    <span>Discount ({couponCode.toUpperCase()})</span>
+                    <span>-{formatAmount(discountAmount)}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-t border-gray-200 pt-2">
+                    <span className="text-lg font-semibold text-gray-700">You Pay:</span>
+                    <span className="text-3xl font-bold text-oxford">{formatAmount(finalAmount)}</span>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Pay Now Button */}
@@ -207,7 +303,7 @@ export default function PayInvoice() {
               >
                 {paying
                   ? "Processing..."
-                  : `Pay ${formatAmount(invoice.amount)} Now`}
+                  : `Pay ${formatAmount(finalAmount)} Now`}
               </Button>
             )}
 
